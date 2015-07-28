@@ -44,26 +44,15 @@ public class BasicHandlers {
 		int y = b.getLocation().getBlockY();
 		int z = b.getLocation().getBlockZ();
 		
-		if(Database.getBlockBase().get(x + "." + y + "." + z) != null && checkSameness(b))
-		{
-			Database.getBlockBase().set(x + "." + y + "." + z, null);
-			Database.saveBlockBase();
-			return;	
-		}
+		Database.getBlockBase().set(x + "." + y + "." + z, null);
+		Database.saveBlockBase();
 	}
 	
 	public static void AddofDatabase(Block b) {
 		int x = b.getLocation().getBlockX();
 		int y = b.getLocation().getBlockY();
 		int z = b.getLocation().getBlockZ();
-		if(Database.getBlockBase().get(x + "." + y + "." + z) == null)
-		{
-			int x1 = b.getLocation().getBlockX();
-			int y1 = b.getLocation().getBlockY();
-			int z1 = b.getLocation().getBlockZ();
-				
-			Database.getBlockBase().set(x1 + "." + y1 + "." + z1, z1);
-		}
+		Database.getBlockBase().set(x + "." + y + "." + z, z);
 		Database.saveBlockBase();
 	}
 	
@@ -93,7 +82,7 @@ public class BasicHandlers {
 		Database.saveBlockBase();
 	}
 	
-	public static void EditBase(Block b, Location l)
+	public static void LocationEditBase(Location l)
 	{
 		int x = l.getBlockX();
 		int y = l.getBlockY();
@@ -284,16 +273,16 @@ public class BasicHandlers {
 		BasicHandlers.DropBlocks(w, b);
 		BasicHandlers.CheckBlock(b);
 		if(Dir.compareToIgnoreCase("EAST") == 0)
-			BasicHandlers.EditBase(b, w.getBlockAt(X + 1, Y, Z).getLocation());
+			BasicHandlers.LocationEditBase(w.getBlockAt(X + 1, Y, Z).getLocation());
 		if(Dir.compareToIgnoreCase("WEST") == 0)
-			BasicHandlers.EditBase(b, w.getBlockAt(X - 1, Y, Z).getLocation());
+			BasicHandlers.LocationEditBase(w.getBlockAt(X - 1, Y, Z).getLocation());
 		if(Dir.compareToIgnoreCase("SOUTH") == 0)
-			BasicHandlers.EditBase(b, w.getBlockAt(X, Y, Z + 1).getLocation());
+			BasicHandlers.LocationEditBase(w.getBlockAt(X, Y, Z + 1).getLocation());
 		if(Dir.compareToIgnoreCase("NORTH") == 0)
-			BasicHandlers.EditBase(b, w.getBlockAt(X, Y, Z - 1).getLocation());
+			BasicHandlers.LocationEditBase(w.getBlockAt(X, Y, Z - 1).getLocation());
 		if(Dir.compareToIgnoreCase("UP") == 0)
-			BasicHandlers.EditBase(b, w.getBlockAt(X, Y + 1, Z).getLocation());
+			BasicHandlers.LocationEditBase(w.getBlockAt(X, Y + 1, Z).getLocation());
 		if(Dir.compareToIgnoreCase("DOWN") == 0)
-			BasicHandlers.EditBase(b, w.getBlockAt(X, Y - 1, Z).getLocation());
+			BasicHandlers.LocationEditBase(w.getBlockAt(X, Y - 1, Z).getLocation());
 	}
 }

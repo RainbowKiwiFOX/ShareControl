@@ -3,17 +3,20 @@ package com.net.h1karo.sharecontrol.listeners.entity;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.metadata.FixedMetadataValue;
+
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.listeners.BasicHandlers;
 
 public class EntityChangeBlockListener implements Listener
 {
-	@SuppressWarnings("unused")
 	private final ShareControl main;
 	
 	public EntityChangeBlockListener(ShareControl h)
@@ -21,7 +24,6 @@ public class EntityChangeBlockListener implements Listener
 		this.main = h;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGH)
 	public void EntityChangeBlock(EntityChangeBlockEvent e)
 	{
@@ -29,6 +31,7 @@ public class EntityChangeBlockListener implements Listener
 		
 		Block b = e.getBlock();
 		World w = e.getBlock().getWorld();
+		Entity eventEntity = e.getEntity();
 		
 		String[] DropBlocks = new String[3];
 		BasicHandlers.upDropBlocksMore(DropBlocks);
@@ -68,9 +71,19 @@ public class EntityChangeBlockListener implements Listener
 			
 		}
 		
-		if(e.getEntityType() != EntityType.FALLING_BLOCK) return;
-		if(BasicHandlers.InBase(e.getBlock()))
-			if((b.getType() == Material.ANVIL && b.getData() > 0) || ((b.getType() == Material.SAND || b.getType() == Material.GRAVEL) && b.getData() < 2))
-				e.setCancelled(true);
+        if (eventEntity.getType() == EntityType.FALLING_BLOCK && BasicHandlers.InBase(b)) {
+            FallingBlock entity = (FallingBlock) eventEntity;
+            if (e.getTo() == Material.AIR) {
+                   entity.setDropItem(false);
+                   BasicHandlers.RemoveofDatabase(b);
+                   entity.setMetadata("ShareControl Metadata", new FixedMetadataValue(main, "true"));
+            }
+        }
+        
+        if (e.getTo() != Material.AIR && b.getType() == Material.AIR && eventEntity.getType() == EntityType.FALLING_BLOCK) {
+        	FallingBlock entity = (FallingBlock) eventEntity;
+        	if(entity.hasMetadata("ShareControl Metadata"))
+        		BasicHandlers.AddofDatabase(b);
+        }
 	}
 }
