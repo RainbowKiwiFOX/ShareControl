@@ -1,3 +1,21 @@
+/*******************************************************************************
+ * Copyright (C) 2015 H1KaRo (h1karo)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
+
+
 package com.net.h1karo.sharecontrol.localization;
 
 import java.io.File;
@@ -75,12 +93,14 @@ public class LanguageFiles {
     	
     	getLangConfig(lang).set("GamemodesControl.NotAllowedGamemode", GamemodesControl);
     	
-    	getLangConfig(lang).set("Commands.CheckGamemode", CheckGamemode);
+    	getLangConfig(lang).set("PlayersInGamemode.List", PlayerListInGamemode);
+    	getLangConfig(lang).set("PlayersInGamemode.More", PlayerListInGamemodeMore);
     	
     	getLangConfig(lang).set("Menu.This", menu);
     	getLangConfig(lang).set("Menu.Reload", menureload);
     	getLangConfig(lang).set("Menu.Version", menuinfo);
     	getLangConfig(lang).set("Menu.Update", menuupdate);
+    	getLangConfig(lang).set("Menu.GetList", menugetlist);
     	getLangConfig(lang).set("Menu.Tools", menutools);
     	getLangConfig(lang).set("Menu.ChangeTool", menusettool);
     	getLangConfig(lang).set("Menu.InfoTool", menuinfotool);
@@ -112,6 +132,7 @@ public class LanguageFiles {
     	getLangConfig(lang).set("Tools.Gamemode", GM);
     	getLangConfig(lang).set("Tools.Health", Health);
     	getLangConfig(lang).set("Tools.Exp", Exp);
+    	getLangConfig(lang).set("Tools.World", World);
     	getLangConfig(lang).set("Tools.BlockHas", BlockHas);
     	getLangConfig(lang).set("Tools.BlockNow", BlockNow);
     	
@@ -130,11 +151,14 @@ public class LanguageFiles {
     	catch (IOException ex) {
     		main.getLogger().log(Level.WARNING, "Could not save config to " + languageConfigFile, ex);
     	}
+    	
+    	languageConfigFile = null;
+    	languageConfig = null;
     }
    
-										/**\ * * * * \**/
-										/**\ STRINGS \**/
-    									/**\ * * * * \**/
+										/**\ * * * * * * * * \**/
+										/**\ DEFAULT STRINGS \**/
+    									/**\ * * * * * * * * \**/
     
     	/**\ ENGLISH \**/
     	/**\---------\**/
@@ -190,16 +214,18 @@ public class LanguageFiles {
 		
 		GamemodesControl = getLangConfig(lang).getString("GamemodesControl.NotAllowedGamemode", "&cYou can not go in gamemode &6%gamemode%&c!");
 		
-		CheckGamemode = getLangConfig(lang).getString("Commands.CheckGamemode", "&7Gamemode of player &9%nickname%&7: &9%gamemode%&7!");
+		PlayerListInGamemode = getLangConfig(lang).getString("PlayersInGamemode.List", "&7Players in &9%gamemode%&7 mode: &9%list%&7");
+		PlayerListInGamemodeMore = getLangConfig(lang).getString("PlayersInGamemode.More", "&7To find out detailed information about the player, type &9/sc check <ник игрока>&7!");
 		
 		menu = getLangConfig(lang).getString("Menu.This", "&9%command% &f- this menu,");
 		menureload = getLangConfig(lang).getString("Menu.Reload", "&9%command% &f- reloading,");
 		menuinfo = getLangConfig(lang).getString("Menu.Version", "&9%command% &f- information,");
 		menuupdate = getLangConfig(lang).getString("Menu.Update", "&9%command% &f- check updates,");
+		menugetlist = getLangConfig(lang).getString("Menu.GetList", "&9%command% &f- get a list of players who use this gamemode,");
 		menutools = getLangConfig(lang).getString("Menu.Tools", "&9%command% &f- list of tools,");
 		menusettool = getLangConfig(lang).getString("Menu.ChangeTool", "&9%command% &f- get changing tool,");
 		menuinfotool = getLangConfig(lang).getString("Menu.InfoTool", "&9%command% &f- get information tool.");
-		menucheck = getLangConfig(lang).getString("Menu.Check", "&9%command% &f- see gamemode of player.");
+		menucheck = getLangConfig(lang).getString("Menu.Check", "&9%command% &f- see information about player.");
 		
 		
 		using = getLangConfig(lang).getString("Using", "&7Using: &c%command%");
@@ -222,6 +248,7 @@ public class LanguageFiles {
 		Name = getLangConfig(lang).getString("Tools.Name", "&7Name: &9%name%");
 		ID = getLangConfig(lang).getString("Tools.ID", "&7ID: &9%id%");
 		Coordinates = getLangConfig(lang).getString("Tools.Coordinates", "&7Coordinates: &9%coords%");
+		World = getLangConfig(lang).getString("Tools.World", "&7World: &9%world%");
 		Nick = getLangConfig(lang).getString("Tools.Nickname", "&7Nickname: &9%nickname%");
 		UUID =  getLangConfig(lang).getString("Tools.UUID", "&7UUID: &9%uuid%");
 		GM = getLangConfig(lang).getString("Tools.Gamemode", "&7Gamemode: &9%gamemode%");
@@ -276,12 +303,12 @@ public class LanguageFiles {
 		OnMonsterInteract = getLangConfig(lang).getString("Events.MobsInteract", "&cВы не можете взаимодействовать с мобами!");
 		OnPlayerInteract = getLangConfig(lang).getString("Events.PlayerInteract", "&cВы не можете взаимодействовать с игроками!");
 		OnInventoryClick = getLangConfig(lang).getString("Events.Inventory.Message", "&cВы не можете использовать этот предмет!");
-		OnInventoryClickMaterial = getLangConfig(lang).getString("Events.Inventory.Material", "&cВы не можете использовать этот &6%item%&c!");
+		OnInventoryClickMaterial = getLangConfig(lang).getString("Events.Inventory.Material", "&cВы не можете использовать &6%item%&c!");
 		OnOpenOtherInventory = getLangConfig(lang).getString("Events.OpenInventory", "&cВы не можете использовать инвентарь!");
 		OnBlockBreak = getLangConfig(lang).getString("Events.BlockBreak.Message", "&cВы не можете ломать этот блок!");
-		OnBlockPlace = getLangConfig(lang).getString("Events.BlockPlace.Message", "&cВы не можете ломать этот &6%block%&c!");
-		OnBlockBreakMaterial = getLangConfig(lang).getString("Events.BlockBreak.Material", "&cВы не можете ставить этот блок!");
-		OnBlockPlaceMaterial = getLangConfig(lang).getString("Events.BlockPlace.Material", "&cВы не можете ставить этот &6%block%&c!");
+		OnBlockPlace = getLangConfig(lang).getString("Events.BlockPlace.Message", "&cВы не можете ставить этот блок!");
+		OnBlockBreakMaterial = getLangConfig(lang).getString("Events.BlockBreak.Material", "&cВы не можете ломать &6%block%&c!");
+		OnBlockPlaceMaterial = getLangConfig(lang).getString("Events.BlockPlace.Material", "&cВы не можете ставить &6%block%&c!");
 		OnBowShoot = getLangConfig(lang).getString("Events.ShootBow", "&cВы не можете стрелять из лука!");
 		AnotherWorld = getLangConfig(lang).getString("Events.InteractWithWorlds", "&cВы не можете взаимодействовать с этим миром!");
 		CreativeBlockNotDrop = getLangConfig(lang).getString("Events.NotDropBlock", "&7Этот блок из творчества, поэтому он не выпал!");
@@ -295,16 +322,18 @@ public class LanguageFiles {
 		
 		GamemodesControl = getLangConfig(lang).getString("GamemodesControl.NotAllowedGamemode", "&cВы не можете перейти в режим игры &6%gamemode%&c!");
 		
-		CheckGamemode = getLangConfig(lang).getString("Commands.CheckGamemode", "&7Режим игры игрока &9%nickname%&7: &9%gamemode%&7!");
+		PlayerListInGamemode = getLangConfig(lang).getString("PlayersInGamemode.List", "&7Игроки в режиме игры &9%gamemode%&7: &9%list%&7");
+		PlayerListInGamemodeMore = getLangConfig(lang).getString("PlayersInGamemode.More", "&7Чтобы узнать подробную информацию о игроке, напишите &9/sc check <ник игрока>&7!");
 		
 		menu = getLangConfig(lang).getString("Menu.This", "&9%command% &f- данное меню,");
 		menureload = getLangConfig(lang).getString("Menu.Reload", "&9%command% &f- перезагрузка,");
 		menuinfo = getLangConfig(lang).getString("Menu.Version", "&9%command% &f- информация,");
 		menuupdate = getLangConfig(lang).getString("Menu.Update", "&9%command% &f- проверить обновления,");
+		menugetlist = getLangConfig(lang).getString("Menu.GetList", "&9%command% &f- получить список игроков, которые используют данный режим,");
 		menutools = getLangConfig(lang).getString("Menu.Tools", "&9%command% &f- список инструментов,");
 		menusettool = getLangConfig(lang).getString("Menu.ChangeTool", "&9%command% &f- получить изменяющий предмет,");
 		menuinfotool = getLangConfig(lang).getString("Menu.InfoTool", "&9%command% &f- получить информационный предмет,");
-		menucheck = getLangConfig(lang).getString("Menu.Check", "&9%command% &f- узнать режим игры игрока.");
+		menucheck = getLangConfig(lang).getString("Menu.Check", "&9%command% &f- получить информацию о игроку.");
 		
 		using = getLangConfig(lang).getString("Using", "&7Использование: &c%command%");
 		
@@ -326,6 +355,7 @@ public class LanguageFiles {
 		Name = getLangConfig(lang).getString("Tools.Name", "&7Название: &9%name%");
 		ID = getLangConfig(lang).getString("Tools.ID", "&7ID: &9%id%");
 		Coordinates = getLangConfig(lang).getString("Tools.Coordinates", "&7Координаты: &9%coords%");
+		World = getLangConfig(lang).getString("Tools.World", "&7Мир: &9%world%");
 		Nick = getLangConfig(lang).getString("Tools.Nickname", "&7Ник: &9%nickname%");
 		UUID =  getLangConfig(lang).getString("Tools.UUID", "&7Уникальный индетификатор (UUID): &9%uuid%");
 		GM = getLangConfig(lang).getString("Tools.Gamemode", "&7Режим: &9%gamemode%");
@@ -356,8 +386,6 @@ public class LanguageFiles {
 	
 	public static String NoPerms;
 	
-	public static String CheckGamemode;
-	
 	public static String menu;
 	public static String menureload;
 	public static String menuinfo;
@@ -366,6 +394,7 @@ public class LanguageFiles {
 	public static String menusettool;
 	public static String menuinfotool;
 	public static String menucheck;
+	public static String menugetlist;
 	
 	public static String using;
 	
@@ -383,9 +412,11 @@ public class LanguageFiles {
 	public static String loreIT1;
 	public static String loreIT2;
 	
-	public static String CreativeType, NaturalType, Name, Coordinates, Type, ID, Nick, GM, Health, Exp, UUID;
+	public static String CreativeType, NaturalType, Name, Coordinates, Type, ID, Nick, GM, Health, Exp, UUID, World;
 	
 	public static String Creative, Survival, Adventure, Spectator;
+	
+	public static String PlayerListInGamemode, PlayerListInGamemodeMore;
 	
 	public static String BlockHas;
 	public static String BlockNow;

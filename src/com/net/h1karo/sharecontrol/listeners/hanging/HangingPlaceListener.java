@@ -16,33 +16,34 @@
  ******************************************************************************/
 
 
-package com.net.h1karo.sharecontrol.listeners.creative;
+package com.net.h1karo.sharecontrol.listeners.hanging;
 
 import org.bukkit.GameMode;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
+import org.bukkit.event.hanging.HangingPlaceEvent;
+import org.bukkit.metadata.FixedMetadataValue;
+
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
-import com.net.h1karo.sharecontrol.localization.Localization;
 
-public class PlayerArmorStandManipulateListener implements Listener
-{
-	@SuppressWarnings("unused")
-	private final ShareControl main;
+public class HangingPlaceListener implements Listener {
 	
-	public PlayerArmorStandManipulateListener(ShareControl h)
+	private final ShareControl main;
+	public HangingPlaceListener(ShareControl h)
 	{
 		this.main = h;
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH)
-	public void ArmorStand(PlayerArmorStandManipulateEvent e) {
-		if(Permissions.perms(e.getPlayer(), "allow.blocking-interact") || e.isCancelled()) return;
-		if(e.getPlayer().getGameMode() == GameMode.CREATIVE) {
-			e.setCancelled(true);
-			Localization.ArmorStand(e.getPlayer());
+	@EventHandler
+	public void HangingPlace(HangingPlaceEvent e)
+	{
+		Player p = e.getPlayer();
+		Entity ent = e.getEntity();
+		if(p.getGameMode() == GameMode.CREATIVE && !Permissions.perms(p, "allow.notlogging")) {
+			ent.setMetadata("ShareControl.CREATIVE_ENTITY", new FixedMetadataValue(main, "1"));
 		}
 	}
 }

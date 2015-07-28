@@ -1,3 +1,21 @@
+/*******************************************************************************
+ * Copyright (C) 2015 H1KaRo (h1karo)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
+
+
 package com.net.h1karo.sharecontrol.localization;
 
 import java.util.Arrays;
@@ -5,6 +23,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -19,7 +38,7 @@ import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.MessageManager.MessageType;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
-import com.net.h1karo.sharecontrol.items.utils;
+import com.net.h1karo.sharecontrol.items.items;
 import com.net.h1karo.sharecontrol.listeners.BasicHandlers;
 
 public class Localization {
@@ -222,6 +241,28 @@ public class Localization {
 		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.GamemodesControl.replace("%gamemode%", gamemode));
 		MessageManager.getManager().msg(p, MessageType.BAD, msg);
 	}
+
+	public static void getListOfPlayerInGM(CommandSender sender, String gamemode) {
+		String list = "";
+		
+		for(Player p : Bukkit.getOnlinePlayers())
+			if(p.getGameMode() == GameMode.valueOf(gamemode))
+				if(list == "") list = p.getDisplayName();
+				else list = list + ", " + p.getDisplayName();
+
+		if(gamemode.compareToIgnoreCase("creative") == 0) 
+			gamemode = LanguageFiles.Creative;
+		if(gamemode.compareToIgnoreCase("survival") == 0) 
+			gamemode = LanguageFiles.Survival;
+		if(gamemode.compareToIgnoreCase("adventure") == 0) 
+			gamemode = LanguageFiles.Adventure;
+		if(gamemode.compareToIgnoreCase("spectator") == 0) 
+			gamemode = LanguageFiles.Spectator;
+		
+		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.PlayerListInGamemode.replace("%gamemode%", gamemode).replace("%list%", list));
+		MessageManager.getManager().msg(sender, MessageType.BAD, msg);
+		
+	}
 	
 	//
 	// COMMANDS MESSAGES
@@ -237,15 +278,17 @@ public class Localization {
 		String msg3 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menuinfo.replace("%command%", command));
 		command = " /sc update";
 		String msg4 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menuupdate.replace("%command%", command));
+		command = " /sc list <gamemode>";
+		String msg5 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menugetlist.replace("%command%", command));
 		command = " /sc tools";
-		String msg5 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menutools.replace("%command%", command));
+		String msg6 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menutools.replace("%command%", command));
 		command = " /sc tools changetool";
-		String msg6 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menusettool.replace("%command%", command));
+		String msg7 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menusettool.replace("%command%", command));
 		command = " /sc tools infotool";
-		String msg7 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menuinfotool.replace("%command%", command));
+		String msg8 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menuinfotool.replace("%command%", command));
 		command = " /sc check <nickname>";
-		String msg8 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menucheck.replace("%command%", command));
-		MessageManager.getManager().msg(sender, MessageType.HELP, "========[" + prefix + ChatColor.BLUE + " Menu" + ChatColor.GRAY + "]========");
+		String msg9 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menucheck.replace("%command%", command));
+		MessageManager.getManager().msg(sender, MessageType.HELP, "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 " + prefix + ChatColor.BLUE + " Menu" + ChatColor.GRAY + " \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg1);
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg2);
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg3);
@@ -254,7 +297,8 @@ public class Localization {
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg6);
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg7);
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg8);
-		MessageManager.getManager().msg(sender, MessageType.HELP, ChatColor.GRAY + "=================================");
+		MessageManager.getManager().msg(sender, MessageType.HELP, msg9);
+		MessageManager.getManager().msg(sender, MessageType.HELP, ChatColor.GRAY + "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 	}
 	
 	public static void reloadMsg(CommandSender sender)
@@ -279,17 +323,11 @@ public class Localization {
 		command = " /sc tools infotool";
 		String msg3 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menuinfotool.replace("%command%", command));
 		
-		MessageManager.getManager().msg(p, MessageType.HELP, "======[" + prefix + ChatColor.BLUE + " Tool Menu" + ChatColor.GRAY + "]======");
+		MessageManager.getManager().msg(p, MessageType.HELP, "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 " + prefix + ChatColor.BLUE + " Tool Menu" + ChatColor.GRAY + " \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 		MessageManager.getManager().msg(p, MessageType.HELP, msg1);
 		MessageManager.getManager().msg(p, MessageType.HELP, msg2);
 		MessageManager.getManager().msg(p, MessageType.HELP, msg3);
-		MessageManager.getManager().msg(p, MessageType.HELP, ChatColor.GRAY + "=================================");
-	}
-	
-
-	public static void getGamemode(CommandSender sender, String nickname) {
-		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.CheckGamemode.replace("%nickname%", nickname).replace("%gamemode%", Bukkit.getPlayer(nickname).getGameMode().toString()));
-		MessageManager.getManager().msg(sender, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.HELP, ChatColor.GRAY + "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 	}
 	
 	 // TOOLS
@@ -313,7 +351,7 @@ public class Localization {
 			loreStr2 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.loreIT2);
 
 		List<String> loreIT = Arrays.asList(loreStr1, loreStr2);
-		ItemStack infotool = utils.setMeta(new ItemStack(Material.BLAZE_POWDER), nameIT, loreIT);
+		ItemStack infotool = items.setMeta(new ItemStack(Material.BLAZE_POWDER), nameIT, loreIT);
 		
 		((Player) p).getInventory().addItem(infotool);
 	}
@@ -337,7 +375,7 @@ public class Localization {
 		else
 			loreST3 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.loreST3);
 		List<String> loreST = Arrays.asList(loreST1, loreST2, loreST3);
-		ItemStack settool = utils.setMeta(new ItemStack(Material.MAGMA_CREAM), nameST, loreST);
+		ItemStack settool = items.setMeta(new ItemStack(Material.MAGMA_CREAM), nameST, loreST);
 		
 		((Player) p).getInventory().addItem(settool);		
 	}
@@ -347,7 +385,7 @@ public class Localization {
 	{
 		String id = b.getTypeId() + "";
 		String material = b.getType().toString();
-		String coordinates = b.getX() + ", " + b.getY() + ", " + b.getZ();
+		String coords = b.getX() + ", " + b.getY() + ", " + b.getZ();
 		String type;
 		
 		if(BasicHandlers.InBase(b))
@@ -357,36 +395,44 @@ public class Localization {
 		
 		String msg1 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Name.replace("%name%", material));
 		String msg2 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.ID.replace("%id%", id));
-		String msg3 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Coordinates.replace("%coords%", coordinates));
+		String msg3 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Coordinates.replace("%coords%", coords));
 		String msg4 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Type.replace("%type%", type));
 		
-		MessageManager.getManager().msg(p, MessageType.HELP, "---[ " + prefixab + ChatColor.BLUE + " Block Information" + ChatColor.GRAY + " ]---");
+		MessageManager.getManager().msg(p, MessageType.HELP, "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 " + ChatColor.BLUE + " Block Information" + ChatColor.GRAY + " \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 		MessageManager.getManager().msg(p, MessageType.HELP, msg1);
 		MessageManager.getManager().msg(p, MessageType.HELP, msg2);
 		MessageManager.getManager().msg(p, MessageType.HELP, msg3);
 		MessageManager.getManager().msg(p, MessageType.HELP, msg4);
+		MessageManager.getManager().msg(p, MessageType.HELP, ChatColor.GRAY + "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 	}
 	
-	public static void PlayerInfo(Player p, Player m)
+	public static void PlayerInfo(CommandSender sender, Player m)
 	{
 		String gamemode = m.getGameMode() + "";
 		String name = m.getDisplayName();
 		String uuid = m.getUniqueId().toString();
 		double health = m.getHealthScale();
 		float exp = m.getExp();
+		String coords = m.getLocation().getBlockX() + ", " + m.getLocation().getBlockY() + ", " + m.getLocation().getBlockZ();
+		String world = m.getWorld().getName();
 		
 		String msg1 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Nick.replace("%nickname%", name));
 		String msg2 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.UUID.replace("%uuid%", uuid));
 		String msg3 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.GM.replace("%gamemode%", gamemode));
-		String msg4 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Health.replace("%health%", health + ""));
-		String msg5 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Exp.replace("%exp%", exp + ""));
+		String msg4 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.World.replace("%world%", world + ""));
+		String msg5 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Coordinates.replace("%coords%", coords + ""));
+		String msg6 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Health.replace("%health%", health + ""));
+		String msg7 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Exp.replace("%exp%", exp + ""));
 		
-		MessageManager.getManager().msg(p, MessageType.HELP, "----[ " + ChatColor.BLUE + "Player Information" + ChatColor.GRAY + " ]----");
-		MessageManager.getManager().msg(p, MessageType.HELP, msg1);
-		MessageManager.getManager().msg(p, MessageType.HELP, msg2);
-		MessageManager.getManager().msg(p, MessageType.HELP, msg3);
-		MessageManager.getManager().msg(p, MessageType.HELP, msg4);
-		MessageManager.getManager().msg(p, MessageType.HELP, msg5);
+		MessageManager.getManager().msg(sender, MessageType.HELP, "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 " + ChatColor.BLUE + "Player Information" + ChatColor.GRAY + " \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
+		MessageManager.getManager().msg(sender, MessageType.HELP, msg1);
+		MessageManager.getManager().msg(sender, MessageType.HELP, msg2);
+		MessageManager.getManager().msg(sender, MessageType.HELP, msg3);
+		MessageManager.getManager().msg(sender, MessageType.HELP, msg4);
+		MessageManager.getManager().msg(sender, MessageType.HELP, msg5);
+		MessageManager.getManager().msg(sender, MessageType.HELP, msg6);
+		MessageManager.getManager().msg(sender, MessageType.HELP, msg7);
+		MessageManager.getManager().msg(sender, MessageType.HELP, ChatColor.GRAY + "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 	}
 	
 	public static void SetBlockType(Player p, Block b, PlayerInteractEvent e)

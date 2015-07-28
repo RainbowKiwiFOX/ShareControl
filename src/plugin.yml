@@ -1,6 +1,6 @@
 name: ShareControl
 main: com.net.h1karo.sharecontrol.ShareControl
-version: 2.0.1
+version: 2.0.7
 authors:
   - H1KaRo
 softdepend: [MobArena, pvparena, Essentials]
@@ -39,25 +39,25 @@ permissions:
         description: Allow all interact
         default: op
         children:
-            sharecontrol.allow.blocking-placement: true
-            sharecontrol.allow.blocking-breakage: true
+            sharecontrol.allow.blocking-placement.*: true
+            sharecontrol.allow.blocking-breakage.*: true
             sharecontrol.allow.blocking-interact: true
-            sharecontrol.allow.blocking-inventory: true
+            sharecontrol.allow.blocking-inventory.*: true
             sharecontrol.allow.creature-interact: true
             sharecontrol.allow.player-interact: true
             sharecontrol.allow.pickup: true
             sharecontrol.allow.drop: true
-            sharecontrol.allow.inventory: true
+            sharecontrol.allow.multi-inventories: true
             sharecontrol.allow.blocking-creative: true
             sharecontrol.allow.notlogging: true
             sharecontrol.allow.commands: true
-    sharecontrol.allow.blocking-placement:
+    sharecontrol.allow.blocking-placement.*:
         description: Allow place all block
         default: op
-    sharecontrol.allow.blocking-breakage:
+    sharecontrol.allow.blocking-breakage.*:
         description: Allow break all block
         default: op
-    sharecontrol.allow.blocking-inventory:
+    sharecontrol.allow.blocking-inventory.*:
         description: Allow use all items
         default: op
     sharecontrol.allow.blocking-interact:
@@ -75,7 +75,7 @@ permissions:
     sharecontrol.allow.player-interact:
         description: Allow interact with player
         default: op
-    sharecontrol.allow.inventory:
+    sharecontrol.allow.multi-inventories:
         description: Disable inventory separation
         default: op
     sharecontrol.allow.blocking-creative:
@@ -103,7 +103,7 @@ permissions:
         default: op
     sharecontrol.gamemodescontrol.survival:
         description: Allow use survival mode
-        default: op
+        default: true
     sharecontrol.gamemodescontrol.spectator:
         description: Allow use spectator mode
         default: op

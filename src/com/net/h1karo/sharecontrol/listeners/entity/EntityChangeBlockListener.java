@@ -1,3 +1,21 @@
+/*******************************************************************************
+ * Copyright (C) 2015 H1KaRo (h1karo)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
+
+
 package com.net.h1karo.sharecontrol.listeners.entity;
 
 import org.bukkit.Material;
@@ -76,14 +94,16 @@ public class EntityChangeBlockListener implements Listener
             if (e.getTo() == Material.AIR) {
                    entity.setDropItem(false);
                    BasicHandlers.RemoveofDatabase(b);
-                   entity.setMetadata("ShareControl Metadata", new FixedMetadataValue(main, "true"));
+                   entity.setMetadata("ShareControl.CREATIVE_FALLING_BLOCK", new FixedMetadataValue(main, "1"));
             }
         }
         
         if (e.getTo() != Material.AIR && b.getType() == Material.AIR && eventEntity.getType() == EntityType.FALLING_BLOCK) {
         	FallingBlock entity = (FallingBlock) eventEntity;
-        	if(entity.hasMetadata("ShareControl Metadata"))
+        	if(entity.hasMetadata("ShareControl.CREATIVE_FALLING_BLOCK")) {
         		BasicHandlers.AddofDatabase(b);
+        		entity.removeMetadata("ShareControl.CREATIVE_FALLING_BLOCK", main);
+        	}
         }
 	}
 }

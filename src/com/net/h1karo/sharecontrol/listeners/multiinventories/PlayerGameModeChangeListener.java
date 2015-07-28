@@ -16,18 +16,18 @@
  ******************************************************************************/
 
 
-package com.net.h1karo.sharecontrol.listeners.gamemodescontrol;
+package com.net.h1karo.sharecontrol.listeners.multiinventories;
 
 import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.inventory.PlayerInventory;
 
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
-import com.net.h1karo.sharecontrol.localization.Localization;
-
 public class PlayerGameModeChangeListener implements Listener {
 	@SuppressWarnings("unused")
 	private final ShareControl main;
@@ -36,28 +36,44 @@ public class PlayerGameModeChangeListener implements Listener {
 		this.main = h;
 	}
 	
+
+	
+	public static boolean joinMA = false;
+	public static boolean leaveMA = false;
+	public static boolean joinPVP = false;
+	public static boolean leavePVP = false;
+	
 	@EventHandler
 	public void ChangeGameMode(PlayerGameModeChangeEvent e)
 	{
-		if(!Configuration.FullGCEnabled || !Configuration.GamemodesControlEnabled || Permissions.perms(e.getPlayer(), "gamemodescontrol.*") || e.isCancelled()) return;
-		if(e.getNewGameMode() == GameMode.CREATIVE && !Permissions.perms(e.getPlayer(), "gamemodescontrol.creative")) {
-			e.setCancelled(true);
-			Localization.NotAllowedGamemode(e.getPlayer(), "creative");
+		Player p = e.getPlayer();
+		if(Permissions.perms(p, "allow.multi-inventories") || e.isCancelled() || !Configuration.MultiInventoriesEnabled) return;
+		if(!Configuration.InventorySeparation)
+		{ 	Handlers.clear(p);
+			return;		}
+		
+		PlayerInventory Inventory = p.getInventory();
+		
+		if(joinMA || joinPVP) {
+			if(p.getGameMode() == GameMode.SURVIVAL)
+			{
+				Handlers.SaveSurvival(p, Inventory);
+			}
+			if(p.getGameMode() == GameMode.ADVENTURE)
+			{
+				Handlers.SaveAdventure(p, Inventory);
+			}
+			
+			if(joinMA) joinMA = false;
+			if(joinPVP) joinPVP = false;
+			return;
 		}
 		
-		if(e.getNewGameMode() == GameMode.SURVIVAL && !Permissions.perms(e.getPlayer(), "gamemodescontrol.survival")) {
-			e.setCancelled(true);
-			Localization.NotAllowedGamemode(e.getPlayer(), "survival");
+		if(leaveMA || leavePVP) {
+			if(leaveMA) leaveMA = false;
+			if(leavePVP) leavePVP = false;
+			return;
 		}
-		
-		if(e.getNewGameMode() == GameMode.ADVENTURE && !Permissions.perms(e.getPlayer(), "gamemodescontrol.adventure")) {
-			e.setCancelled(true);
-			Localization.NotAllowedGamemode(e.getPlayer(), "adventure");
-		}
-		
-		if(e.getNewGameMode() == GameMode.SPECTATOR && !Permissions.perms(e.getPlayer(), "gamemodescontrol.spectator")) {
-			e.setCancelled(true);
-			Localization.NotAllowedGamemode(e.getPlayer(), "spectator");
-		}
+		Handlers.BasicHandler(Inventory, p, e.getNewGameMode(), e.getPlayer().getGameMode());
 	}
 }

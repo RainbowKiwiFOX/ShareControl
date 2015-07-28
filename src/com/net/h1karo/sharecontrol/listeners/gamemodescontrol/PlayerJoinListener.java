@@ -20,43 +20,45 @@ package com.net.h1karo.sharecontrol.listeners.gamemodescontrol;
 
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
 import com.net.h1karo.sharecontrol.localization.Localization;
 
-public class PlayerGameModeChangeListener implements Listener {
+public class PlayerJoinListener implements Listener {
+	
 	@SuppressWarnings("unused")
 	private final ShareControl main;
-	public PlayerGameModeChangeListener(ShareControl h)
+	public PlayerJoinListener(ShareControl h)
 	{
 		this.main = h;
 	}
 	
-	@EventHandler
-	public void ChangeGameMode(PlayerGameModeChangeEvent e)
+	@EventHandler(priority = EventPriority.HIGH)
+	public void PlayerJoin(PlayerJoinEvent e)
 	{
-		if(!Configuration.FullGCEnabled || !Configuration.GamemodesControlEnabled || Permissions.perms(e.getPlayer(), "gamemodescontrol.*") || e.isCancelled()) return;
-		if(e.getNewGameMode() == GameMode.CREATIVE && !Permissions.perms(e.getPlayer(), "gamemodescontrol.creative")) {
-			e.setCancelled(true);
+		if(!Configuration.GamemodesControlEnabled || Permissions.perms(e.getPlayer(), "gamemodescontrol.*")) return;
+		if(e.getPlayer().getGameMode() == GameMode.CREATIVE && !Permissions.perms(e.getPlayer(), "gamemodescontrol.creative")) {
+			e.getPlayer().setGameMode(GameMode.SURVIVAL);
 			Localization.NotAllowedGamemode(e.getPlayer(), "creative");
 		}
 		
-		if(e.getNewGameMode() == GameMode.SURVIVAL && !Permissions.perms(e.getPlayer(), "gamemodescontrol.survival")) {
-			e.setCancelled(true);
+		if(e.getPlayer().getGameMode() == GameMode.SURVIVAL && !Permissions.perms(e.getPlayer(), "gamemodescontrol.survival")) {
+			e.getPlayer().setGameMode(GameMode.CREATIVE);
 			Localization.NotAllowedGamemode(e.getPlayer(), "survival");
 		}
 		
-		if(e.getNewGameMode() == GameMode.ADVENTURE && !Permissions.perms(e.getPlayer(), "gamemodescontrol.adventure")) {
-			e.setCancelled(true);
+		if(e.getPlayer().getGameMode() == GameMode.ADVENTURE && !Permissions.perms(e.getPlayer(), "gamemodescontrol.adventure")) {
+			e.getPlayer().setGameMode(GameMode.SURVIVAL);
 			Localization.NotAllowedGamemode(e.getPlayer(), "adventure");
 		}
 		
-		if(e.getNewGameMode() == GameMode.SPECTATOR && !Permissions.perms(e.getPlayer(), "gamemodescontrol.spectator")) {
-			e.setCancelled(true);
+		if(e.getPlayer().getGameMode() == GameMode.SPECTATOR && !Permissions.perms(e.getPlayer(), "gamemodescontrol.spectator")) {
+			e.getPlayer().setGameMode(GameMode.SURVIVAL);
 			Localization.NotAllowedGamemode(e.getPlayer(), "spectator");
 		}
 	}

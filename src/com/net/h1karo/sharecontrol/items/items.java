@@ -16,38 +16,30 @@
  ******************************************************************************/
 
 
-package com.net.h1karo.sharecontrol.listeners.blocks;
+package com.net.h1karo.sharecontrol.items;
+
+import java.util.List;
 
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockFromToEvent;
-import com.net.h1karo.sharecontrol.ShareControl;
-import com.net.h1karo.sharecontrol.listeners.BasicHandlers;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
-public class BlockFromToListener implements Listener
-{
-	@SuppressWarnings("unused")
-	private final ShareControl main;
-	
-	public BlockFromToListener(ShareControl h)
+public class items {
+	public static ItemStack setMeta(ItemStack material, String name, List<String> lore)
 	{
-		this.main = h;
-	}
-	
-	@EventHandler
-	public void WaterBreakBlock(BlockFromToEvent e) {
-		String[] WBD = new String[29];
-		BasicHandlers.WaterDropBlocks(WBD);
-		Block b = e.getToBlock();
-		for(int i = 0; i < WBD.length; i++)
-		if(b.getType() == Material.getMaterial(WBD[i]) && BasicHandlers.InBase(b))
-		{
-			e.setCancelled(true);
-			b.setType(Material.AIR);
-			BasicHandlers.OnBase(b);
-			return;
-		}
+		if(material==null || material.getType() == Material.AIR || (name == null && lore == null))
+			return null;
+		
+		ItemMeta im = material.getItemMeta();
+		if(name != null)
+			im.setDisplayName(name);
+		if(lore != null)
+			im.setLore(lore);
+		
+		im.addEnchant(Enchantment.DURABILITY, 5, true);
+		
+		material.setItemMeta(im);		
+		return material;
 	}
 }

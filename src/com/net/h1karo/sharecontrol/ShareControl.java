@@ -1,3 +1,21 @@
+/*******************************************************************************
+ * Copyright (C) 2015 H1KaRo (h1karo)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
+
+
 package com.net.h1karo.sharecontrol;
 
 import java.io.BufferedReader;
@@ -64,6 +82,8 @@ public class ShareControl extends JavaPlugin implements Listener
 	@Override
 	public void onEnable()
 	{
+		getLogger().info("Loading configuration...");
+		
 		instance = this;
 		setupListeners();
 
@@ -71,8 +91,6 @@ public class ShareControl extends JavaPlugin implements Listener
 		Configuration.saveCfg();
 		
         if(error) Configuration.Error(null);
-        if(error) return;
-        else getLogger().info("Plugin was enable!");
         
         try {
             MetricsLite metrics = new MetricsLite(this);
@@ -85,16 +103,22 @@ public class ShareControl extends JavaPlugin implements Listener
 		getCommand("sharecontrol").setExecutor(Executor);
 		getCommand("sharecontrol").setPermissionMessage(MessageManager.prefix + ChatColor.translateAlternateColorCodes('&', LanguageFiles.NoPerms));
 		
-        updateCheck();
-        
-        if(result == UpdateResult.UPDATE_AVAILABLE)
-			UpdateFound();
-
+		Permissions.RegisterCustomPermissions();
+		
+		getLogger().info("Configuration successfully uploaded!");
+		
+		if(Configuration.versionCheck) {
+			getLogger().info("Check updates...");
+			updateCheck();
+			if(result == UpdateResult.UPDATE_AVAILABLE)
+				UpdateFound();
+			if(result == UpdateResult.NO_UPDATE)
+				getLogger().info("Updates not found!");
+		}
 	}
 	@Override
 	public void onDisable()
 	{
-		getLogger().info("Plugin was disable!");
 		instance = null;
 	}
 	
@@ -214,7 +238,6 @@ public class ShareControl extends JavaPlugin implements Listener
 	}
 	
 	public void UpdateFound() {
-		if(!Configuration.versionCheck) return;
 		String name = newVersion;
 		String msg = "An update is available: " + "ShareControl v" + name.replace(" Alpha", "").replace(" Beta", "") + " available at " + Localization.link;
 		getLogger().info(msg);
@@ -251,14 +274,18 @@ public class ShareControl extends JavaPlugin implements Listener
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerPickupItemListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerShearEntityListener(this), this);
 		
+		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.hanging.HangingBreakListener(this), this);
+		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.hanging.HangingPlaceListener(this), this);
+		
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.entity.BreedingListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.entity.EntityChangeBlockListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.entity.EntityExplodeListener(this), this);
 		
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.gamemodescontrol.PlayerCommandPreprocessListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.gamemodescontrol.PlayerGameModeChangeListener(this), this);
+		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.gamemodescontrol.PlayerJoinListener(this), this);
 		
-		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.inventory.PlayerGameModeChangeListener(this), this);
+		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.multiinventories.PlayerGameModeChangeListener(this), this);
 		
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.survival.BlockBreakListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.survival.BlockPlaceListener(this), this);

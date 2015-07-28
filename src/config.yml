@@ -5,7 +5,7 @@
 
 General:
   CheckUpdates: true
-  Version: 2.0.1
+  Version: 2.0.7
   Language: en
 Notifications:
   SurvivalNotify: true
@@ -44,6 +44,9 @@ Settings:
     Enabled: false
     List:
     - kit start
+  MultiInventories:
+    Enabled: true
+    Separation: true
 WorldsConfig:
   Enabled: false
   BlockingCreativeInWorlds:

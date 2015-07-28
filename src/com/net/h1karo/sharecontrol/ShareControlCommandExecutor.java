@@ -1,5 +1,24 @@
+/*******************************************************************************
+ * Copyright (C) 2015 H1KaRo (h1karo)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
+
+
 package com.net.h1karo.sharecontrol;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -52,9 +71,39 @@ public class ShareControlCommandExecutor implements CommandExecutor {
 			
 			if(args[0].equalsIgnoreCase("check") && args.length == 2)
 			{
-				Localization.getGamemode(sender, args[1]);
+				Localization.PlayerInfo(sender, Bukkit.getPlayer(args[1]));
 				return true;
 			}
+			
+			if(args[0].equalsIgnoreCase("list") && args.length == 1)
+			{
+				String command = "/sharecontrol list <gamemode>";
+				String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.using.replace("%command%", command));
+				MessageManager.getManager().msg(sender, MessageType.USE, msg);
+				return true;
+			}
+			
+			if(args[0].equalsIgnoreCase("list") && args.length == 2)
+			{
+				Localization.getListOfPlayerInGM(sender, args[1]);
+				return true;
+			}
+			
+			/** preform for 2.1 **/
+			
+			/*if(args[0].equalsIgnoreCase("add") && args.length < 3)
+			{
+				String command = "/sharecontrol add <break/place/use> <material>";
+				String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.using.replace("%command%", command));
+				MessageManager.getManager().msg(sender, MessageType.USE, msg);
+				return true;
+			}
+			
+			if(args[0].equalsIgnoreCase("add") && args.length == 3)
+			{
+				Configuration.addBreak(sender, args[2]);
+				return true;
+			}*/
 			
 			if(args[0].equalsIgnoreCase("tools") && args.length == 1)
 			{
