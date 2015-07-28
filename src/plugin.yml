@@ -1,0 +1,109 @@
+name: ShareControl
+main: com.net.h1karo.sharecontrol.ShareControl
+version: 2.0.4
+authors:
+  - H1KaRo
+softdepend: [MobArena, pvparena, Essentials]
+description: Control the player in gamemode creative.
+website: http://dev.bukkit.org/bukkit-plugins/sharecontrol/
+commands:
+   sharecontrol:
+      description: Principal command of plugin
+      permission: sharecontrol.commands
+      usage: /sharecontrol
+      aliases: [sc]
+permissions:
+    sharecontrol.*:
+        description: Gives access to all ShareControl's commands and allow all
+        default: op
+        children:
+            sharecontrol.commands: true
+            sharecontrol.allow.*: true
+            sharecontrol.gamemodescontrol.*: true
+    sharecontrol.commands:
+        description: Allow use all commands of the plugin
+        default: op
+    sharecontrol.tools.*:
+        description: Allow use all tools of the plugin
+        default: op
+        children:
+            sharecontrol.tools.changetool: true
+            sharecontrol.tools.infotool: true
+    sharecontrol.tools.changetool:
+        description: Allow use changing tool
+        default: op
+    sharecontrol.tools.infotool:
+        description: Allow use information tool
+        default: op
+    sharecontrol.allow.*:
+        description: Allow all interact
+        default: op
+        children:
+            sharecontrol.allow.blocking-placement: true
+            sharecontrol.allow.blocking-breakage: true
+            sharecontrol.allow.blocking-interact: true
+            sharecontrol.allow.blocking-inventory: true
+            sharecontrol.allow.creature-interact: true
+            sharecontrol.allow.player-interact: true
+            sharecontrol.allow.pickup: true
+            sharecontrol.allow.drop: true
+            sharecontrol.allow.inventory: true
+            sharecontrol.allow.blocking-creative: true
+            sharecontrol.allow.notlogging: true
+            sharecontrol.allow.commands: true
+    sharecontrol.allow.blocking-placement:
+        description: Allow place all block
+        default: op
+    sharecontrol.allow.blocking-breakage:
+        description: Allow break all block
+        default: op
+    sharecontrol.allow.blocking-inventory:
+        description: Allow use all items
+        default: op
+    sharecontrol.allow.blocking-interact:
+        description: Allow interact to all entity
+        default: op
+    sharecontrol.allow.pickup:
+        description: Allow pickup item
+        default: op
+    sharecontrol.allow.drop:
+        description: Allow drop item
+        default: op
+    sharecontrol.allow.creature-interact:
+        description: Allow interact with entity
+        default: op
+    sharecontrol.allow.player-interact:
+        description: Allow interact with player
+        default: op
+    sharecontrol.allow.inventory:
+        description: Disable inventory separation
+        default: op
+    sharecontrol.allow.blocking-creative:
+        description: Allow place, break and interact with mobs in blocking worlds
+        default: op
+    sharecontrol.allow.notlogging:
+        description: Disable block logging
+        default: op
+    sharecontrol.allow.commands:
+        description: Allow use commands of list blocking commands
+        default: op
+    sharecontrol.gamemodescontrol.*:
+        description: Allow change gamemode to all modes
+        default: op
+        children:
+            sharecontrol.gamemodescontrol.creative: true
+            sharecontrol.gamemodescontrol.survival: true
+            sharecontrol.gamemodescontrol.adventure: true
+            sharecontrol.gamemodescontrol.spectator: true
+    sharecontrol.gamemodescontrol.creative:
+        description: Allow use creative mode
+        default: op
+    sharecontrol.gamemodescontrol.adventure:
+        description: Allow use adventure mode
+        default: op
+    sharecontrol.gamemodescontrol.survival:
+        description: Allow use survival mode
+        default: op
+    sharecontrol.gamemodescontrol.spectator:
+        description: Allow use spectator mode
+        default: op

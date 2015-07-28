@@ -1,0 +1,54 @@
+# CONFIG OF ShareControl
+# |------------------| #
+# |     SETTINGS     | #
+# |------------------| #
+
+General:
+  CheckUpdates: true
+  Version: 2.0.4
+  Language: en
+Notifications:
+  SurvivalNotify: true
+  CreativeNotify: true
+  Material: true
+Settings:
+  Blocks:
+    BlockingPlacement:
+    - BEDROCK
+    - MONSTER_EGGS
+    - TNT
+    - ENDER_PORTAL_FRAME
+    BlockingBreakage:
+    - BEDROCK
+  Items:
+    BlockingInventory:
+    - MONSTER_EGG
+    - MINECART
+    - BOAT
+    - STORAGE_MINECART
+    - POWERED_MINECART
+    - EXPLOSIVE_MINECART
+    - HOPPER_MINECART
+    - LAVA_BUCKET
+    - ENDER_PEARL
+    - EYE_OF_ENDER
+    - EXP_BOTTLE
+    - FIREBALL
+    - FLINT_AND_STEEL
+    - POTION
+  BlockingCreatureInteract: true
+  BlockingPlayerInteract: true
+  BlockingBreak: true
+  InventorySeparation: true
+  BlockingCmds:
+    Enabled: false
+    List:
+    - kit start
+WorldsConfig:
+  Enabled: false
+  BlockingCreativeInWorlds:
+  - world_nether
+  - world_the_end
+GamemodesControl:
+  Enabled: false
+  Full: false
