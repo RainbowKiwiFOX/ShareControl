@@ -305,14 +305,18 @@ public class Localization {
 		String msg4 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menuupdate.replace("%command%", command));
 		command = " /sc list <gamemode>";
 		String msg5 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menugetlist.replace("%command%", command));
+		command = " /sc add <break/place/use> <material/id>";
+		String msg6 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menuadd.replace("%command%", command));
+		command = " /sc remove <break/place/use> <material/id>";
+		String msg7 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menuremove.replace("%command%", command));
 		command = " /sc tools";
-		String msg6 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menutools.replace("%command%", command));
+		String msg8 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menutools.replace("%command%", command));
 		command = " /sc tools changetool";
-		String msg7 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menusettool.replace("%command%", command));
+		String msg9 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menusettool.replace("%command%", command));
 		command = " /sc tools infotool";
-		String msg8 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menuinfotool.replace("%command%", command));
+		String msg10 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menuinfotool.replace("%command%", command));
 		command = " /sc check <nickname>";
-		String msg9 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menucheck.replace("%command%", command));
+		String msg11 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menucheck.replace("%command%", command));
 		MessageManager.getManager().msg(sender, MessageType.HELP, "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 " + prefix + ChatColor.BLUE + " Menu" + ChatColor.GRAY + " \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg1);
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg2);
@@ -323,6 +327,8 @@ public class Localization {
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg7);
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg8);
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg9);
+		MessageManager.getManager().msg(sender, MessageType.HELP, msg10);
+		MessageManager.getManager().msg(sender, MessageType.HELP, msg11);
 		MessageManager.getManager().msg(sender, MessageType.HELP, ChatColor.GRAY + "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 	}
 	

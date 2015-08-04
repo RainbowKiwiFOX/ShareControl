@@ -2,4 +2,4 @@
 Control mode of creativity.
 
 Official source code.
-Latest release version: 2.1
+Latest release version: 2.1.1

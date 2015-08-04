@@ -102,6 +102,8 @@ public class LanguageFiles {
     	getLangConfig(lang).set("Menu.Version", menuinfo);
     	getLangConfig(lang).set("Menu.Update", menuupdate);
     	getLangConfig(lang).set("Menu.GetList", menugetlist);
+    	getLangConfig(lang).set("Menu.AddToList", menuadd);
+    	getLangConfig(lang).set("Menu.RemoveFromList", menuremove);
     	getLangConfig(lang).set("Menu.Tools", menutools);
     	getLangConfig(lang).set("Menu.ChangeTool", menusettool);
     	getLangConfig(lang).set("Menu.InfoTool", menuinfotool);
@@ -233,6 +235,8 @@ public class LanguageFiles {
 		menuinfo = getLangConfig(lang).getString("Menu.Version", "&9%command% &f- information,");
 		menuupdate = getLangConfig(lang).getString("Menu.Update", "&9%command% &f- check updates,");
 		menugetlist = getLangConfig(lang).getString("Menu.GetList", "&9%command% &f- get a list of players who use this gamemode,");
+		menuadd = getLangConfig(lang).getString("Menu.AddToList", "&9%command% &f- add block or item to list from config,");
+		menuremove = getLangConfig(lang).getString("Menu.RemoveFromList", "&9%command% &f- remove block or item from list from config,");
 		menutools = getLangConfig(lang).getString("Menu.Tools", "&9%command% &f- list of tools,");
 		menusettool = getLangConfig(lang).getString("Menu.ChangeTool", "&9%command% &f- get changing tool,");
 		menuinfotool = getLangConfig(lang).getString("Menu.InfoTool", "&9%command% &f- get information tool.");
@@ -352,6 +356,8 @@ public class LanguageFiles {
 		menuinfo = getLangConfig(lang).getString("Menu.Version", "&9%command% &f- информаци€,");
 		menuupdate = getLangConfig(lang).getString("Menu.Update", "&9%command% &f- проверить обновлени€,");
 		menugetlist = getLangConfig(lang).getString("Menu.GetList", "&9%command% &f- получить список игроков, которые используют данный режим,");
+		menuadd = getLangConfig(lang).getString("Menu.AddToList", "&9%command% &f- добавить блок или предмет в список из конфига,");
+		menuremove = getLangConfig(lang).getString("Menu.RemoveFromList", "&9%command% &f- удалить блок или предмет из списка из конфига,");
 		menutools = getLangConfig(lang).getString("Menu.Tools", "&9%command% &f- список инструментов,");
 		menusettool = getLangConfig(lang).getString("Menu.ChangeTool", "&9%command% &f- получить измен€ющий предмет,");
 		menuinfotool = getLangConfig(lang).getString("Menu.InfoTool", "&9%command% &f- получить информационный предмет,");
@@ -416,15 +422,7 @@ public class LanguageFiles {
 	
 	public static String NoPerms;
 	
-	public static String menu;
-	public static String menureload;
-	public static String menuinfo;
-	public static String menuupdate;
-	public static String menutools;
-	public static String menusettool;
-	public static String menuinfotool;
-	public static String menucheck;
-	public static String menugetlist;
+	public static String menu, menureload, menuinfo, menuupdate, menutools, menusettool, menuinfotool, menucheck, menugetlist, menuadd, menuremove;
 	
 	public static String using;
 	
