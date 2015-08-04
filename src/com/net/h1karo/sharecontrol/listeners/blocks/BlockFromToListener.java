@@ -23,8 +23,9 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
+
 import com.net.h1karo.sharecontrol.ShareControl;
-import com.net.h1karo.sharecontrol.listeners.BasicHandlers;
+import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
 public class BlockFromToListener implements Listener
 {
@@ -38,15 +39,12 @@ public class BlockFromToListener implements Listener
 	
 	@EventHandler
 	public void WaterBreakBlock(BlockFromToEvent e) {
-		String[] WBD = new String[29];
-		BasicHandlers.WaterDropBlocks(WBD);
 		Block b = e.getToBlock();
-		for(int i = 0; i < WBD.length; i++)
-		if(b.getType() == Material.getMaterial(WBD[i]) && BasicHandlers.InBase(b))
+		if(MetaBase.ifWaterDrop(b) && MetaBase.CheckCreative(b))
 		{
 			e.setCancelled(true);
 			b.setType(Material.AIR);
-			BasicHandlers.OnBase(b);
+			MetaBase.RemoveBlockMetadata(b);
 			return;
 		}
 	}

@@ -26,6 +26,7 @@ import org.bukkit.command.CommandSender;
 
 import com.net.h1karo.sharecontrol.MessageManager.MessageType;
 import com.net.h1karo.sharecontrol.ShareControl.UpdateResult;
+import com.net.h1karo.sharecontrol.configuration.Configuration;
 import com.net.h1karo.sharecontrol.localization.LanguageFiles;
 import com.net.h1karo.sharecontrol.localization.Localization;
 
@@ -89,11 +90,9 @@ public class ShareControlCommandExecutor implements CommandExecutor {
 				return true;
 			}
 			
-			/** preform for 2.1 **/
-			
-			/*if(args[0].equalsIgnoreCase("add") && args.length < 3)
+			if(args[0].equalsIgnoreCase("add") && args.length < 3)
 			{
-				String command = "/sharecontrol add <break/place/use> <material>";
+				String command = "/sc add <break/place/use> <material>";
 				String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.using.replace("%command%", command));
 				MessageManager.getManager().msg(sender, MessageType.USE, msg);
 				return true;
@@ -101,9 +100,23 @@ public class ShareControlCommandExecutor implements CommandExecutor {
 			
 			if(args[0].equalsIgnoreCase("add") && args.length == 3)
 			{
-				Configuration.addBreak(sender, args[2]);
+				Configuration.addToList(sender, args[1], args[2]);
 				return true;
-			}*/
+			}
+
+			if(args[0].equalsIgnoreCase("remove") && args.length < 3)
+			{
+				String command = "/sc remove <break/place/use> <material>";
+				String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.using.replace("%command%", command));
+				MessageManager.getManager().msg(sender, MessageType.USE, msg);
+				return true;
+			}
+			
+			if(args[0].equalsIgnoreCase("remove") && args.length == 3)
+			{
+				Configuration.removeFromList(sender, args[1], args[2]);
+				return true;
+			}
 			
 			if(args[0].equalsIgnoreCase("tools") && args.length == 1)
 			{

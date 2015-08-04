@@ -27,11 +27,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
-import com.net.h1karo.sharecontrol.listeners.BasicHandlers;
 import com.net.h1karo.sharecontrol.localization.Localization;
+import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
 public class PlayerInteractListener implements Listener
 {
@@ -57,7 +58,7 @@ public class PlayerInteractListener implements Listener
 			if(e.getClickedBlock().getType() != Material.CHEST && e.getClickedBlock().getType() != Material.TRAPPED_CHEST) return;
 			Localization.openInv(p);
 			e.setCancelled(true);
-			}
+		}
 	}
     
     @EventHandler(priority = EventPriority.HIGH)
@@ -90,9 +91,7 @@ public class PlayerInteractListener implements Listener
 			String StrListItem = (String) Configuration.BlockingItemsInvList.toArray()[i];
 			Material typeListItem;
 			
-			BasicHandlers.isInteger(StrListItem);
-			
-			if(BasicHandlers.ifInt)
+			if(MetaBase.isInteger(StrListItem))
 			{
 				String NewStr = StrListItem.replace("'", "");
 				int ID = Integer.parseInt(NewStr);

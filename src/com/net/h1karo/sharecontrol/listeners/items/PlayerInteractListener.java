@@ -36,6 +36,7 @@ import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.items.items;
 import com.net.h1karo.sharecontrol.localization.LanguageFiles;
 import com.net.h1karo.sharecontrol.localization.Localization;
+import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
 public class PlayerInteractListener implements Listener {
 	
@@ -102,7 +103,34 @@ public class PlayerInteractListener implements Listener {
 				return;
 			}
 			Block b = e.getClickedBlock();
-			Localization.SetBlockType(p, b, e);
+			
+			if(MetaBase.CheckCreative(b) && e.getAction() == Action.LEFT_CLICK_BLOCK)
+			{
+				e.setCancelled(true);
+				Localization.CreativeTypeHas(p);
+				return;
+			}
+			
+			if(!MetaBase.CheckCreative(b) && e.getAction() == Action.RIGHT_CLICK_BLOCK)
+			{
+				Localization.NaturalTypeHas(p);
+				return;
+			}
+			
+			if(MetaBase.CheckCreative(b) && e.getAction() == Action.RIGHT_CLICK_BLOCK)
+			{
+				Localization.NaturalTypeNow(p);
+				MetaBase.RemoveBlockMetadata(b);
+				return;
+			}
+			
+			if(!MetaBase.CheckCreative(b) && e.getAction() == Action.LEFT_CLICK_BLOCK)
+			{
+				e.setCancelled(true);
+				Localization.CreativeTypeNow(p);
+				MetaBase.AddBlockMetadata(b);
+				return;
+			}
 		}
 	}
 

@@ -31,7 +31,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import com.net.h1karo.sharecontrol.ShareControl;
-import com.net.h1karo.sharecontrol.listeners.BasicHandlers;
+import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
 public class EntityChangeBlockListener implements Listener
 {
@@ -51,49 +51,13 @@ public class EntityChangeBlockListener implements Listener
 		World w = e.getBlock().getWorld();
 		Entity eventEntity = e.getEntity();
 		
-		String[] DropBlocks = new String[3];
-		BasicHandlers.upDropBlocksMore(DropBlocks);
+		MetaBase.DropBlocks(w, b);
 		
-		for(int j = 256; j > b.getLocation().getBlockY(); j--) 
-		{
-			for(int i=0; i < DropBlocks.length; i++)
-			{
-				Block NewB = w.getBlockAt(b.getLocation().getBlockX(), j, b.getLocation().getBlockZ());
-				if(NewB.getType() == Material.getMaterial(DropBlocks[i]))	BasicHandlers.OnBase(NewB);
-			}
-		}
-		
-		DropBlocks = new String[36];
-		BasicHandlers.upDropBlocks(DropBlocks);
-		for(int i=0; i < DropBlocks.length; i++)
-		{
-			Block NewB = w.getBlockAt(b.getLocation().getBlockX(), b.getLocation().getBlockY() + 1, b.getLocation().getBlockZ());
-			if(NewB.getType() == Material.getMaterial(DropBlocks[i]))	BasicHandlers.OnBase(NewB);
-		}
-		
-		DropBlocks = new String[10];
-		BasicHandlers.laterallyDropBlocks(DropBlocks);
-		for(int i=0; i < DropBlocks.length; i++)
-		{
-			Block NewB = w.getBlockAt(b.getLocation().getBlockX() + 1, b.getLocation().getBlockY(), b.getLocation().getBlockZ());
-			if(NewB.getType() == Material.getMaterial(DropBlocks[i]))	BasicHandlers.OnBase(NewB);
-			
-			NewB = w.getBlockAt(b.getLocation().getBlockX() - 1, b.getLocation().getBlockY(), b.getLocation().getBlockZ());
-			if(NewB.getType() == Material.getMaterial(DropBlocks[i]))	BasicHandlers.OnBase(NewB);
-			
-			NewB = w.getBlockAt(b.getLocation().getBlockX(), b.getLocation().getBlockY(), b.getLocation().getBlockZ() + 1);
-			if(NewB.getType() == Material.getMaterial(DropBlocks[i]))	BasicHandlers.OnBase(NewB);
-			
-			NewB = w.getBlockAt(b.getLocation().getBlockX(), b.getLocation().getBlockY(), b.getLocation().getBlockZ() - 1);
-			if(NewB.getType() == Material.getMaterial(DropBlocks[i]))	BasicHandlers.OnBase(NewB);
-			
-		}
-		
-        if (eventEntity.getType() == EntityType.FALLING_BLOCK && BasicHandlers.InBase(b)) {
+        if (eventEntity.getType() == EntityType.FALLING_BLOCK && MetaBase.CheckCreative(b)) {
             FallingBlock entity = (FallingBlock) eventEntity;
             if (e.getTo() == Material.AIR) {
                    entity.setDropItem(false);
-                   BasicHandlers.RemoveofDatabase(b);
+                   MetaBase.RemoveBlockMetadata(b);
                    entity.setMetadata("ShareControl.CREATIVE_FALLING_BLOCK", new FixedMetadataValue(main, "1"));
             }
         }
@@ -101,7 +65,7 @@ public class EntityChangeBlockListener implements Listener
         if (e.getTo() != Material.AIR && b.getType() == Material.AIR && eventEntity.getType() == EntityType.FALLING_BLOCK) {
         	FallingBlock entity = (FallingBlock) eventEntity;
         	if(entity.hasMetadata("ShareControl.CREATIVE_FALLING_BLOCK")) {
-        		BasicHandlers.AddofDatabase(b);
+        		MetaBase.AddBlockMetadata(b);
         		entity.removeMetadata("ShareControl.CREATIVE_FALLING_BLOCK", main);
         	}
         }

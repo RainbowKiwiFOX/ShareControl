@@ -25,8 +25,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+
 import com.net.h1karo.sharecontrol.ShareControl;
-import com.net.h1karo.sharecontrol.listeners.BasicHandlers;
+import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
 public class BlockPlaceListener implements Listener
 {
@@ -57,16 +58,10 @@ public class BlockPlaceListener implements Listener
 		
 		if(w.getBlockAt(e.getBlockPlaced().getX(), e.getBlockPlaced().getY(), e.getBlockPlaced().getZ() - 1).getType() != Material.CACTUS && w.getBlockAt(e.getBlockPlaced().getX(), e.getBlockPlaced().getY(), e.getBlockPlaced().getZ() + 1).getType() != Material.CACTUS && w.getBlockAt(e.getBlockPlaced().getX() - 1, e.getBlockPlaced().getY(), e.getBlockPlaced().getZ()).getType() != Material.CACTUS && w.getBlockAt(e.getBlockPlaced().getX() + 1, e.getBlockPlaced().getY(), e.getBlockPlaced().getZ()).getType() != Material.CACTUS) return;
 		
-		String[] DropBlocks = new String[3];
-		BasicHandlers.upDropBlocksMore(DropBlocks);
-		
-		for(int j = 256; j >= b.getLocation().getBlockY(); j--) 
+		for(int j = 256; j > b.getLocation().getBlockY(); j--) 
 		{
-			for(int i=0; i < DropBlocks.length; i++)
-			{
-				Block NewB = w.getBlockAt(b.getLocation().getBlockX(), j, b.getLocation().getBlockZ());
-				if(NewB.getType() == Material.getMaterial(DropBlocks[i]))	BasicHandlers.OnBase(NewB);
-			}
+			Block NewB = w.getBlockAt(b.getLocation().getBlockX(), j, b.getLocation().getBlockZ());
+				if(MetaBase.ifUpDrop(NewB))	MetaBase.FullClear(NewB);
 		}
 	}
 }

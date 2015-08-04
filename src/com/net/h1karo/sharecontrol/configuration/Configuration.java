@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.logging.Level;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -33,6 +34,7 @@ import com.net.h1karo.sharecontrol.MessageManager;
 import com.net.h1karo.sharecontrol.MessageManager.MessageType;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.localization.LanguageFiles;
+import com.net.h1karo.sharecontrol.localization.Localization;
 
 public class Configuration {
 	
@@ -165,8 +167,8 @@ public class Configuration {
     		LanguageFiles.savelanguageConfig("ru");
     	}
 		
-		LanguageFiles.reloadlanguageConfig(Configuration.Language);
-		LanguageFiles.savelanguageConfig(Configuration.Language);
+		LanguageFiles.reloadlanguageConfig(Language);
+		LanguageFiles.savelanguageConfig(Language);
 	}
 	
 	// inventories.yml
@@ -206,10 +208,8 @@ public class Configuration {
     
     static boolean ifInt;
     
-    /** preform for 2.1 **/
-    
-    /*@SuppressWarnings("deprecation")
-	public static void addBreak(CommandSender sender, String material) {
+    @SuppressWarnings("deprecation")
+	public static void addToList(CommandSender sender, String list, String material) {
     	Material Material;
     	isInteger(material);
 		
@@ -222,7 +222,72 @@ public class Configuration {
 		if(!(Material instanceof Material)) {
 			Localization.ThisNotMaterialandID(sender, material);
 		}
-    }*/
+		else {
+			if(list.compareToIgnoreCase("break") == 0) {
+				BlockingBlocksBreakList.add(material);
+				saveCfg();
+				Localization.AddSuccess(sender, list, material);
+				return;
+			}
+			if(list.compareToIgnoreCase("place") == 0) {
+				BlockingBlocksPlaceList.add(material);
+				saveCfg();
+				Localization.AddSuccess(sender, list, material);
+				return;
+			}
+			if(list.compareToIgnoreCase("use") == 0) {
+				BlockingItemsInvList.add(material);
+				saveCfg();
+				Localization.AddSuccess(sender, list, material);
+				return;
+			}
+			
+			String command = "/sc add <break/place/use> <material>";
+			String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.using.replace("%command%", command));
+			MessageManager.getManager().msg(sender, MessageType.USE, msg);
+		}
+    }
+    
+    
+    @SuppressWarnings("deprecation")
+	public static void removeFromList(CommandSender sender, String list, String material) {
+    	Material Material;
+    	isInteger(material);
+		
+		if(ifInt)
+		{
+			int ID = Integer.parseInt(material);
+			Material = org.bukkit.Material.getMaterial(ID);
+		}
+		else Material = org.bukkit.Material.getMaterial(material);
+		if(!(Material instanceof Material)) {
+			Localization.ThisNotMaterialandID(sender, material);
+		}
+		else {
+			if(list.compareToIgnoreCase("break") == 0) {
+				BlockingBlocksBreakList.remove(material);
+				saveCfg();
+				Localization.RemoveSuccess(sender, list, material);
+				return;
+			}
+			if(list.compareToIgnoreCase("place") == 0) {
+				BlockingBlocksPlaceList.remove(material);
+				saveCfg();
+				Localization.RemoveSuccess(sender, list, material);
+				return;
+			}
+			if(list.compareToIgnoreCase("use") == 0) {
+				BlockingItemsInvList.remove(material);
+				saveCfg();
+				Localization.RemoveSuccess(sender, list, material);
+				return;
+			}
+			
+			String command = "/sc remove <break/place/use> <material>";
+			String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.using.replace("%command%", command));
+			MessageManager.getManager().msg(sender, MessageType.USE, msg);
+		}
+    }
 
 	@SuppressWarnings("deprecation")
 	protected static void CheckError()

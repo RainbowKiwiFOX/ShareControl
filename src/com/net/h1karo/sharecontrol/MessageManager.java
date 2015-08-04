@@ -39,6 +39,7 @@ public class MessageManager {
 		INFO(ChatColor.GRAY),
 		BAD(ChatColor.RED),
 		USE(ChatColor.GRAY),
+		PLAYERS(ChatColor.GRAY),
 		PLINFO(ChatColor.GRAY),
 		HELP(ChatColor.GRAY),
 		ERROR(ChatColor.DARK_RED),
@@ -61,10 +62,18 @@ public class MessageManager {
 	{
 		for(String msg : msgs)
 		{
-			if(type.name() != "HELP" && Configuration.PrefixEnabled)
-				sender.sendMessage(prefix + type.getColor() + msg);
-			else 
-				sender.sendMessage(type.getColor() + msg);
+			if(Configuration.PrefixEnabled) {
+				if(type != MessageType.HELP)
+					sender.sendMessage(prefix + type.getColor() + msg);
+				else 
+					sender.sendMessage(type.getColor() + msg);
+			}
+			else {
+				if(type != MessageType.HELP && type != MessageType.PLAYERS)
+					sender.sendMessage(prefix + type.getColor() + msg);
+				else 
+					sender.sendMessage(type.getColor() + msg);
+			}
 		}
 	}
 }

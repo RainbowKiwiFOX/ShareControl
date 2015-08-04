@@ -22,13 +22,14 @@ import java.util.List;
 
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 
 import com.net.h1karo.sharecontrol.ShareControl;
-import com.net.h1karo.sharecontrol.listeners.BasicHandlers;
+import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
 public class BlockPistonExtendListener implements Listener
 {
@@ -47,14 +48,12 @@ public class BlockPistonExtendListener implements Listener
 		List<Block> blocks = e.getBlocks();
 		World w = e.getBlock().getWorld();
 		int X,Y,Z;
-		String Dir = e.getDirection().toString();
+		BlockFace Dir = e.getDirection();
 		
-		/** Blocks edit in list of creative block **/
-		if(BasicHandlers.checkSamenessList(blocks)) {
-			for(int i=0; i < blocks.size(); i++) {
-				Block b = blocks.get(i);
-				if(BasicHandlers.InBase(b))
-					BasicHandlers.EditBlockByPiston(b, i, Dir, w);
+		if(MetaBase.ListCheckCreative(blocks)) {
+			for(Block b : blocks) {
+				if(MetaBase.CheckCreative(b))
+					MetaBase.EditBlockByPiston(b, Dir, w);
 			}
 			
 			for(int i = blocks.size() - 1; i >= 0; i--) {
@@ -62,45 +61,44 @@ public class BlockPistonExtendListener implements Listener
 				X = b.getX();
 				Y = b.getY();
 				Z = b.getZ();
-				if(Dir.compareToIgnoreCase("EAST") == 0)
+				if(Dir == BlockFace.EAST)
 					X--;
-				if(Dir.compareToIgnoreCase("WEST") == 0)
+				if(Dir == BlockFace.WEST)
 					X++;
-				if(Dir.compareToIgnoreCase("SOUTH") == 0)
+				if(Dir == BlockFace.SOUTH)
 					Z--;
-				if(Dir.compareToIgnoreCase("NORTH") == 0)
+				if(Dir == BlockFace.NORTH)
 					Z++;
-				if(Dir.compareToIgnoreCase("UP") == 0)
+				if(Dir == BlockFace.UP)
 					Y--;
-				if(Dir.compareToIgnoreCase("DOWN") == 0)
+				if(Dir == BlockFace.DOWN)
 					Y++;
 				
 				Block bt = w.getBlockAt(X, Y, Z);
-				if(!BasicHandlers.InBase(bt)) {
-					BasicHandlers.clearBlock(b);
+				if(!MetaBase.CheckCreative(bt)) {
+					MetaBase.RemoveBlockMetadata(b);
 				}
 			}
 		}
-		/** Piston add in list of creative block **/
 		
 		X = e.getBlock().getX();
 		Y = e.getBlock().getY();
 		Z = e.getBlock().getZ();
 		
-		if(BasicHandlers.InBase(e.getBlock()))
+		if(MetaBase.CheckCreative(e.getBlock()))
 		{
-			if(Dir.compareToIgnoreCase("EAST") == 0) 
-				BasicHandlers.AddofDatabase(w.getBlockAt(X + 1, Y, Z));
-			if(Dir.compareToIgnoreCase("WEST") == 0) 
-				BasicHandlers.AddofDatabase(w.getBlockAt(X - 1, Y, Z));
-			if(Dir.compareToIgnoreCase("SOUTH") == 0) 
-				BasicHandlers.AddofDatabase(w.getBlockAt(X, Y, Z + 1));
-			if(Dir.compareToIgnoreCase("NORTH") == 0) 
-				BasicHandlers.AddofDatabase(w.getBlockAt(X, Y, Z - 1));
-			if(Dir.compareToIgnoreCase("UP") == 0) 
-				BasicHandlers.AddofDatabase(w.getBlockAt(X, Y + 1, Z));
-			if(Dir.compareToIgnoreCase("DOWN") == 0) 
-				BasicHandlers.AddofDatabase(w.getBlockAt(X, Y - 1, Z));
+			if(Dir == BlockFace.EAST) 
+				MetaBase.AddBlockMetadata(w.getBlockAt(X + 1, Y, Z));
+			if(Dir == BlockFace.WEST) 
+				MetaBase.AddBlockMetadata(w.getBlockAt(X - 1, Y, Z));
+			if(Dir == BlockFace.SOUTH) 
+				MetaBase.AddBlockMetadata(w.getBlockAt(X, Y, Z + 1));
+			if(Dir == BlockFace.NORTH) 
+				MetaBase.AddBlockMetadata(w.getBlockAt(X, Y, Z - 1));
+			if(Dir == BlockFace.UP) 
+				MetaBase.AddBlockMetadata(w.getBlockAt(X, Y + 1, Z));
+			if(Dir == BlockFace.DOWN) 
+				MetaBase.AddBlockMetadata(w.getBlockAt(X, Y - 1, Z));
 		}
 	}
 }

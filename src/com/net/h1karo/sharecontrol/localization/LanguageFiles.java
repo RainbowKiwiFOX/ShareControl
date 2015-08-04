@@ -15,7 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-
 package com.net.h1karo.sharecontrol.localization;
 
 import java.io.File;
@@ -94,6 +93,8 @@ public class LanguageFiles {
     	getLangConfig(lang).set("GamemodesControl.NotAllowedGamemode", GamemodesControl);
     	
     	getLangConfig(lang).set("PlayersInGamemode.List", PlayerListInGamemode);
+    	getLangConfig(lang).set("PlayersInGamemode.UnknownGamemode", UnknownGamemode);
+    	getLangConfig(lang).set("PlayersInGamemode.NotFound", PlayerInGamemodeNotFound);
     	getLangConfig(lang).set("PlayersInGamemode.More", PlayerListInGamemodeMore);
     	
     	getLangConfig(lang).set("Menu.This", menu);
@@ -110,6 +111,14 @@ public class LanguageFiles {
     	
     	getLangConfig(lang).set("Reload.Reloading", reloading);
     	getLangConfig(lang).set("Reload.Success", reloadsuccess);
+    	
+    	getLangConfig(lang).set("ChangeConfig.AddToBlockingPlacement", AMtoPlaceList);
+    	getLangConfig(lang).set("ChangeConfig.AddToBlockingBreakage", AMtoBreakList);
+    	getLangConfig(lang).set("ChangeConfig.AddToBlockingInventory", AMtoUseList);
+    	getLangConfig(lang).set("ChangeConfig.RemoveFromBlockingPlacement", RMtoPlaceList);
+    	getLangConfig(lang).set("ChangeConfig.RemoveFromBlockingBreakage", RMtoBreakList);
+    	getLangConfig(lang).set("ChangeConfig.RemoveFromBlockingInventory", RMtoUseList);
+    	getLangConfig(lang).set("ChangeConfig.ThisNotMaterialAndId", ThisNotMaterialandId);
     	
     	getLangConfig(lang).set("Tools.ChangeTool.Get", getsettool);
     	getLangConfig(lang).set("Tools.ChangeTool.Name", namesettool);
@@ -187,7 +196,7 @@ public class LanguageFiles {
     	  	+ " %uuid% - universally unique identifier of player";
     	
     	UpdateNotFound = getLangConfig(lang).getString("Update.UpdateNotFound", "&7Updates not found. You have the latest version!");
-		UpdateAvailable = getLangConfig(lang).getString("Update.Available", "&7An update is available: &9%update%&7 available an &9%link%&7!");
+		UpdateAvailable = getLangConfig(lang).getString("Update.Available", "&7An update is available: &9%update%&7, download at &9%link%&7!");
 		
 		NoPerms = getLangConfig(lang).getString("NoPermission", "&cYou do not have permission to do this!");
 		
@@ -215,6 +224,8 @@ public class LanguageFiles {
 		GamemodesControl = getLangConfig(lang).getString("GamemodesControl.NotAllowedGamemode", "&cYou can not go in gamemode &6%gamemode%&c!");
 		
 		PlayerListInGamemode = getLangConfig(lang).getString("PlayersInGamemode.List", "&7Players in &9%gamemode%&7 mode: &9%list%&7");
+		UnknownGamemode = getLangConfig(lang).getString("PlayersInGamemode.UnknownGamemode", "&cUnknown gamemode: &6%gamemode%&c.");
+		PlayerInGamemodeNotFound = getLangConfig(lang).getString("PlayersInGamemode.NotFound", "&7Players in the gamemode &9%gamemode%&7 not found!");
 		PlayerListInGamemodeMore = getLangConfig(lang).getString("PlayersInGamemode.More", "&7To find out detailed information about the player, type &9/sc check <ник игрока>&7!");
 		
 		menu = getLangConfig(lang).getString("Menu.This", "&9%command% &f- this menu,");
@@ -232,6 +243,14 @@ public class LanguageFiles {
 		
 		reloading = getLangConfig(lang).getString("Reload.Reloading", "&7Reloading...");
 		reloadsuccess = getLangConfig(lang).getString("Reload.Success", "&7Reloading the plugin successfully completed!");
+		
+		AMtoPlaceList = getLangConfig(lang).getString("ChangeConfig.AddToBlockingPlacement", "&7The block &9%material%&7 successfully added to list of blocks that are prohibited to place!");
+		AMtoBreakList = getLangConfig(lang).getString("ChangeConfig.AddToBlockingBreakage", "&7The block &9%material%&7 successfully added to list of blocks that are prohibited to break!");
+		AMtoUseList = getLangConfig(lang).getString("ChangeConfig.AddToBlockingInventory", "&7The item &9%material%&7 successfully added to list of item that are prohibited to use!");
+		RMtoPlaceList = getLangConfig(lang).getString("ChangeConfig.RemoveFromBlockingPlacement", "&7The block &9%material%&7 successfully removed from list of blocks that are prohibited to place!");
+		RMtoBreakList = getLangConfig(lang).getString("ChangeConfig.RemoveFromBlockingBreakage", "&7The block &9%material%&7 successfully removed from list of blocks that are prohibited to break!");
+		RMtoUseList = getLangConfig(lang).getString("ChangeConfig.RemoveFromBlockingInventory", "&7The item &9%material%&7 successfully removed from list of items that are prohibited to use!");
+		ThisNotMaterialandId = getLangConfig(lang).getString("ChangeConfig.ThisNotMaterialAndId", "&7Error: &9%material%&7 is not a material or id of block or item.");
 		
 		getsettool = getLangConfig(lang).getString("Tools.ChangeTool.Get", "&7You got the &9change tool&7!");
 		namesettool = getLangConfig(lang).getString("Tools.ChangeTool.Name", "&9&lChange Tool");
@@ -323,7 +342,10 @@ public class LanguageFiles {
 		GamemodesControl = getLangConfig(lang).getString("GamemodesControl.NotAllowedGamemode", "&cВы не можете перейти в режим игры &6%gamemode%&c!");
 		
 		PlayerListInGamemode = getLangConfig(lang).getString("PlayersInGamemode.List", "&7Игроки в режиме игры &9%gamemode%&7: &9%list%&7");
+		UnknownGamemode = getLangConfig(lang).getString("PlayersInGamemode.UnknownGamemode", "&cНеизвестный тип игрового режима: &6%gamemode%&c.");
+		PlayerInGamemodeNotFound = getLangConfig(lang).getString("PlayersInGamemode.NotFound", "&7Игроки в игровом режиме &9%gamemode%&7 не найдены!");
 		PlayerListInGamemodeMore = getLangConfig(lang).getString("PlayersInGamemode.More", "&7Чтобы узнать подробную информацию о игроке, напишите &9/sc check <ник игрока>&7!");
+		
 		
 		menu = getLangConfig(lang).getString("Menu.This", "&9%command% &f- данное меню,");
 		menureload = getLangConfig(lang).getString("Menu.Reload", "&9%command% &f- перезагрузка,");
@@ -339,6 +361,14 @@ public class LanguageFiles {
 		
 		reloading = getLangConfig(lang).getString("Reload.Reloading", "&7Перезагрузка...");
 		reloadsuccess = getLangConfig(lang).getString("Reload.Success", "&7Перезагрузка плагина завершена успешно!");
+		
+		AMtoPlaceList = getLangConfig(lang).getString("ChangeConfig.AddToBlockingPlacement", "&7Блок &9%material%&7 успешно добавлен в список блоков, которые запрещено ставить!");
+		AMtoBreakList = getLangConfig(lang).getString("ChangeConfig.AddToBlockingBreakage", "&7Блок &9%material%&7 успешно добавлен в список блоков, которые запрещено ломать!");
+		AMtoUseList = getLangConfig(lang).getString("ChangeConfig.AddToBlockingInventory", "&7Предмет &9%material%&7 успешно добавлен в список предметов, которые запрещено использовать!");
+		RMtoPlaceList = getLangConfig(lang).getString("ChangeConfig.RemoveFromBlockingPlacement", "&7Блок &9%material%&7 успешно удален из списка блоков, которые запрещено ставить!");
+		RMtoBreakList = getLangConfig(lang).getString("ChangeConfig.RemoveFromBlockingBreakage", "&7Блок &9%material%&7 успешно удален из списка блоков, которые запрещено ломать!");
+		RMtoUseList = getLangConfig(lang).getString("ChangeConfig.RemoveFromBlockingInventory", "&7Предмет &9%material%&7 успешно удален из списка предметов, которые запрещено использовать!");
+		ThisNotMaterialandId = getLangConfig(lang).getString("ChangeConfig.ThisNotMaterialAndId", "&7Ошибка: &9%material%&7 не является материалом или ID блока или предмета.");
 		
 		getsettool = getLangConfig(lang).getString("Tools.ChangeTool.Get", "&7Вы получили &9изменяющий предмет&7!");
 		namesettool = getLangConfig(lang).getString("Tools.ChangeTool.Name", "&9&lИзменяющий предмет");
@@ -398,25 +428,22 @@ public class LanguageFiles {
 	
 	public static String using;
 	
-	public static String reloading;
-	public static String reloadsuccess;
+	public static String AMtoBreakList, AMtoPlaceList, AMtoUseList;
+	public static String RMtoBreakList, RMtoPlaceList, RMtoUseList;
+	public static String ThisNotMaterialandId;
 	
-	public static String getinfotool;
-	public static String getsettool;
+	public static String reloading, reloadsuccess;
 	
-	public static String namesettool;
-	public static String loreST1;
-	public static String loreST2;
-	public static String loreST3;
-	public static String nameinfotool;
-	public static String loreIT1;
-	public static String loreIT2;
+	public static String getinfotool, getsettool;
+	
+	public static String namesettool, loreST1, loreST2, loreST3;
+	public static String nameinfotool, loreIT1, loreIT2;
 	
 	public static String CreativeType, NaturalType, Name, Coordinates, Type, ID, Nick, GM, Health, Exp, UUID, World;
 	
 	public static String Creative, Survival, Adventure, Spectator;
 	
-	public static String PlayerListInGamemode, PlayerListInGamemodeMore;
+	public static String PlayerListInGamemode, PlayerListInGamemodeMore, UnknownGamemode, PlayerInGamemodeNotFound;
 	
 	public static String BlockHas;
 	public static String BlockNow;

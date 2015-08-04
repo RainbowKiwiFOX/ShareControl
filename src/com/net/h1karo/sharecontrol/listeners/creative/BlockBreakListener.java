@@ -27,11 +27,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
-import com.net.h1karo.sharecontrol.listeners.BasicHandlers;
 import com.net.h1karo.sharecontrol.localization.Localization;
+import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
 public class BlockBreakListener implements Listener {
 	
@@ -48,7 +49,7 @@ public class BlockBreakListener implements Listener {
 		Player p = e.getPlayer();
 		if(p.getGameMode() != GameMode.CREATIVE || e.isCancelled()) return;
 		Block b = e.getBlock();
-		BasicHandlers.RemoveofDatabase(b);
+		MetaBase.RemoveBlockMetadata(b);
 	}
 	
 	
@@ -67,9 +68,7 @@ public class BlockBreakListener implements Listener {
 		{
 			String StrListBlock = (String) Configuration.BlockingBlocksBreakList.toArray()[i];
 			if(!Permissions.perms(p, "allow.blocking-breakage." + StrListBlock)) {
-				BasicHandlers.isInteger(StrListBlock);
-				
-				if(BasicHandlers.ifInt)
+				if(MetaBase.isInteger(StrListBlock))
 				{
 					String NewStr = StrListBlock.replace("'", "");
 					int ID = Integer.parseInt(NewStr);
@@ -84,7 +83,7 @@ public class BlockBreakListener implements Listener {
 					e.setCancelled(true);
 					return;
 				}
-		}
+			}
 		}
 	}
 	
@@ -92,42 +91,9 @@ public class BlockBreakListener implements Listener {
 	public void onAutoBreak(BlockBreakEvent e)
 	{
 		if(e.isCancelled()) return;
+		
 		Block b = e.getBlock();
-		String[] DropBlocks = new String[3];
-		BasicHandlers.upDropBlocksMore(DropBlocks);
 		World w = e.getBlock().getWorld();
-		for(int j = 256; j > b.getLocation().getBlockY(); j--) 
-		{
-			for(int i=0; i < DropBlocks.length; i++)
-			{
-				Block NewB = w.getBlockAt(b.getLocation().getBlockX(), j, b.getLocation().getBlockZ());
-				if(NewB.getType() == Material.getMaterial(DropBlocks[i]))	BasicHandlers.OnBase(NewB);
-			}
-		}
-		
-		DropBlocks = new String[36];
-		BasicHandlers.upDropBlocks(DropBlocks);
-		for(int i=0; i < DropBlocks.length; i++)
-		{
-			Block NewB = w.getBlockAt(b.getLocation().getBlockX(), b.getLocation().getBlockY() + 1, b.getLocation().getBlockZ());
-			if(NewB.getType() == Material.getMaterial(DropBlocks[i]))	BasicHandlers.OnBase(NewB);
-		}
-		
-		DropBlocks = new String[10];
-		BasicHandlers.laterallyDropBlocks(DropBlocks);
-		for(int i=0; i < DropBlocks.length; i++)
-		{
-			Block NewB = w.getBlockAt(b.getLocation().getBlockX() + 1, b.getLocation().getBlockY(), b.getLocation().getBlockZ());
-			if(NewB.getType() == Material.getMaterial(DropBlocks[i]))	BasicHandlers.OnBase(NewB);
-			
-			NewB = w.getBlockAt(b.getLocation().getBlockX() - 1, b.getLocation().getBlockY(), b.getLocation().getBlockZ());
-			if(NewB.getType() == Material.getMaterial(DropBlocks[i]))	BasicHandlers.OnBase(NewB);
-			
-			NewB = w.getBlockAt(b.getLocation().getBlockX(), b.getLocation().getBlockY(), b.getLocation().getBlockZ() + 1);
-			if(NewB.getType() == Material.getMaterial(DropBlocks[i]))	BasicHandlers.OnBase(NewB);
-			
-			NewB = w.getBlockAt(b.getLocation().getBlockX(), b.getLocation().getBlockY(), b.getLocation().getBlockZ() - 1);
-			if(NewB.getType() == Material.getMaterial(DropBlocks[i]))	BasicHandlers.OnBase(NewB);
-		}
+		MetaBase.DropBlocks(w, b);
 	}
 }

@@ -27,7 +27,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 import com.net.h1karo.sharecontrol.ShareControl;
-import com.net.h1karo.sharecontrol.listeners.BasicHandlers;
+import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
 public class EntityExplodeListener implements Listener {
 	
@@ -45,7 +45,7 @@ public class EntityExplodeListener implements Listener {
 			List<Block> blocks = e.blockList();
 			for(int i=0; i < blocks.size(); i++) {
 				Block b = blocks.get(i);
-				if(BasicHandlers.checkSameness(b))
+				if(MetaBase.CheckCreative(b))
 					e.blockList().remove(b);
 			}
 		}

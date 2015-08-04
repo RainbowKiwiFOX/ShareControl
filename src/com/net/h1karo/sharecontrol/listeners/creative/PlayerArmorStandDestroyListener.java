@@ -16,36 +16,39 @@
  ******************************************************************************/
 
 
-package com.net.h1karo.sharecontrol.listeners.survival;
+package com.net.h1karo.sharecontrol.listeners.creative;
 
-import org.bukkit.GameMode;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.net.h1karo.sharecontrol.ShareControl;
-import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
-public class BlockPlaceListener implements Listener {
+public class PlayerArmorStandDestroyListener implements Listener {
 	
 	@SuppressWarnings("unused")
 	private final ShareControl main;
-	public BlockPlaceListener(ShareControl h)
+	public PlayerArmorStandDestroyListener(ShareControl h)
 	{
 		this.main = h;
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH)
-	public void SurvivalBlockPlace(BlockPlaceEvent e)
-	{
-		Player p = e.getPlayer();
-		if(p.getGameMode() == GameMode.CREATIVE || e.isCancelled())
+	@EventHandler
+	public void PlayerArmorStandDestroy(EntityDamageByEntityEvent e){
+		if (!(e.getEntity() instanceof LivingEntity)) {
 			return;
-		Block b = e.getBlockPlaced();
-		if(MetaBase.CheckCreative(b))
-			MetaBase.RemoveBlockMetadata(b);
+		}
+		
+		final LivingEntity livingEntity = (LivingEntity)e.getEntity();
+		if(!livingEntity.getType().equals(EntityType.ARMOR_STAND)){
+			return;
+		}
+		
+		if(e.getEntity().hasMetadata("ShareControl.CREATIVE_ENTITY")) {
+			e.setCancelled(true);
+			e.getEntity().remove();
+		}
 	}
 }

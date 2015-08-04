@@ -33,6 +33,7 @@ import com.garbagemule.MobArena.MobArena;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -41,11 +42,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.net.h1karo.sharecontrol.MessageManager.MessageType;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
-import com.net.h1karo.sharecontrol.database.Database;
 import com.net.h1karo.sharecontrol.listeners.supports.MobArenaEventListener;
 import com.net.h1karo.sharecontrol.listeners.supports.PvPArenaEventListener;
 import com.net.h1karo.sharecontrol.localization.LanguageFiles;
 import com.net.h1karo.sharecontrol.localization.Localization;
+import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -68,9 +69,9 @@ public class ShareControl extends JavaPlugin implements Listener
 	private static Configuration mainconfig;
 	@SuppressWarnings("unused")
 	private static LanguageFiles lang;
-	private ShareControlCommandExecutor Executor;
 	@SuppressWarnings("unused")
-	private static Database bBase;
+	private static MetaBase metabase;
+	private ShareControlCommandExecutor Executor;
 	
 	public String web = getDescription().getWebsite();
     String stringVersion = ChatColor.BLUE + getDescription().getVersion();
@@ -82,7 +83,9 @@ public class ShareControl extends JavaPlugin implements Listener
 	@Override
 	public void onEnable()
 	{
-		getLogger().info("Loading configuration...");
+		ConsoleCommandSender console = Bukkit.getConsoleSender();
+		console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&l=================== &9&lShare&f&lControl &7&l==================="));
+		console.sendMessage(ChatColor.translateAlternateColorCodes('&', " Loading configuration..."));
 		
 		instance = this;
 		setupListeners();
@@ -105,16 +108,22 @@ public class ShareControl extends JavaPlugin implements Listener
 		
 		Permissions.RegisterCustomPermissions();
 		
-		getLogger().info("Configuration successfully uploaded!");
+		console.sendMessage(ChatColor.translateAlternateColorCodes('&', " Configuration successfully uploaded!"));
 		
 		if(Configuration.versionCheck) {
-			getLogger().info("Check updates...");
+			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " Check updates..."));
 			updateCheck();
-			if(result == UpdateResult.UPDATE_AVAILABLE)
-				UpdateFound();
+			if(result == UpdateResult.UPDATE_AVAILABLE) {
+				String name = newVersion;
+				console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &fAn update is available: &9ShareControl v" + name.replace(" Alpha", "").replace(" Beta", "") + "&f,"));
+				console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &fdownload at"));
+				console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &f" + Localization.link));
+			}
 			if(result == UpdateResult.NO_UPDATE)
-				getLogger().info("Updates not found!");
+				console.sendMessage(ChatColor.translateAlternateColorCodes('&', " Updates not found!"));
 		}
+		
+		console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&l===================================================="));
 	}
 	@Override
 	public void onDisable()
@@ -202,7 +211,7 @@ public class ShareControl extends JavaPlugin implements Listener
         	else CurrentBuildNumber = Double.parseDouble(CurrentBuildString);
         }
         else 
-        	CurrentVersionNumber = Double.parseDouble(currentVersion.substring(0, currentVersion.indexOf(".") + 1) + currentVersion.substring(currentVersion.indexOf(".") + 1).replace(".", ""));
+        	CurrentVersionNumber = Double.parseDouble((currentVersion.substring(0, currentVersion.indexOf(".") + 1) + currentVersion.substring(currentVersion.indexOf(".") + 1).replace(".", "")).replace("b", "").replace("a", ""));
             
             if(newVersion.contains("-")) {
             	NewVersionNumber = Double.parseDouble(newVersion.substring(0, newVersion.indexOf(".") + 1) + newVersion.substring(newVersion.indexOf(".") + 1, newVersion.indexOf("-")).replace(".", ""));
@@ -219,7 +228,7 @@ public class ShareControl extends JavaPlugin implements Listener
             	else NewBuildNumber = Double.parseDouble(NewBuildString);
             }
             else 
-            	NewVersionNumber = Double.parseDouble(newVersion.substring(0, newVersion.indexOf(".") + 1) + newVersion.substring(newVersion.indexOf(".") + 1).replace(".", ""));
+            	NewVersionNumber = Double.parseDouble((newVersion.substring(0, newVersion.indexOf(".") + 1) + newVersion.substring(newVersion.indexOf(".") + 1).replace(".", "")).replace("b", "").replace("a", ""));
             
             /**\\**//**\\**//**\\**/
           /**\   CHECK VERSIONS   /**\
@@ -237,21 +246,17 @@ public class ShareControl extends JavaPlugin implements Listener
         result = UpdateResult.ERROR;
 	}
 	
-	public void UpdateFound() {
-		String name = newVersion;
-		String msg = "An update is available: " + "ShareControl v" + name.replace(" Alpha", "").replace(" Beta", "") + " available at " + Localization.link;
-		getLogger().info(msg);
-	}
-	
 	private void setupListeners()
     {
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(this, this);
 		
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.blocks.BlockFromToListener(this), this);
+		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.blocks.BlockGrowListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.blocks.BlockPistonExtendListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.blocks.BlockPistonRetractListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.blocks.BlockPlaceListener(this), this);
+		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.blocks.StructureGrowListener(this), this);
 		
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.BlockBreakListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.BlockPlaceListener(this), this);
@@ -260,7 +265,9 @@ public class ShareControl extends JavaPlugin implements Listener
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.EntityShootBowListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.InventoryClickListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.InventoryOpenListener(this), this);
+		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerArmorStandDestroyListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerArmorStandManipulateListener(this), this);
+		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerArmorStandSpawnListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerCommandPreprocessListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerDeathListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerDropItemListener(this), this);
@@ -299,7 +306,7 @@ public class ShareControl extends JavaPlugin implements Listener
 		
 		mainconfig = new Configuration(this);
 		lang = new LanguageFiles(this);
-		bBase = new Database(this);
+		metabase = new MetaBase(this);
 
         MobArena maPlugin = (MobArena)pm.getPlugin("MobArena");
         PVPArena pvpPlugin = (PVPArena)pm.getPlugin("pvparena");

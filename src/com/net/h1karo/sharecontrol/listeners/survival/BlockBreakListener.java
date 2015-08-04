@@ -30,8 +30,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
-import com.net.h1karo.sharecontrol.database.Database;
-import com.net.h1karo.sharecontrol.listeners.BasicHandlers;
+import com.net.h1karo.sharecontrol.metabase.MetaBase;
 import com.net.h1karo.sharecontrol.localization.Localization;
 
 public class BlockBreakListener implements Listener {
@@ -54,7 +53,7 @@ public class BlockBreakListener implements Listener {
 
 		if(b.getType() == Material.PISTON_EXTENSION) {
 			World w = b.getWorld();
-			if(!BasicHandlers.InBase(b)) return;
+			if(!MetaBase.CheckCreative(b)) return;
 			if(b.getData() == 13) {
 				e.setCancelled(true);
 				Block piston = w.getBlockAt(b.getX() - 1, b.getY(), b.getZ());
@@ -88,12 +87,8 @@ public class BlockBreakListener implements Listener {
 		ClearBlock(b, p, e);
 	}
 	
-	public void ClearBlock(Block b, Player p, BlockBreakEvent e) {
-		int x = b.getX();
-		int y = b.getY();
-		int z = b.getZ();
-		
-		if(Database.getBlockBase().get(x + "." + y + "." + z) != null && BasicHandlers.checkSameness(b)) {
+	public void ClearBlock(Block b, Player p, BlockBreakEvent e) {	
+		if(MetaBase.CheckCreative(b)) {
 			e.setCancelled(true);
 			if(!Configuration.BlockingBreak)
 			{
@@ -106,26 +101,20 @@ public class BlockBreakListener implements Listener {
 				return;
 			}
 				
-			Database.getBlockBase().set(x + "." + y + "." + z, null);
-			Database.saveBlockBase();
+			MetaBase.RemoveBlockMetadata(b);
 			return;
 		}
 	}
 	
 	public void ClearPiston(Block b, BlockBreakEvent e) {
-		int x = b.getX();
-		int y = b.getY();
-		int z = b.getZ();
-		
-		if(Database.getBlockBase().get(x + "." + y + "." + z) != null && BasicHandlers.checkSameness(b)){
+		if(MetaBase.CheckCreative(b)){
 			e.setCancelled(true);
 			if(!Configuration.BlockingBreak)
 				b.setType(Material.AIR);
 			else
 				return;
 			
-			Database.getBlockBase().set(x + "." + y + "." + z, null);
-			Database.saveBlockBase();
+			MetaBase.RemoveBlockMetadata(b);
 			return;
 		}
 	}

@@ -29,8 +29,6 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.net.h1karo.sharecontrol.MessageManager;
@@ -39,7 +37,7 @@ import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.MessageManager.MessageType;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
 import com.net.h1karo.sharecontrol.items.items;
-import com.net.h1karo.sharecontrol.listeners.BasicHandlers;
+import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
 public class Localization {
 	
@@ -81,42 +79,42 @@ public class Localization {
     public static void NoPerms(Player p) 
 	{
     	String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.NoPerms);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	public static void dropNotify(Player p) 
 	{
 		if(!Configuration.CreativeNotify) return;
 		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.OnDrop);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 
 	public static void MonsterInteractNotify(Player p) 
 	{
 		if(!Configuration.CreativeNotify) return;
 		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.OnMonsterInteract);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	public static void Fishing(Player p) 
 	{
 		if(!Configuration.CreativeNotify) return;
 		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.OnFishing);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	public static void Bow(Player p) 
 	{
 		if(!Configuration.CreativeNotify) return;
 		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.OnBowShoot);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	public static void PlayerInteractNotify(Player p) 
 	{
 		if(!Configuration.CreativeNotify) return;
 		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.OnPlayerInteract);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	public static void invNotify(Material typeThisItem, Player p) 
@@ -128,14 +126,14 @@ public class Localization {
 			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.OnInventoryClickMaterial.replace("%item%", strThisItem));
 		else
 			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.OnInventoryClick);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	public static void openInv(Player p)
 	{
 		if(!Configuration.CreativeNotify) return;
 		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.OnOpenOtherInventory);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	public static void PlaceBlock(Material typeThisBlock, Player p)
@@ -147,7 +145,7 @@ public class Localization {
 			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.OnBlockPlaceMaterial.replace("%block%", strThisBlock));
 		else 
 			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.OnBlockPlace);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	public static void BreakBlock(Material typeThisBlock, Player p)
@@ -159,14 +157,14 @@ public class Localization {
 			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.OnBlockBreakMaterial.replace("%block%", strThisBlock));
 		else 
 			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.OnBlockBreak);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	public static void InBlockWorld(Player p)
 	{
 		if(!Configuration.CreativeNotify) return;
 		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.AnotherWorld);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	public static void SurvivalBlockNotDrop(Player p) {
@@ -189,13 +187,13 @@ public class Localization {
 			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.EntityInteractMaterial.replace("%item%", strThisItem));
 		else 
 			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.EntityInteract);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	public static void interact(Player p) {
 		if(!Configuration.CreativeNotify) return;
 		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.UseBlocks);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	public static void ANEntityUseNotify(EntityType typeThisEntity, Player p) {
@@ -206,26 +204,26 @@ public class Localization {
 			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.EntityInteractMaterial.replace("%item%", strThisItem));
 		else 
 			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.EntityInteract);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	public static void ANinteract(Player p) {
 		if(!Configuration.CreativeNotify) return;
 		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.UseBlocks);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	
 	public static void ProhibitedCmd(Player p) {
 		if(!Configuration.CreativeNotify) return;
 		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.OnCommand);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	public static void ArmorStand(Player p) {
 		if(!Configuration.CreativeNotify) return;
 		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.ArmorStand);
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 
@@ -239,31 +237,58 @@ public class Localization {
 		if(gamemode.compareToIgnoreCase("spectator") == 0) 
 			gamemode = LanguageFiles.Spectator;
 		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.GamemodesControl.replace("%gamemode%", gamemode));
-		MessageManager.getManager().msg(p, MessageType.BAD, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 
 	public static void getListOfPlayerInGM(CommandSender sender, String gamemode) {
+		if(getGamemode(gamemode) == null) {
+			String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.UnknownGamemode.replace("%gamemode%", gamemode));
+			MessageManager.getManager().msg(sender, MessageType.PLINFO, msg);
+			return;
+		}
+		
 		String list = "";
+		String msg;
 		
 		for(Player p : Bukkit.getOnlinePlayers())
-			if(p.getGameMode() == GameMode.valueOf(gamemode))
+			if(p.getGameMode() == getGamemode(gamemode))
 				if(list == "") list = p.getDisplayName();
 				else list = list + ", " + p.getDisplayName();
 
-		if(gamemode.compareToIgnoreCase("creative") == 0) 
+		if(gamemode.compareToIgnoreCase("creative") == 0 || gamemode.compareToIgnoreCase("1") == 0) 
 			gamemode = LanguageFiles.Creative;
-		if(gamemode.compareToIgnoreCase("survival") == 0) 
+		if(gamemode.compareToIgnoreCase("survival") == 0 || gamemode.compareToIgnoreCase("0") == 0) 
 			gamemode = LanguageFiles.Survival;
-		if(gamemode.compareToIgnoreCase("adventure") == 0) 
+		if(gamemode.compareToIgnoreCase("adventure") == 0 || gamemode.compareToIgnoreCase("2") == 0) 
 			gamemode = LanguageFiles.Adventure;
-		if(gamemode.compareToIgnoreCase("spectator") == 0) 
+		if(gamemode.compareToIgnoreCase("spectator") == 0 || gamemode.compareToIgnoreCase("3") == 0) 
 			gamemode = LanguageFiles.Spectator;
-		
-		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.PlayerListInGamemode.replace("%gamemode%", gamemode).replace("%list%", list));
-		MessageManager.getManager().msg(sender, MessageType.BAD, msg);
+		if(list != "")
+			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.PlayerListInGamemode.replace("%gamemode%", gamemode).replace("%list%", list));
+		else
+			msg =  ChatColor.translateAlternateColorCodes('&', LanguageFiles.PlayerInGamemodeNotFound.replace("%gamemode%", gamemode));
+		MessageManager.getManager().msg(sender, MessageType.PLINFO, msg);
 		
 	}
 	
+	@SuppressWarnings("deprecation")
+	private static GameMode getGamemode(String gamemode) {
+		if(MetaBase.isInteger(gamemode)) {
+			return GameMode.getByValue(Integer.parseInt(gamemode));
+		}
+		else {
+			if(gamemode.compareToIgnoreCase("creative") == 0) 
+				return GameMode.CREATIVE;
+			if(gamemode.compareToIgnoreCase("survival") == 0) 
+				return GameMode.SURVIVAL;
+			if(gamemode.compareToIgnoreCase("adventure") == 0) 
+				return GameMode.ADVENTURE;
+			if(gamemode.compareToIgnoreCase("spectator") == 0) 
+				return GameMode.SPECTATOR;
+		}
+		return null;
+	}
+
 	//
 	// COMMANDS MESSAGES
 	//
@@ -388,7 +413,7 @@ public class Localization {
 		String coords = b.getX() + ", " + b.getY() + ", " + b.getZ();
 		String type;
 		
-		if(BasicHandlers.InBase(b))
+		if(MetaBase.CheckCreative(b))
 			type = ChatColor.translateAlternateColorCodes('&', LanguageFiles.CreativeType);
 		else
 			type = ChatColor.translateAlternateColorCodes('&', LanguageFiles.NaturalType);
@@ -435,43 +460,62 @@ public class Localization {
 		MessageManager.getManager().msg(sender, MessageType.HELP, ChatColor.GRAY + "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 	}
 	
-	public static void SetBlockType(Player p, Block b, PlayerInteractEvent e)
+	public static void CreativeTypeNow(Player p)
 	{
-		if(BasicHandlers.InBase(b) && e.getAction() == Action.LEFT_CLICK_BLOCK)
-		{
-			e.setCancelled(true);
-			String type = ChatColor.translateAlternateColorCodes('&', LanguageFiles.CreativeType);
-			String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.BlockHas.replace("%type%", type));
-			MessageManager.getManager().msg(p, MessageType.PLINFO, msg);
-			return;
-		}
+		String type = ChatColor.translateAlternateColorCodes('&', LanguageFiles.CreativeType);
+		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.BlockNow.replace("%type%", type));
+		MessageManager.getManager().msg(p, MessageType.PLINFO, msg);
+	}
+	
+	public static void NaturalTypeNow(Player p)
+	{
+		String type = ChatColor.translateAlternateColorCodes('&', LanguageFiles.NaturalType);
+		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.BlockNow.replace("%type%", type));
+		MessageManager.getManager().msg(p, MessageType.PLINFO, msg);
+	}
+	
+	public static void CreativeTypeHas(Player p)
+	{
+		String type = ChatColor.translateAlternateColorCodes('&', LanguageFiles.CreativeType);
+		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.BlockHas.replace("%type%", type));
+		MessageManager.getManager().msg(p, MessageType.PLINFO, msg);
+	}
+	
+	public static void NaturalTypeHas(Player p)
+	{
+		String type = ChatColor.translateAlternateColorCodes('&', LanguageFiles.NaturalType);
+		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.BlockHas.replace("%type%", type));
+		MessageManager.getManager().msg(p, MessageType.PLINFO, msg);
+	}
+
+	public static void ThisNotMaterialandID(CommandSender sender, String material) {
+		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.ThisNotMaterialandId.replace("%material%", material));
+		MessageManager.getManager().msg(sender, MessageType.PLINFO, msg);
+	}
+
+	public static void AddSuccess(CommandSender sender, String list, String material) {
+		String msg = "";
+		if(list.compareToIgnoreCase("break") == 0)
+			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.AMtoBreakList.replace("%material%", material));
+		if(list.compareToIgnoreCase("place") == 0)
+			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.AMtoPlaceList.replace("%material%", material));
+		if(list.compareToIgnoreCase("use") == 0)
+			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.AMtoUseList.replace("%material%", material));
 		
-		if(!BasicHandlers.InBase(b) && e.getAction() == Action.RIGHT_CLICK_BLOCK)
-		{
-			String type = ChatColor.translateAlternateColorCodes('&', LanguageFiles.NaturalType);
-			String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.BlockHas.replace("%type%", type));
-			MessageManager.getManager().msg(p, MessageType.PLINFO, msg);
-			return;
-		}
+		MessageManager.getManager().msg(sender, MessageType.PLINFO, msg);
+	}
+	
+
+
+	public static void RemoveSuccess(CommandSender sender, String list, String material) {
+		String msg = "";
+		if(list.compareToIgnoreCase("break") == 0)
+			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.RMtoBreakList.replace("%material%", material));
+		if(list.compareToIgnoreCase("place") == 0)
+			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.RMtoPlaceList.replace("%material%", material));
+		if(list.compareToIgnoreCase("use") == 0)
+			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.RMtoUseList.replace("%material%", material));
 		
-		if(BasicHandlers.InBase(b) && e.getAction() == Action.RIGHT_CLICK_BLOCK)
-		{
-			String type = ChatColor.translateAlternateColorCodes('&', LanguageFiles.NaturalType);
-			String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.BlockNow.replace("%type%", type));
-			MessageManager.getManager().msg(p, MessageType.PLINFO, msg);
-			BasicHandlers.AddofDatabase(b);
-			return;
-		}
-		
-		if(!BasicHandlers.InBase(b) && e.getAction() == Action.LEFT_CLICK_BLOCK)
-		{
-			e.setCancelled(true);
-			String type = ChatColor.translateAlternateColorCodes('&', LanguageFiles.CreativeType);
-			String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.BlockNow.replace("%type%", type));
-			MessageManager.getManager().msg(p, MessageType.PLINFO, msg);
-			
-			BasicHandlers.AddofDatabase(b);
-			return;
-		}
+		MessageManager.getManager().msg(sender, MessageType.PLINFO, msg);
 	}
 }

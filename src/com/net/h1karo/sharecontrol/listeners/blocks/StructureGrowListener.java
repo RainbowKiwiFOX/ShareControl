@@ -16,36 +16,34 @@
  ******************************************************************************/
 
 
-package com.net.h1karo.sharecontrol.listeners.survival;
+package com.net.h1karo.sharecontrol.listeners.blocks;
 
-import org.bukkit.GameMode;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
+import org.bukkit.Material;
+import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.world.StructureGrowEvent;
 
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
-public class BlockPlaceListener implements Listener {
-	
+public class StructureGrowListener implements Listener
+{
 	@SuppressWarnings("unused")
 	private final ShareControl main;
-	public BlockPlaceListener(ShareControl h)
+	
+	public StructureGrowListener(ShareControl h)
 	{
 		this.main = h;
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH)
-	public void SurvivalBlockPlace(BlockPlaceEvent e)
-	{
-		Player p = e.getPlayer();
-		if(p.getGameMode() == GameMode.CREATIVE || e.isCancelled())
-			return;
-		Block b = e.getBlockPlaced();
-		if(MetaBase.CheckCreative(b))
-			MetaBase.RemoveBlockMetadata(b);
+	@EventHandler
+	public void StructureGrow(StructureGrowEvent e) {
+		for(BlockState b : e.getBlocks()) {
+			if(MetaBase.CheckCreative(b.getBlock()) && b.getType() == Material.LOG || b.getType() == Material.LOG_2) {
+				e.setCancelled(true);
+				return;
+			}
+		}
 	}
 }

@@ -28,8 +28,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
-import com.net.h1karo.sharecontrol.listeners.BasicHandlers;
 import com.net.h1karo.sharecontrol.localization.Localization;
+import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
 public class InventoryClickListener implements Listener
 {
@@ -53,10 +53,7 @@ public class InventoryClickListener implements Listener
 			if(!Permissions.perms(p, "allow.blocking-placement." + StrListItem)) {
 				Material typeThisItem = e.getCursor().getType();
 				Material typeListItem;
-				
-				BasicHandlers.isInteger(StrListItem);
-				
-				if(BasicHandlers.ifInt)
+				if(MetaBase.isInteger(StrListItem))
 				{
 					String NewStr = StrListItem.replace("'", "");
 					int ID = Integer.parseInt(NewStr);
