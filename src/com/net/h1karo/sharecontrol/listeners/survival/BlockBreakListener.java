@@ -30,7 +30,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
-import com.net.h1karo.sharecontrol.metabase.MetaBase;
+import com.net.h1karo.sharecontrol.database.Database;
 import com.net.h1karo.sharecontrol.localization.Localization;
 
 public class BlockBreakListener implements Listener {
@@ -53,7 +53,7 @@ public class BlockBreakListener implements Listener {
 
 		if(b.getType() == Material.PISTON_EXTENSION) {
 			World w = b.getWorld();
-			if(!MetaBase.CheckCreative(b)) return;
+			if(!Database.CheckCreative(b)) return;
 			if(b.getData() == 13) {
 				e.setCancelled(true);
 				Block piston = w.getBlockAt(b.getX() - 1, b.getY(), b.getZ());
@@ -88,7 +88,7 @@ public class BlockBreakListener implements Listener {
 	}
 	
 	public void ClearBlock(Block b, Player p, BlockBreakEvent e) {	
-		if(MetaBase.CheckCreative(b)) {
+		if(Database.CheckCreative(b)) {
 			e.setCancelled(true);
 			if(!Configuration.BlockingBreak)
 			{
@@ -101,20 +101,20 @@ public class BlockBreakListener implements Listener {
 				return;
 			}
 				
-			MetaBase.RemoveBlockMetadata(b);
+			Database.RemoveBlock(b);
 			return;
 		}
 	}
 	
 	public void ClearPiston(Block b, BlockBreakEvent e) {
-		if(MetaBase.CheckCreative(b)){
+		if(Database.CheckCreative(b)){
 			e.setCancelled(true);
 			if(!Configuration.BlockingBreak)
 				b.setType(Material.AIR);
 			else
 				return;
 			
-			MetaBase.RemoveBlockMetadata(b);
+			Database.RemoveBlock(b);
 			return;
 		}
 	}

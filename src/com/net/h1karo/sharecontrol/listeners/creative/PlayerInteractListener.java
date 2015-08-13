@@ -31,8 +31,8 @@ import org.bukkit.inventory.ItemStack;
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
+import com.net.h1karo.sharecontrol.database.Database;
 import com.net.h1karo.sharecontrol.localization.Localization;
-import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
 public class PlayerInteractListener implements Listener
 {
@@ -91,7 +91,7 @@ public class PlayerInteractListener implements Listener
 			String StrListItem = (String) Configuration.BlockingItemsInvList.toArray()[i];
 			Material typeListItem;
 			
-			if(MetaBase.isInteger(StrListItem))
+			if(Database.isInteger(StrListItem))
 			{
 				String NewStr = StrListItem.replace("'", "");
 				int ID = Integer.parseInt(NewStr);

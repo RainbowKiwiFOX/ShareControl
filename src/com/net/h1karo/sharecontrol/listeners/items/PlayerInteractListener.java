@@ -33,10 +33,10 @@ import org.bukkit.inventory.ItemStack;
 
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
+import com.net.h1karo.sharecontrol.database.Database;
 import com.net.h1karo.sharecontrol.items.items;
 import com.net.h1karo.sharecontrol.localization.LanguageFiles;
 import com.net.h1karo.sharecontrol.localization.Localization;
-import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
 public class PlayerInteractListener implements Listener {
 	
@@ -104,31 +104,31 @@ public class PlayerInteractListener implements Listener {
 			}
 			Block b = e.getClickedBlock();
 			
-			if(MetaBase.CheckCreative(b) && e.getAction() == Action.LEFT_CLICK_BLOCK)
+			if(Database.CheckCreative(b) && e.getAction() == Action.LEFT_CLICK_BLOCK)
 			{
 				e.setCancelled(true);
 				Localization.CreativeTypeHas(p);
 				return;
 			}
 			
-			if(!MetaBase.CheckCreative(b) && e.getAction() == Action.RIGHT_CLICK_BLOCK)
+			if(!Database.CheckCreative(b) && e.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
 				Localization.NaturalTypeHas(p);
 				return;
 			}
 			
-			if(MetaBase.CheckCreative(b) && e.getAction() == Action.RIGHT_CLICK_BLOCK)
+			if(Database.CheckCreative(b) && e.getAction() == Action.RIGHT_CLICK_BLOCK)
 			{
 				Localization.NaturalTypeNow(p);
-				MetaBase.RemoveBlockMetadata(b);
+				Database.RemoveBlock(b);
 				return;
 			}
 			
-			if(!MetaBase.CheckCreative(b) && e.getAction() == Action.LEFT_CLICK_BLOCK)
+			if(!Database.CheckCreative(b) && e.getAction() == Action.LEFT_CLICK_BLOCK)
 			{
 				e.setCancelled(true);
 				Localization.CreativeTypeNow(p);
-				MetaBase.AddBlockMetadata(b);
+				Database.AddBlock(b);
 				return;
 			}
 		}

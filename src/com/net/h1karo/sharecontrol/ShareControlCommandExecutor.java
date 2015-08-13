@@ -20,15 +20,23 @@ package com.net.h1karo.sharecontrol;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.net.h1karo.sharecontrol.MessageManager.MessageType;
 import com.net.h1karo.sharecontrol.ShareControl.UpdateResult;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
+import com.net.h1karo.sharecontrol.database.Database;
 import com.net.h1karo.sharecontrol.localization.LanguageFiles;
 import com.net.h1karo.sharecontrol.localization.Localization;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
+import com.sk89q.worldedit.bukkit.selections.Selection;
 
 public class ShareControlCommandExecutor implements CommandExecutor {
 	 
@@ -133,6 +141,69 @@ public class ShareControlCommandExecutor implements CommandExecutor {
 			if(args[0].equalsIgnoreCase("tools") && (args[1].equalsIgnoreCase("changetool") || args[1].equalsIgnoreCase("change")))
 			{
 				Localization.getSetTool(sender);
+				return true;
+			}
+			
+			if(args[0].equalsIgnoreCase("set") && args.length == 2)
+			{
+				if(!(sender instanceof Player)) {
+					main.getLogger().info("This command only for players!");
+					return true;
+				}
+				
+				Player p = (Player)sender;
+				
+				if(!ShareControl.getFoundWorldEdit()) {
+					Localization.WENotFound(sender);
+					return true;
+				}
+				
+				if(!args[1].startsWith("na") && !args[1].startsWith("su") && !args[1].startsWith("cr") && !args[1].startsWith(LanguageFiles.CreativeType.substring(1)) && !args[1].startsWith(LanguageFiles.NaturalType.substring(1))) {
+					Localization.UnknownType(sender, args[1]);
+					return true;
+				}
+				
+				
+				
+				WorldEditPlugin WorldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit"); 
+				Selection sel = WorldEdit.getSelection(p); 
+				
+
+				if(sel == null) {
+					Localization.MakeSelection(p);
+					return true;
+				}
+				Localization.PleaseWait(p);
+			 
+				if (!(sel instanceof CuboidSelection)) {
+					Localization.NotCuboid(p);
+					return true;
+				}
+				
+				World w = sel.getWorld();
+				int i = 0;
+				
+				Location min = sel.getMinimumPoint();
+				Location max = sel.getMaximumPoint();
+				
+				if(args[1].startsWith("cr") || args[1].startsWith(LanguageFiles.CreativeType.substring(1))) 
+					for (int x = min.getBlockX(); x <= max.getBlockX(); x++)
+				        for (int y = min.getBlockY(); y <= max.getBlockY(); y++)
+				            for (int z = min.getBlockZ(); z <= max.getBlockZ(); z++)
+				            	if(w.getBlockAt(x, y, z).getType() != Material.AIR) {
+				            		Database.AddBlock(w.getBlockAt(x, y, z));
+				            		i++;
+				            	}
+				
+				if(args[1].startsWith("na") || args[1].startsWith("su") || args[1].startsWith(LanguageFiles.NaturalType.substring(1)))
+					for (int x = min.getBlockX(); x <= max.getBlockX(); x++)
+				        for (int y = min.getBlockY(); y <= max.getBlockY(); y++)
+				            for (int z = min.getBlockZ(); z <= max.getBlockZ(); z++)
+								if(w.getBlockAt(x, y, z).getType() != Material.AIR && Database.CheckCreative(w.getBlockAt(x, y, z))) {
+									Database.RemoveBlock(w.getBlockAt(x, y, z));
+									i++;
+								}
+				Localization.BlocksChanged(p, i);
 				return true;
 			}
 			

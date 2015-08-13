@@ -25,7 +25,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.StructureGrowEvent;
 
 import com.net.h1karo.sharecontrol.ShareControl;
-import com.net.h1karo.sharecontrol.metabase.MetaBase;
+import com.net.h1karo.sharecontrol.database.Database;
+import com.net.h1karo.sharecontrol.localization.Localization;
 
 public class StructureGrowListener implements Listener
 {
@@ -38,12 +39,12 @@ public class StructureGrowListener implements Listener
 	}
 	
 	@EventHandler
-	public void StructureGrow(StructureGrowEvent e) {
-		for(BlockState b : e.getBlocks()) {
-			if(MetaBase.CheckCreative(b.getBlock()) && b.getType() == Material.LOG || b.getType() == Material.LOG_2) {
+	public void StructureGrow(final StructureGrowEvent e) {
+		for(BlockState b : e.getBlocks())
+			if(Database.CheckCreative(b.getBlock()) && b.getBlock().getType() == Material.SAPLING) {
 				e.setCancelled(true);
+				Localization.Saplings(e.getPlayer());
 				return;
 			}
-		}
 	}
 }

@@ -27,7 +27,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.net.h1karo.sharecontrol.ShareControl;
-import com.net.h1karo.sharecontrol.metabase.MetaBase;
+import com.net.h1karo.sharecontrol.database.Database;
 
 public class BlockPlaceListener implements Listener
 {
@@ -61,7 +61,7 @@ public class BlockPlaceListener implements Listener
 		for(int j = 256; j > b.getLocation().getBlockY(); j--) 
 		{
 			Block NewB = w.getBlockAt(b.getLocation().getBlockX(), j, b.getLocation().getBlockZ());
-				if(MetaBase.ifUpDrop(NewB))	MetaBase.FullClear(NewB);
+				if(Database.ifUpDrop(NewB))	Database.FullClear(NewB);
 		}
 	}
 }

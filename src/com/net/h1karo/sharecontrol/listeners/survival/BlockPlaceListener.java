@@ -27,7 +27,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.net.h1karo.sharecontrol.ShareControl;
-import com.net.h1karo.sharecontrol.metabase.MetaBase;
+import com.net.h1karo.sharecontrol.database.Database;
 
 public class BlockPlaceListener implements Listener {
 	
@@ -45,7 +45,7 @@ public class BlockPlaceListener implements Listener {
 		if(p.getGameMode() == GameMode.CREATIVE || e.isCancelled())
 			return;
 		Block b = e.getBlockPlaced();
-		if(MetaBase.CheckCreative(b))
-			MetaBase.RemoveBlockMetadata(b);
+		if(Database.CheckCreative(b))
+			Database.RemoveBlock(b);
 	}
 }

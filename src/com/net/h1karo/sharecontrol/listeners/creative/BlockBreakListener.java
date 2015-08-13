@@ -31,8 +31,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
+import com.net.h1karo.sharecontrol.database.Database;
 import com.net.h1karo.sharecontrol.localization.Localization;
-import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
 public class BlockBreakListener implements Listener {
 	
@@ -49,7 +49,7 @@ public class BlockBreakListener implements Listener {
 		Player p = e.getPlayer();
 		if(p.getGameMode() != GameMode.CREATIVE || e.isCancelled()) return;
 		Block b = e.getBlock();
-		MetaBase.RemoveBlockMetadata(b);
+		Database.RemoveBlock(b);
 	}
 	
 	
@@ -68,7 +68,7 @@ public class BlockBreakListener implements Listener {
 		{
 			String StrListBlock = (String) Configuration.BlockingBlocksBreakList.toArray()[i];
 			if(!Permissions.perms(p, "allow.blocking-breakage." + StrListBlock)) {
-				if(MetaBase.isInteger(StrListBlock))
+				if(Database.isInteger(StrListBlock))
 				{
 					String NewStr = StrListBlock.replace("'", "");
 					int ID = Integer.parseInt(NewStr);
@@ -94,6 +94,6 @@ public class BlockBreakListener implements Listener {
 		
 		Block b = e.getBlock();
 		World w = e.getBlock().getWorld();
-		MetaBase.DropBlocks(w, b);
+		Database.DropBlocks(w, b);
 	}
 }

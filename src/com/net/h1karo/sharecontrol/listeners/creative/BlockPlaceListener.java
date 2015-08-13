@@ -30,8 +30,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
+import com.net.h1karo.sharecontrol.database.Database;
 import com.net.h1karo.sharecontrol.localization.Localization;
-import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
 public class BlockPlaceListener implements Listener {
 	
@@ -49,9 +49,9 @@ public class BlockPlaceListener implements Listener {
 		Block b = e.getBlockPlaced();
 		if(p.getGameMode() != GameMode.CREATIVE || e.isCancelled()) return;
 		if(!Permissions.perms(p, "allow.notlogging"))
-			MetaBase.AddBlockMetadata(b);
+			Database.AddBlock(b);
 		else
-			MetaBase.RemoveBlockMetadata(b);
+			Database.RemoveBlock(b);
 	}
 	
 	
@@ -70,7 +70,7 @@ public class BlockPlaceListener implements Listener {
 				Material typeThisBlock = e.getBlock().getType();
 				Material typeListBlock;
 				
-				if(MetaBase.isInteger(StrListBlock))
+				if(Database.isInteger(StrListBlock))
 				{
 					String NewStr = StrListBlock.replace("'", "");
 					int ID = Integer.parseInt(NewStr);

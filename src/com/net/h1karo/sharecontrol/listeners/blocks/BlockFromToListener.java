@@ -25,7 +25,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 
 import com.net.h1karo.sharecontrol.ShareControl;
-import com.net.h1karo.sharecontrol.metabase.MetaBase;
+import com.net.h1karo.sharecontrol.database.Database;
 
 public class BlockFromToListener implements Listener
 {
@@ -40,11 +40,11 @@ public class BlockFromToListener implements Listener
 	@EventHandler
 	public void WaterBreakBlock(BlockFromToEvent e) {
 		Block b = e.getToBlock();
-		if(MetaBase.ifWaterDrop(b) && MetaBase.CheckCreative(b))
+		if(Database.ifWaterDrop(b) && Database.CheckCreative(b))
 		{
 			e.setCancelled(true);
 			b.setType(Material.AIR);
-			MetaBase.RemoveBlockMetadata(b);
+			Database.RemoveBlock(b);
 			return;
 		}
 	}

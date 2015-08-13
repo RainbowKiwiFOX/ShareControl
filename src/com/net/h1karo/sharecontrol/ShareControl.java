@@ -42,11 +42,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.net.h1karo.sharecontrol.MessageManager.MessageType;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
+import com.net.h1karo.sharecontrol.database.Database;
 import com.net.h1karo.sharecontrol.listeners.supports.MobArenaEventListener;
 import com.net.h1karo.sharecontrol.listeners.supports.PvPArenaEventListener;
 import com.net.h1karo.sharecontrol.localization.LanguageFiles;
 import com.net.h1karo.sharecontrol.localization.Localization;
-import com.net.h1karo.sharecontrol.metabase.MetaBase;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -70,7 +71,7 @@ public class ShareControl extends JavaPlugin implements Listener
 	@SuppressWarnings("unused")
 	private static LanguageFiles lang;
 	@SuppressWarnings("unused")
-	private static MetaBase metabase;
+	private static Database metabase;
 	private ShareControlCommandExecutor Executor;
 	
 	public String web = getDescription().getWebsite();
@@ -78,7 +79,7 @@ public class ShareControl extends JavaPlugin implements Listener
     public String authors = getDescription().getAuthors().toString().replace("[", "").replace("]", "");
     
     public static ArenaMaster am;
-    private static boolean foundMA = false, foundPVP = false, foundEss = false;
+    private static boolean foundMA = false, foundPVP = false, foundEss = false, foundWE = false;
     
 	@Override
 	public void onEnable()
@@ -146,15 +147,16 @@ public class ShareControl extends JavaPlugin implements Listener
 	protected void pluginInfo(CommandSender sender)
 	{
 		String version = ChatColor.translateAlternateColorCodes('&', LanguageFiles.CurrentVersion.replace("%version%", stringVersion));
-		String Author = "\n  %author%,\n";
+		String Author = "\n  %author%";
 		String team = ChatColor.translateAlternateColorCodes('&', 
 			LanguageFiles.DevelopmentTeam.replace("%development-team%", Author
 				.replace("%author%", LanguageFiles.Author.replace("%nickname%", "H1KaRo"))));
 		String site = ChatColor.translateAlternateColorCodes('&', LanguageFiles.WebSite.replace("%link%", web));
-		MessageManager.getManager().msg(sender, MessageType.HELP, "======[" + Localization.prefix + ChatColor.BLUE + " Information" + ChatColor.GRAY + "]======");
+		MessageManager.getManager().msg(sender, MessageType.HELP, "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 " + Localization.prefix + ChatColor.BLUE + " Information" + ChatColor.GRAY + " \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 		MessageManager.getManager().msg(sender, MessageType.HELP, version);
 		MessageManager.getManager().msg(sender, MessageType.HELP, team);
 		MessageManager.getManager().msg(sender, MessageType.HELP, site);
+		MessageManager.getManager().msg(sender, MessageType.HELP, ChatColor.GRAY + "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 	}
 	
 	
@@ -202,10 +204,12 @@ public class ShareControl extends JavaPlugin implements Listener
         	
         	if(CurrentBuildString.contains("b")) {
         		CurrentBuildString = CurrentBuildString.replace("b", "");
+        		if(CurrentBuildString != "")
         		CurrentBuildNumber = Double.parseDouble(CurrentBuildString) - 1;
         	}
         	else if(CurrentBuildString.contains("a")) {
         		CurrentBuildString = CurrentBuildString.replace("a", "");
+        		if(CurrentBuildString != "")
         		CurrentBuildNumber = Double.parseDouble(CurrentBuildString) - 10;
         	}
         	else CurrentBuildNumber = Double.parseDouble(CurrentBuildString);
@@ -219,10 +223,12 @@ public class ShareControl extends JavaPlugin implements Listener
             	
             	if(NewBuildString.contains("b")) {
             		NewBuildString = NewBuildString.replace("b", "");
+            		if(NewBuildString != "")
             		NewBuildNumber = Double.parseDouble(NewBuildString) - 1;
             	}
             	else if(NewBuildString.contains("a")) {
             		NewBuildString = NewBuildString.replace("a", "");
+            		if(NewBuildString != "")
             		NewBuildNumber = Double.parseDouble(NewBuildString) - 10;
             	}
             	else NewBuildNumber = Double.parseDouble(NewBuildString);
@@ -306,12 +312,12 @@ public class ShareControl extends JavaPlugin implements Listener
 		
 		mainconfig = new Configuration(this);
 		lang = new LanguageFiles(this);
-		metabase = new MetaBase(this);
+		metabase = new Database(this);
 
         MobArena maPlugin = (MobArena)pm.getPlugin("MobArena");
         PVPArena pvpPlugin = (PVPArena)pm.getPlugin("pvparena");
-        
         Essentials ess = (Essentials)pm.getPlugin("Essentials");
+        WorldEditPlugin we = (WorldEditPlugin)pm.getPlugin("WorldEdit");
         
         if(maPlugin != null && maPlugin.isEnabled()) {
             am = maPlugin.getArenaMaster();
@@ -325,6 +331,10 @@ public class ShareControl extends JavaPlugin implements Listener
         
         if(ess != null && ess.isEnabled()) {
         	foundEss = true;
+        }
+        
+        if(we != null && we.isEnabled()) {
+        	foundWE = true;
         }
     }
 	
@@ -341,5 +351,10 @@ public class ShareControl extends JavaPlugin implements Listener
     public static boolean getFoundEssentials()
     {
         return foundEss;
+    }
+    
+    public static boolean getFoundWorldEdit()
+    {
+        return foundWE;
     }
 }

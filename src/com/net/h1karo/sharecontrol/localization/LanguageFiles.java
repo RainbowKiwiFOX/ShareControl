@@ -89,6 +89,7 @@ public class LanguageFiles {
     	getLangConfig(lang).set("Events.Fishing", OnFishing);
     	getLangConfig(lang).set("Events.ArmorStand", ArmorStand);
     	getLangConfig(lang).set("Events.ProhibitedCommand", OnCommand);
+    	getLangConfig(lang).set("Events.Saplings", Saplings);
     	
     	getLangConfig(lang).set("GamemodesControl.NotAllowedGamemode", GamemodesControl);
     	
@@ -107,6 +108,7 @@ public class LanguageFiles {
     	getLangConfig(lang).set("Menu.Tools", menutools);
     	getLangConfig(lang).set("Menu.ChangeTool", menusettool);
     	getLangConfig(lang).set("Menu.InfoTool", menuinfotool);
+    	getLangConfig(lang).set("Menu.SelectionSet", menuselectionset);
     	getLangConfig(lang).set("Menu.Check", menucheck);
     	
     	getLangConfig(lang).set("Using", using);
@@ -151,6 +153,13 @@ public class LanguageFiles {
     	getLangConfig(lang).set("Gamemodes.Survival", Survival);
     	getLangConfig(lang).set("Gamemodes.Adventure", Adventure);
     	getLangConfig(lang).set("Gamemodes.Spectator", Spectator);
+    	
+    	getLangConfig(lang).set("Selections.WorldEditNotFound", WENotFound);
+    	getLangConfig(lang).set("Selections.UnknownType", UnknownType);
+    	getLangConfig(lang).set("Selections.MakeSelection", MakeSelection);
+    	getLangConfig(lang).set("Selections.NotCuboid", NotCuboid);
+    	getLangConfig(lang).set("Selections.PleaseWait", PleaseWait);
+    	getLangConfig(lang).set("Selections.BlocksChanged", BlocksChanged);
     	
     	getLangConfig(lang).set("Version", CurrentVersion);
     	getLangConfig(lang).set("DevelopmentTeam", DevelopmentTeam);
@@ -222,6 +231,7 @@ public class LanguageFiles {
 		OnFishing = getLangConfig(lang).getString("Events.Fishing", "&cYou can not fish!");
 		ArmorStand = getLangConfig(lang).getString("Events.ArmorStand", "&cYou not can interact with armor stand!");
 		OnCommand = getLangConfig(lang).getString("Events.ProhibitedCommand", "&cYou not can use this command!");
+		Saplings = getLangConfig(lang).getString("Events.Saplings", "&7This sapling from the creative mode, so you can not grow!");
 		
 		GamemodesControl = getLangConfig(lang).getString("GamemodesControl.NotAllowedGamemode", "&cYou can not go in gamemode &6%gamemode%&c!");
 		
@@ -240,6 +250,7 @@ public class LanguageFiles {
 		menutools = getLangConfig(lang).getString("Menu.Tools", "&9%command% &f- list of tools,");
 		menusettool = getLangConfig(lang).getString("Menu.ChangeTool", "&9%command% &f- get changing tool,");
 		menuinfotool = getLangConfig(lang).getString("Menu.InfoTool", "&9%command% &f- get information tool.");
+		menuselectionset = getLangConfig(lang).getString("Menu.SelectionSet", "&9%command% &f- change type of the blocks in selection,");
 		menucheck = getLangConfig(lang).getString("Menu.Check", "&9%command% &f- see information about player.");
 		
 		
@@ -284,6 +295,13 @@ public class LanguageFiles {
 		Survival = getLangConfig(lang).getString("Gamemodes.Survival", "survival");
 		Adventure = getLangConfig(lang).getString("Gamemodes.Adventure", "adventure");
 		Spectator = getLangConfig(lang).getString("Gamemodes.Spectator", "spectator");
+		
+		WENotFound = getLangConfig(lang).getString("Selections.WorldEditNotFound", "&6WorldEdit&c was not found, so you can not use this command.");
+		UnknownType = getLangConfig(lang).getString("Selections.UnknownType", "&cUnknown type: &6%type%&c! Available types: &6%types%.");
+		MakeSelection = getLangConfig(lang).getString("Selections.MakeSelection", "&cMake a region selection first!");
+		NotCuboid = getLangConfig(lang).getString("Selections.NotCuboid", "&cYour selection isn't a cuboid!");
+		PleaseWait = getLangConfig(lang).getString("Selections.PleaseWait", "&7It may take some time.. Please wait!");
+		BlocksChanged = getLangConfig(lang).getString("Selections.BlocksChanged", "&7Been successfully updated &9%number% blocks&7!");
 		
 		CurrentVersion = getLangConfig(lang).getString("Version", "&7The current version of the plugin: &9%version%&7!");
 		DevelopmentTeam = getLangConfig(lang).getString("DevelopmentTeam", "&7Development team: &9%development-team%");
@@ -342,6 +360,7 @@ public class LanguageFiles {
 		OnFishing = getLangConfig(lang).getString("Events.Fishing", "&cВы не можете рыбачить!");
 		ArmorStand = getLangConfig(lang).getString("Events.ArmorStand", "&cВы не можете взаимодействовать с стойкой для брони!");
 		OnCommand = getLangConfig(lang).getString("Events.ProhibitedCommand", "&cВы не можете использовать эту команду!");
+		Saplings = getLangConfig(lang).getString("Events.Saplings", "&7Этот саженец из творчества, поэтому вы не можете его вырастить!");
 		
 		GamemodesControl = getLangConfig(lang).getString("GamemodesControl.NotAllowedGamemode", "&cВы не можете перейти в режим игры &6%gamemode%&c!");
 		
@@ -361,6 +380,7 @@ public class LanguageFiles {
 		menutools = getLangConfig(lang).getString("Menu.Tools", "&9%command% &f- список инструментов,");
 		menusettool = getLangConfig(lang).getString("Menu.ChangeTool", "&9%command% &f- получить изменяющий предмет,");
 		menuinfotool = getLangConfig(lang).getString("Menu.InfoTool", "&9%command% &f- получить информационный предмет,");
+		menuselectionset = getLangConfig(lang).getString("Menu.SelectionSet", "&9%command% &f- изменить тип блоков в выделенном регионе,");
 		menucheck = getLangConfig(lang).getString("Menu.Check", "&9%command% &f- получить информацию о игроку.");
 		
 		using = getLangConfig(lang).getString("Using", "&7Использование: &c%command%");
@@ -405,6 +425,13 @@ public class LanguageFiles {
 		Adventure = getLangConfig(lang).getString("Gamemodes.Adventure", "приключение");
 		Spectator = getLangConfig(lang).getString("Gamemodes.Spectator", "наблюдение");
 		
+		WENotFound = getLangConfig(lang).getString("Selections.WorldEditNotFound", "&6WorldEdit&c не был найден, поэтому вы не можете использовать эту команду.");
+		UnknownType = getLangConfig(lang).getString("Selections.UnknownType", "&cНеизвестный тип: &6%type%&c! Доступные типы: &6%types%.");
+		MakeSelection = getLangConfig(lang).getString("Selections.MakeSelection", "&cПервым делом выдели регион топором!");
+		NotCuboid = getLangConfig(lang).getString("Selections.NotCuboid", "&cДанный регион не является кубоидом!");
+		PleaseWait = getLangConfig(lang).getString("Selections.PleaseWait", "&7Это может занять какое-то время.. Пожалуйста, подождите!");
+		BlocksChanged = getLangConfig(lang).getString("Selections.BlocksChanged", "&7Блоков изменено: &9%number%&7!");
+		
 		CurrentVersion = getLangConfig(lang).getString("Version", "&7Текущая версия плагина: &9%version%&7!");
 		DevelopmentTeam = getLangConfig(lang).getString("DevelopmentTeam", "&7Команда разработчиков: &9%development-team%");
 		WebSite = getLangConfig(lang).getString("Site", "&7Сайт: &9%link%");
@@ -416,13 +443,13 @@ public class LanguageFiles {
 	public static String UpdateNotFound;
 	public static String UpdateAvailable;
 	
-	public static String OnDrop, OnMonsterInteract, OnPlayerInteract, OnInventoryClick, OnInventoryClickMaterial, OnOpenOtherInventory, OnBlockBreak, OnBlockPlace, OnBlockBreakMaterial, OnBlockPlaceMaterial, OnBowShoot, AnotherWorld, CreativeBlockNotDrop, CreativeBlockNotBreak, EntityInteract, EntityInteractMaterial, UseBlocks, OnFishing, ArmorStand, OnCommand;
+	public static String OnDrop, OnMonsterInteract, OnPlayerInteract, OnInventoryClick, OnInventoryClickMaterial, OnOpenOtherInventory, OnBlockBreak, OnBlockPlace, OnBlockBreakMaterial, OnBlockPlaceMaterial, OnBowShoot, AnotherWorld, CreativeBlockNotDrop, CreativeBlockNotBreak, EntityInteract, EntityInteractMaterial, UseBlocks, OnFishing, ArmorStand, OnCommand, Saplings;
 	
 	public static String GamemodesControl;
 	
 	public static String NoPerms;
 	
-	public static String menu, menureload, menuinfo, menuupdate, menutools, menusettool, menuinfotool, menucheck, menugetlist, menuadd, menuremove;
+	public static String menu, menureload, menuinfo, menuupdate, menutools, menusettool, menuinfotool, menucheck, menugetlist, menuadd, menuremove, menuselectionset;
 	
 	public static String using;
 	
@@ -442,6 +469,8 @@ public class LanguageFiles {
 	public static String Creative, Survival, Adventure, Spectator;
 	
 	public static String PlayerListInGamemode, PlayerListInGamemodeMore, UnknownGamemode, PlayerInGamemodeNotFound;
+	
+	public static String WENotFound, UnknownType, PleaseWait, BlocksChanged, MakeSelection, NotCuboid;
 	
 	public static String BlockHas;
 	public static String BlockNow;

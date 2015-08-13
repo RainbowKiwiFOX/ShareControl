@@ -36,8 +36,8 @@ import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.MessageManager.MessageType;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
+import com.net.h1karo.sharecontrol.database.Database;
 import com.net.h1karo.sharecontrol.items.items;
-import com.net.h1karo.sharecontrol.metabase.MetaBase;
 
 public class Localization {
 	
@@ -226,6 +226,13 @@ public class Localization {
 		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
+	public static void Saplings(Player p) {
+		if((Configuration.CreativeNotify && p.getGameMode() == GameMode.CREATIVE) || (Configuration.SurvivalNotify && p.getGameMode() != GameMode.CREATIVE)) {
+			String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Saplings);
+			MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
+		}
+	}
+	
 
 	public static void NotAllowedGamemode(Player p, String gamemode) {
 		if(gamemode.compareToIgnoreCase("creative") == 0) 
@@ -273,7 +280,7 @@ public class Localization {
 	
 	@SuppressWarnings("deprecation")
 	private static GameMode getGamemode(String gamemode) {
-		if(MetaBase.isInteger(gamemode)) {
+		if(Database.isInteger(gamemode)) {
 			return GameMode.getByValue(Integer.parseInt(gamemode));
 		}
 		else {
@@ -290,7 +297,7 @@ public class Localization {
 	}
 
 	//
-	// COMMANDS MESSAGES
+	// MENUES
 	//
 	
 	public static void helpMenu(CommandSender sender)
@@ -315,8 +322,10 @@ public class Localization {
 		String msg9 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menusettool.replace("%command%", command));
 		command = " /sc tools infotool";
 		String msg10 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menuinfotool.replace("%command%", command));
+		command = " /sc set <" + LanguageFiles.NaturalType + "/" + LanguageFiles.CreativeType + ">";
+		String msg11 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menuselectionset.replace("%command%", command));
 		command = " /sc check <nickname>";
-		String msg11 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menucheck.replace("%command%", command));
+		String msg12 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.menucheck.replace("%command%", command));
 		MessageManager.getManager().msg(sender, MessageType.HELP, "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 " + prefix + ChatColor.BLUE + " Menu" + ChatColor.GRAY + " \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg1);
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg2);
@@ -329,6 +338,7 @@ public class Localization {
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg9);
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg10);
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg11);
+		MessageManager.getManager().msg(sender, MessageType.HELP, msg12);
 		MessageManager.getManager().msg(sender, MessageType.HELP, ChatColor.GRAY + "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 	}
 	
@@ -419,7 +429,7 @@ public class Localization {
 		String coords = b.getX() + ", " + b.getY() + ", " + b.getZ();
 		String type;
 		
-		if(MetaBase.CheckCreative(b))
+		if(Database.CheckCreative(b))
 			type = ChatColor.translateAlternateColorCodes('&', LanguageFiles.CreativeType);
 		else
 			type = ChatColor.translateAlternateColorCodes('&', LanguageFiles.NaturalType);
@@ -429,7 +439,7 @@ public class Localization {
 		String msg3 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Coordinates.replace("%coords%", coords));
 		String msg4 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Type.replace("%type%", type));
 		
-		MessageManager.getManager().msg(p, MessageType.HELP, "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 " + ChatColor.BLUE + " Block Information" + ChatColor.GRAY + " \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
+		MessageManager.getManager().msg(p, MessageType.HELP, "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 " + ChatColor.BLUE + " Block Information" + ChatColor.GRAY + " \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 		MessageManager.getManager().msg(p, MessageType.HELP, msg1);
 		MessageManager.getManager().msg(p, MessageType.HELP, msg2);
 		MessageManager.getManager().msg(p, MessageType.HELP, msg3);
@@ -455,7 +465,7 @@ public class Localization {
 		String msg6 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Health.replace("%health%", health + ""));
 		String msg7 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Exp.replace("%exp%", exp + ""));
 		
-		MessageManager.getManager().msg(sender, MessageType.HELP, "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 " + ChatColor.BLUE + "Player Information" + ChatColor.GRAY + " \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
+		MessageManager.getManager().msg(sender, MessageType.HELP, "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 " + ChatColor.BLUE + "Player Information" + ChatColor.GRAY + " \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg1);
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg2);
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg3);
@@ -523,5 +533,36 @@ public class Localization {
 			msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.RMtoUseList.replace("%material%", material));
 		
 		MessageManager.getManager().msg(sender, MessageType.PLINFO, msg);
+	}
+
+	public static void WENotFound(CommandSender sender) {
+		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.AMtoUseList);
+		MessageManager.getManager().msg(sender, MessageType.BAD, msg);
+	}
+
+	public static void UnknownType(CommandSender sender, String type) {
+		String types = LanguageFiles.CreativeType + ", " + LanguageFiles.NaturalType;
+		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.UnknownType.replace("%type%", type).replace("%types%", types));
+		MessageManager.getManager().msg(sender, MessageType.BAD, msg);
+	}
+
+	public static void PleaseWait(Player p) {
+		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.PleaseWait);
+		MessageManager.getManager().msg(p, MessageType.PLINFO, msg);
+	}
+
+	public static void BlocksChanged(Player p, int number) {
+		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.BlocksChanged.replace("%number%", number + ""));
+		MessageManager.getManager().msg(p, MessageType.PLINFO, msg);
+	}
+	
+	public static void MakeSelection(Player p) {
+		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.MakeSelection);
+		MessageManager.getManager().msg(p, MessageType.PLINFO, msg);
+	}
+	
+	public static void NotCuboid(Player p) {
+		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.NotCuboid);
+		MessageManager.getManager().msg(p, MessageType.PLINFO, msg);
 	}
 }

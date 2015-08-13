@@ -29,7 +29,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
-import com.net.h1karo.sharecontrol.metabase.MetaBase;
+import com.net.h1karo.sharecontrol.database.Database;
 import com.net.h1karo.sharecontrol.localization.Localization;
 
 public class PlayerItemConsumeListener implements Listener
@@ -54,7 +54,7 @@ public class PlayerItemConsumeListener implements Listener
 				Material typeThisItem = e.getItem().getType();
 				Material typeListItem;
 				
-				if(MetaBase.isInteger(StrListItem))
+				if(Database.isInteger(StrListItem))
 				{
 					String NewStr = StrListItem.replace("'", "");
 					int ID = Integer.parseInt(NewStr);

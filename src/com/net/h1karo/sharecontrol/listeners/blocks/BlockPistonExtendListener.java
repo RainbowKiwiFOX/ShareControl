@@ -29,7 +29,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 
 import com.net.h1karo.sharecontrol.ShareControl;
-import com.net.h1karo.sharecontrol.metabase.MetaBase;
+import com.net.h1karo.sharecontrol.database.Database;
 
 public class BlockPistonExtendListener implements Listener
 {
@@ -50,10 +50,10 @@ public class BlockPistonExtendListener implements Listener
 		int X,Y,Z;
 		BlockFace Dir = e.getDirection();
 		
-		if(MetaBase.ListCheckCreative(blocks)) {
+		if(Database.ListCheckCreative(blocks)) {
 			for(Block b : blocks) {
-				if(MetaBase.CheckCreative(b))
-					MetaBase.EditBlockByPiston(b, Dir, w);
+				if(Database.CheckCreative(b))
+					Database.EditBlockByPiston(b, Dir, w);
 			}
 			
 			for(int i = blocks.size() - 1; i >= 0; i--) {
@@ -75,8 +75,8 @@ public class BlockPistonExtendListener implements Listener
 					Y++;
 				
 				Block bt = w.getBlockAt(X, Y, Z);
-				if(!MetaBase.CheckCreative(bt)) {
-					MetaBase.RemoveBlockMetadata(b);
+				if(!Database.CheckCreative(bt)) {
+					Database.RemoveBlock(b);
 				}
 			}
 		}
@@ -85,20 +85,20 @@ public class BlockPistonExtendListener implements Listener
 		Y = e.getBlock().getY();
 		Z = e.getBlock().getZ();
 		
-		if(MetaBase.CheckCreative(e.getBlock()))
+		if(Database.CheckCreative(e.getBlock()))
 		{
 			if(Dir == BlockFace.EAST) 
-				MetaBase.AddBlockMetadata(w.getBlockAt(X + 1, Y, Z));
+				Database.AddBlock(w.getBlockAt(X + 1, Y, Z));
 			if(Dir == BlockFace.WEST) 
-				MetaBase.AddBlockMetadata(w.getBlockAt(X - 1, Y, Z));
+				Database.AddBlock(w.getBlockAt(X - 1, Y, Z));
 			if(Dir == BlockFace.SOUTH) 
-				MetaBase.AddBlockMetadata(w.getBlockAt(X, Y, Z + 1));
+				Database.AddBlock(w.getBlockAt(X, Y, Z + 1));
 			if(Dir == BlockFace.NORTH) 
-				MetaBase.AddBlockMetadata(w.getBlockAt(X, Y, Z - 1));
+				Database.AddBlock(w.getBlockAt(X, Y, Z - 1));
 			if(Dir == BlockFace.UP) 
-				MetaBase.AddBlockMetadata(w.getBlockAt(X, Y + 1, Z));
+				Database.AddBlock(w.getBlockAt(X, Y + 1, Z));
 			if(Dir == BlockFace.DOWN) 
-				MetaBase.AddBlockMetadata(w.getBlockAt(X, Y - 1, Z));
+				Database.AddBlock(w.getBlockAt(X, Y - 1, Z));
 		}
 	}
 }

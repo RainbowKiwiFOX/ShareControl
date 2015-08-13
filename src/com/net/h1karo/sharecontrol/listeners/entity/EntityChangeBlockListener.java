@@ -31,7 +31,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import com.net.h1karo.sharecontrol.ShareControl;
-import com.net.h1karo.sharecontrol.metabase.MetaBase;
+import com.net.h1karo.sharecontrol.database.Database;
 
 public class EntityChangeBlockListener implements Listener
 {
@@ -51,13 +51,13 @@ public class EntityChangeBlockListener implements Listener
 		World w = e.getBlock().getWorld();
 		Entity eventEntity = e.getEntity();
 		
-		MetaBase.DropBlocks(w, b);
+		Database.DropBlocks(w, b);
 		
-        if (eventEntity.getType() == EntityType.FALLING_BLOCK && MetaBase.CheckCreative(b)) {
+        if (eventEntity.getType() == EntityType.FALLING_BLOCK && Database.CheckCreative(b)) {
             FallingBlock entity = (FallingBlock) eventEntity;
             if (e.getTo() == Material.AIR) {
                    entity.setDropItem(false);
-                   MetaBase.RemoveBlockMetadata(b);
+                   Database.RemoveBlock(b);
                    entity.setMetadata("ShareControl.CREATIVE_FALLING_BLOCK", new FixedMetadataValue(main, "1"));
             }
         }
@@ -65,7 +65,7 @@ public class EntityChangeBlockListener implements Listener
         if (e.getTo() != Material.AIR && b.getType() == Material.AIR && eventEntity.getType() == EntityType.FALLING_BLOCK) {
         	FallingBlock entity = (FallingBlock) eventEntity;
         	if(entity.hasMetadata("ShareControl.CREATIVE_FALLING_BLOCK")) {
-        		MetaBase.AddBlockMetadata(b);
+        		Database.AddBlock(b);
         		entity.removeMetadata("ShareControl.CREATIVE_FALLING_BLOCK", main);
         	}
         }

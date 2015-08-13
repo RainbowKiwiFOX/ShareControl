@@ -29,7 +29,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 
 import com.net.h1karo.sharecontrol.ShareControl;
-import com.net.h1karo.sharecontrol.metabase.MetaBase;
+import com.net.h1karo.sharecontrol.database.Database;
 
 public class BlockPistonRetractListener implements Listener
 {
@@ -54,22 +54,22 @@ public class BlockPistonRetractListener implements Listener
 		int Z = e.getBlock().getZ();
 		
 		if(Dir == BlockFace.WEST)
-			MetaBase.RemoveBlockMetadata(w.getBlockAt(X + 1, Y, Z));
+			Database.RemoveBlock(w.getBlockAt(X + 1, Y, Z));
 		if(Dir == BlockFace.EAST)
-			MetaBase.RemoveBlockMetadata(w.getBlockAt(X - 1, Y, Z));
+			Database.RemoveBlock(w.getBlockAt(X - 1, Y, Z));
 		if(Dir == BlockFace.NORTH) 
-			MetaBase.RemoveBlockMetadata(w.getBlockAt(X, Y, Z + 1));
+			Database.RemoveBlock(w.getBlockAt(X, Y, Z + 1));
 		if(Dir == BlockFace.SOUTH) 
-			MetaBase.RemoveBlockMetadata(w.getBlockAt(X, Y, Z - 1));
+			Database.RemoveBlock(w.getBlockAt(X, Y, Z - 1));
 		if(Dir == BlockFace.UP) 
-			MetaBase.RemoveBlockMetadata(w.getBlockAt(X, Y - 1, Z));
+			Database.RemoveBlock(w.getBlockAt(X, Y - 1, Z));
 		if(Dir == BlockFace.DOWN) 
-			MetaBase.RemoveBlockMetadata(w.getBlockAt(X, Y + 1, Z));
+			Database.RemoveBlock(w.getBlockAt(X, Y + 1, Z));
 		
-		if(MetaBase.ListCheckCreative(blocks)) {
+		if(Database.ListCheckCreative(blocks)) {
 			for(Block b : blocks) {
-				if(MetaBase.CheckCreative(b)) {
-					MetaBase.EditBlockByPiston(b, Dir, w);
+				if(Database.CheckCreative(b)) {
+					Database.EditBlockByPiston(b, Dir, w);
 				}
 			}
 		
@@ -92,8 +92,8 @@ public class BlockPistonRetractListener implements Listener
 					Y--;
 					
 				Block bt = w.getBlockAt(X, Y, Z);
-				if(!MetaBase.CheckCreative(bt)) {
-					MetaBase.RemoveBlockMetadata(b);
+				if(!Database.CheckCreative(bt)) {
+					Database.RemoveBlock(b);
 				}
 			}
 		}
