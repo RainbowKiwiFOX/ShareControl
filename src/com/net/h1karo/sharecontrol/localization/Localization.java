@@ -18,6 +18,7 @@
 
 package com.net.h1karo.sharecontrol.localization;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -37,12 +39,17 @@ import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.MessageManager.MessageType;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
 import com.net.h1karo.sharecontrol.database.Database;
+import com.net.h1karo.sharecontrol.database.MySQL;
 import com.net.h1karo.sharecontrol.items.items;
 
 public class Localization {
 	
-	@SuppressWarnings("unused")
 	private static ShareControl main;
+	
+	public Localization(ShareControl h)
+	{
+		Localization.main = h;
+	}
 	//
 	// UPDATES MESSAGES
 	//
@@ -344,15 +351,50 @@ public class Localization {
 	
 	public static void reloadMsg(CommandSender sender)
 	{
+		ConsoleCommandSender console = Bukkit.getConsoleSender();
+		console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&l=============== &9&lShare&f&lControl &9Reload &7&l================"));
+		
 		String msg1 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.reloading);
 		String msg2 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.reloadsuccess);
-		MessageManager.getManager().msg(sender, MessageType.PLINFO, msg1);
+		
+		if(!main.checkSender(sender)) {
+			MessageManager.getManager().msg(sender, MessageType.PLINFO, msg1);
+			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Reloading..."));
+		}
+		else 
+			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Reloading..."));
+		
+		
+		if(Configuration.Database.compareToIgnoreCase("yaml") != 0 && Configuration.Database.compareToIgnoreCase("yml") != 0)
+			MySQL.disconnect();
+		
+		Bukkit.getScheduler().cancelTasks(main);
+		
 		Configuration.loadCfg();
 		Configuration.saveCfg();
+		
+		Database.autoSaveDatabase();
+		
+		if(Configuration.Database.compareToIgnoreCase("yaml") != 0 && Configuration.Database.compareToIgnoreCase("yml") != 0)
+			try {
+				MySQL.connect();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		
 		if(ShareControl.error) {
 			Configuration.Error(sender);
 		}
-		else MessageManager.getManager().msg(sender, MessageType.PLINFO, msg2);
+		else {
+			if(!main.checkSender(sender)) {
+				MessageManager.getManager().msg(sender, MessageType.PLINFO, msg2);
+				console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Reloading the plugin successfully completed!"));
+			}
+			else 
+				console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Reloading the plugin successfully completed!"));
+		}
+		
+		console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&l===================================================="));
 	}
 
 	public static void infoTools(CommandSender p) {

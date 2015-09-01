@@ -88,7 +88,7 @@ public class PlayerInteractListener implements Listener {
 		String loreST2 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.loreST2);
 		String loreST3;
 		if(LanguageFiles.loreST3.contains("%plugin%"))
-			loreST3 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.loreST3.replace("%plugin%", Localization.prefix));
+			loreST3 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.loreST3.replace("%plugin%", ChatColor.BLUE + "Share" + ChatColor.WHITE + "Control" + ChatColor.RESET));
 		else
 			loreST3 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.loreST3);
 

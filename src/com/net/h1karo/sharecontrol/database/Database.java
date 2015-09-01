@@ -3,10 +3,12 @@ package com.net.h1karo.sharecontrol.database;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
-import org.bukkit.Chunk;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -14,9 +16,12 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.net.h1karo.sharecontrol.ShareControl;
-
+import com.net.h1karo.sharecontrol.configuration.Configuration;
+import com.net.h1karo.sharecontrol.listeners.multiinventories.PlayerGameModeChangeListener;
 
 public class Database {
 	
@@ -27,75 +32,151 @@ public class Database {
 		Database.main = h;
 	}
 	
+	public static BukkitTask SaveScheduler;
+	
 	private static File dataFolder;
     private static File blockBaseFolder;
     private static FileConfiguration blockBase = null;
     private static File blockBaseFile = null;
     
-    public static void reloadBlockBase(Chunk chunk) {
+    public static void reloadBlockBase() {
     	dataFolder = new File(main.getDataFolder(), "data");
-        if (!dataFolder.exists()) dataFolder.mkdirs();
-    	blockBaseFolder = new File(main.getDataFolder(), "data" + File.separator + "blocks");
-        if (!blockBaseFolder.exists()) blockBaseFolder.mkdirs();
-    	if (blockBaseFile == null)	blockBaseFile = new File(blockBaseFolder + File.separator + "blocks." + chunk.getWorld().getName() + "." + chunk.getX() + "." + chunk.getZ() + ".yml");
+    	if (!dataFolder.exists()) dataFolder.mkdirs();
+    	blockBaseFolder = new File(main.getDataFolder(), "data");
+    	if (!blockBaseFolder.exists()) blockBaseFolder.mkdirs();
+    	if (blockBaseFile == null)	blockBaseFile = new File(blockBaseFolder + File.separator + "blocks.yml");
     	
     	blockBase = YamlConfiguration.loadConfiguration(blockBaseFile);
-    	 
-    		InputStream defConfigStream = main.getResource(blockBaseFolder + File.separator + "blocks." + chunk.getWorld().getName() + "." + chunk.getX() + "." + chunk.getZ() + ".yml");
-    		if (defConfigStream != null) {
-				@SuppressWarnings("deprecation")
-				YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-    			blockBase.setDefaults(defConfig);
-    		}
-    	saveBlockBase(chunk);
+    	
+    	InputStream defConfigStream = main.getResource(blockBaseFolder + File.separator + "blocks.yml");
+    	if (defConfigStream != null) {
+    		@SuppressWarnings("deprecation")
+    		YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+    		blockBase.setDefaults(defConfig);
     	}
+    	saveBlockBase();
+    }
     
-    public static FileConfiguration getBlockBase(Chunk chunk) {
-    	if (blockBase == null) 	reloadBlockBase(chunk);
-    	return blockBase;
-    	}
+    public static FileConfiguration getBlockBase() {
+    	if (blockBase == null) 	reloadBlockBase();
+		return blockBase;
+    }
     
-    public static void saveBlockBase(Chunk chunk) {
+    public static void saveBlockBase() {
     	if (blockBase == null || blockBaseFile == null) return;
     	try {
-    		getBlockBase(chunk).save(blockBaseFile);
+    		getBlockBase().save(blockBaseFile);
     	} 
     	catch (IOException ex) {
     		main.getLogger().log(Level.WARNING, "Could not save config to " + blockBaseFile, ex);
     	}
     }
+    
+    /** CACHE **/
+    
+    static HashMap<List<Integer>, Integer> cache = new HashMap<List<Integer>, Integer>();
+	
+	public static void saveDatabase() {
+		if(Configuration.Database.compareToIgnoreCase("yaml") == 0 || Configuration.Database.compareToIgnoreCase("yml") == 0)
+			YAMLSave();
+		else
+			SQLSave();
+		cache.clear();
+	}
+	
+	public static void AsyncSaveDatabase() {
+		SaveScheduler = Bukkit.getServer().getScheduler().runTaskAsynchronously(main,  new Runnable() {
+            @Override
+            public void run() {
+            	saveDatabase();
+            }
+		});
+	}
+	
+	
+	
+	
+	public static void AsyncSaveInvSave() {
+		SaveScheduler = Bukkit.getServer().getScheduler().runTaskAsynchronously(main,  new Runnable() {
+            @Override
+            public void run() {
+            	PlayerGameModeChangeListener.saveMultiInv();
+            }
+		});
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static void autoSaveDatabase() {
+		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+        scheduler.scheduleAsyncRepeatingTask(main, new Runnable() {
+            @Override
+            public void run() {
+            	boolean empty = false;
+            	
+            	if(cache.size() != 0 && PlayerGameModeChangeListener.cache.size() != 0) {
+            		empty = true;
+            		main.getLogger().info("Saving...");
+            	}
+            	
+                AsyncSaveDatabase();
+            	AsyncSaveInvSave();
+            	
+            	if(empty)
+            		main.getLogger().info("Database have been background saved!");
+            	
+            	empty = false;
+            }
+        }, Configuration.DBInterval * 120L, Configuration.DBInterval * 120L);
+	}
+	
+	/** GENERAL FUNCTION OF HANDLER **/
 	
 	@SuppressWarnings("deprecation")
 	public static void AddBlock(Block b) {
-		reloadBlockBase(b.getChunk());
-		getBlockBase(b.getChunk()).set(b.getX() + "." + b.getY() + "." + b.getZ(), b.getTypeId());
-		saveBlockBase(b.getChunk());
+		int x = b.getX(), y = b.getY(), z = b.getZ(), id = b.getTypeId();
+		
+		List<Integer> key = new ArrayList<Integer>();
+		key.add(x); key.add(y); key.add(z);
+		cache.put(key, id);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static void AddLocation(Location l) {
-		reloadBlockBase(l.getChunk());
 		World w = l.getWorld();
-		getBlockBase(w.getBlockAt(l).getChunk()).set(w.getBlockAt(l).getX() + "." + w.getBlockAt(l).getY() + "." + w.getBlockAt(l).getZ(), w.getBlockAt(l).getTypeId());
-		saveBlockBase(l.getChunk());
+		Block b = w.getBlockAt(l);
+		AddBlock(b);
 	}
 	
 	public static void RemoveBlock(Block b) {
-		reloadBlockBase(b.getChunk());
-		getBlockBase(b.getChunk()).set(b.getX() + "." + b.getY() + "." + b.getZ(), null);
-		saveBlockBase(b.getChunk());
+		int x = b.getX(), y = b.getY(), z = b.getZ();
+		List<Integer> key = new ArrayList<Integer>();
+		key.add(x); key.add(y); key.add(z);
+		cache.put(key, 0);
 	}
 	
 	@SuppressWarnings("deprecation")
 	public static boolean CheckCreative(Block b) {
+		int x = b.getX(), y = b.getY(), z = b.getZ(), id = b.getTypeId();
+		List<Integer> key = new ArrayList<Integer>();
+		key.add(x); key.add(y); key.add(z);
 		
-		FileConfiguration db = getBlockBase(b.getChunk());
-		if(db.getInt(b.getX() + "." + b.getY() + "." + b.getZ()) == b.getTypeId())
-			return true;
-		else  {
-			 if(db.getInt(b.getX() + "." + b.getY() + "." + b.getZ()) != 0)
+		if(Configuration.Database.compareToIgnoreCase("yaml") == 0 || Configuration.Database.compareToIgnoreCase("yml") == 0) {
+			FileConfiguration db = getBlockBase();
+			if((db.getInt(x + "." + y + "." + z) == id && (!cache.containsKey(key) || (cache.containsKey(key) && cache.get(key) != 0))) || (cache.containsKey(key) && cache.get(key) == id))
+				return true;
+			else  {
+				if(db.getInt(x + "." + y + "." + z) != 0 || (cache.containsKey(key) && cache.get(key) != 0 && cache.get(key) != id))
 					RemoveBlock(b);
-			return false;
+				return false;
+			}
+		}
+		else {
+			if((MySQL.getID(x, y, z) == id && (!cache.containsKey(key) || (cache.containsKey(key) && cache.get(key) != 0))) || (cache.containsKey(key) && cache.get(key) == id))
+				return true;
+			else  {
+				if(MySQL.getID(x, y, z) != 0 || (cache.containsKey(key) && cache.get(key) != 0 && cache.get(key) != id))
+					RemoveBlock(b);
+				return false;
+			}
 		}
 	}
 	
@@ -106,6 +187,9 @@ public class Database {
 		}
 		return false;
 	}
+	
+	
+	/** EXTRA **/
 	
 	public static void UpdateBlockToLocation(Block b, Location l) {
 		if(!CheckCreative(b)) return;
@@ -205,7 +289,8 @@ public class Database {
 	public static boolean ifUpDrop(Block b) {
 		return b.getType() == Material.CARPET ||
 			b.getType() == Material.SIGN_POST ||
-			b.getType() == Material.CACTUS;
+			b.getType() == Material.CACTUS ||
+			b.getType() == Material.SUGAR_CANE_BLOCK;
 	}
 	
 	public static boolean ifOneUpDrop(Block b) {
@@ -244,7 +329,9 @@ public class Database {
 			b.getType() == Material.DARK_OAK_DOOR ||
 			b.getType() == Material.STANDING_BANNER ||
 			b.getType() == Material.STONE_BUTTON ||
-			b.getType() == Material.WOOD_BUTTON;
+			b.getType() == Material.WOOD_BUTTON ||
+			b.getType() == Material.BROWN_MUSHROOM ||
+			b.getType() == Material.RED_MUSHROOM;
 	}
 	
 	public static boolean ifLaterallyDrop(Block b) {
@@ -290,6 +377,53 @@ public class Database {
 			b.getType() == Material.WEB ||
 			b.getType() == Material.SKULL ||
 			b.getType() == Material.SKULL_ITEM ||
-			b.getType() == Material.ITEM_FRAME;
+			b.getType() == Material.ITEM_FRAME ||
+			b.getType() == Material.BROWN_MUSHROOM ||
+			b.getType() == Material.RED_MUSHROOM;
+	}
+	
+	public static void YAMLSave() {
+		reloadBlockBase();
+    	Integer id;
+    	for(List<Integer> key : cache.keySet()) {
+    		String coords = "";
+    		for(int i=0; i < key.size(); i++)
+    			if(coords == "") coords = key.get(i).toString();
+    			else coords = coords + "." + key.get(i);
+    		if(cache.get(key) == 0) id = null;
+    		else id = cache.get(key);
+    		getBlockBase().set(coords, id);
+    	}
+    	saveBlockBase();
+    	cache.clear();
+	}
+	
+	public static void SQLSave() {
+		Integer id;
+    	for(List<Integer> key : cache.keySet()) {
+    		Integer x = key.get(0),
+    			y = key.get(1),
+    			z = key.get(2);
+    		
+    		if(cache.get(key) == 0) id = null;
+    		else id = cache.get(key);
+    		/** SAVE **/
+			MySQL.SQLUpdate(x, y, z, id);
+    	}
+    	cache.clear();
+	}
+	
+	/** DEBUG FUNCTIONS **/
+	
+	public static void getCache() {
+		for(List<Integer> key : cache.keySet()) {
+    		String coords = "";
+    		for(int i=0; i < key.size(); i++)
+    			if(coords == "") coords = key.get(i).toString();
+    			else coords = coords + "." + key.get(i);
+    		main.getLogger().info(coords + " " + cache.get(key));
+    	}
 	}
 }
+
+

@@ -1,6 +1,6 @@
 name: ShareControl
 main: com.net.h1karo.sharecontrol.ShareControl
-version: 2.2
+version: 2.3
 authors:
   - H1KaRo
 softdepend: [MobArena, pvparena, Essentials, WorldEdit]

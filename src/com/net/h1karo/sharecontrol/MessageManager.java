@@ -24,6 +24,7 @@ import org.bukkit.command.CommandSender;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
 
 public class MessageManager {
+	
 	private MessageManager() {};
 	private static MessageManager manager = new MessageManager();
 	public static MessageManager getManager() 
@@ -31,7 +32,6 @@ public class MessageManager {
 		return manager;
 	}
 	
-	ShareControl main;
 	String latestmsg = "";
 	
 	public enum MessageType

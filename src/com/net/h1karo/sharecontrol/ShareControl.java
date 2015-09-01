@@ -23,12 +23,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-
-import net.slipcor.pvparena.PVPArena;
+import java.sql.SQLException;
 
 import com.earth2me.essentials.Essentials;
-import com.garbagemule.MobArena.framework.ArenaMaster;
-import com.garbagemule.MobArena.MobArena;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -43,8 +40,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.net.h1karo.sharecontrol.MessageManager.MessageType;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
 import com.net.h1karo.sharecontrol.database.Database;
-import com.net.h1karo.sharecontrol.listeners.supports.MobArenaEventListener;
-import com.net.h1karo.sharecontrol.listeners.supports.PvPArenaEventListener;
+import com.net.h1karo.sharecontrol.database.InventoriesDatabase;
+import com.net.h1karo.sharecontrol.database.MySQL;
+import com.net.h1karo.sharecontrol.listeners.multiinventories.PlayerGameModeChangeListener;
 import com.net.h1karo.sharecontrol.localization.LanguageFiles;
 import com.net.h1karo.sharecontrol.localization.Localization;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
@@ -71,20 +69,27 @@ public class ShareControl extends JavaPlugin implements Listener
 	@SuppressWarnings("unused")
 	private static LanguageFiles lang;
 	@SuppressWarnings("unused")
-	private static Database metabase;
+	private static Localization local;
+	@SuppressWarnings("unused")
+	private static Database database;
+	@SuppressWarnings("unused")
+	private static InventoriesDatabase invbase;
+	@SuppressWarnings("unused")
+	private static MySQL db;
 	private ShareControlCommandExecutor Executor;
 	
 	public String web = getDescription().getWebsite();
     String stringVersion = ChatColor.BLUE + getDescription().getVersion();
     public String authors = getDescription().getAuthors().toString().replace("[", "").replace("]", "");
     
-    public static ArenaMaster am;
     private static boolean foundMA = false, foundPVP = false, foundEss = false, foundWE = false;
+    private static boolean alpha = false, beta = false;
+    
+    ConsoleCommandSender console = Bukkit.getConsoleSender();
     
 	@Override
 	public void onEnable()
 	{
-		ConsoleCommandSender console = Bukkit.getConsoleSender();
 		console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&l=================== &9&lShare&f&lControl &7&l==================="));
 		console.sendMessage(ChatColor.translateAlternateColorCodes('&', " Loading configuration..."));
 		
@@ -93,9 +98,16 @@ public class ShareControl extends JavaPlugin implements Listener
 
 		Configuration.loadCfg();
 		Configuration.saveCfg();
+		if(Configuration.Database.compareToIgnoreCase("yaml") != 0 && Configuration.Database.compareToIgnoreCase("yml") != 0)
+			try {
+				MySQL.connect();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 		
-        if(error) Configuration.Error(null);
-        
+		Database.autoSaveDatabase();
+    	if(error) Configuration.Error(null);
+    	
         try {
             MetricsLite metrics = new MetricsLite(this);
             metrics.start();
@@ -124,11 +136,21 @@ public class ShareControl extends JavaPlugin implements Listener
 				console.sendMessage(ChatColor.translateAlternateColorCodes('&', " Updates not found!"));
 		}
 		
+		if(beta)
+			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &cWARNING!&r You use beta version of this plugin!"));
+		if(alpha)
+			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &cWARNING!&r You use alpha version of this plugin!"));
+		
 		console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&l===================================================="));
 	}
 	@Override
 	public void onDisable()
 	{
+		Bukkit.getScheduler().cancelTasks(this);
+		Database.saveDatabase();
+		PlayerGameModeChangeListener.saveMultiInv();
+		if(Configuration.Database.compareToIgnoreCase("yaml") != 0 && Configuration.Database.compareToIgnoreCase("yml") != 0)
+			MySQL.disconnect();
 		instance = null;
 	}
 	
@@ -203,11 +225,13 @@ public class ShareControl extends JavaPlugin implements Listener
         	CurrentBuildString = currentVersion.substring(currentVersion.indexOf("-") + 1);
         	
         	if(CurrentBuildString.contains("b")) {
+        		beta = true;
         		CurrentBuildString = CurrentBuildString.replace("b", "");
         		if(CurrentBuildString != "")
         		CurrentBuildNumber = Double.parseDouble(CurrentBuildString) - 1;
         	}
         	else if(CurrentBuildString.contains("a")) {
+        		alpha = true;
         		CurrentBuildString = CurrentBuildString.replace("a", "");
         		if(CurrentBuildString != "")
         		CurrentBuildNumber = Double.parseDouble(CurrentBuildString) - 10;
@@ -247,7 +271,7 @@ public class ShareControl extends JavaPlugin implements Listener
             return;
         }
         catch (Exception e) {
-        	this.getLogger().info("There was an issue attempting to check for the latest version.");
+        	console.sendMessage(" There was an issue attempting to check for the latest version.");
         }
         result = UpdateResult.ERROR;
 	}
@@ -312,22 +336,13 @@ public class ShareControl extends JavaPlugin implements Listener
 		
 		mainconfig = new Configuration(this);
 		lang = new LanguageFiles(this);
-		metabase = new Database(this);
+		database = new Database(this);
+		db = new MySQL(this);
+		invbase = new InventoriesDatabase(this);
+		local = new Localization(this);
 
-        MobArena maPlugin = (MobArena)pm.getPlugin("MobArena");
-        PVPArena pvpPlugin = (PVPArena)pm.getPlugin("pvparena");
         Essentials ess = (Essentials)pm.getPlugin("Essentials");
         WorldEditPlugin we = (WorldEditPlugin)pm.getPlugin("WorldEdit");
-        
-        if(maPlugin != null && maPlugin.isEnabled()) {
-            am = maPlugin.getArenaMaster();
-            foundMA = true;
-            pm.registerEvents(new MobArenaEventListener(this), this);
-        }
-        if(pvpPlugin != null && pvpPlugin.isEnabled()) {
-        	foundPVP = true;
-            pm.registerEvents(new PvPArenaEventListener(this), this);
-        }
         
         if(ess != null && ess.isEnabled()) {
         	foundEss = true;

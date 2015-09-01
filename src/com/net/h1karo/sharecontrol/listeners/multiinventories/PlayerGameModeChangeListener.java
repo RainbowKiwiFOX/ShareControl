@@ -18,16 +18,25 @@
 
 package com.net.h1karo.sharecontrol.listeners.multiinventories;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
 
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
+import com.net.h1karo.sharecontrol.database.InventoriesDatabase;
 public class PlayerGameModeChangeListener implements Listener {
 	@SuppressWarnings("unused")
 	private final ShareControl main;
@@ -36,44 +45,147 @@ public class PlayerGameModeChangeListener implements Listener {
 		this.main = h;
 	}
 	
-
-	
-	public static boolean joinMA = false;
-	public static boolean leaveMA = false;
-	public static boolean joinPVP = false;
-	public static boolean leavePVP = false;
-	
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void ChangeGameMode(PlayerGameModeChangeEvent e)
 	{
 		Player p = e.getPlayer();
 		if(Permissions.perms(p, "allow.multi-inventories") || e.isCancelled() || !Configuration.MultiInventoriesEnabled) return;
 		if(!Configuration.InventorySeparation)
-		{ 	Handlers.clear(p);
+		{ 	clear(p);
 			return;		}
 		
 		PlayerInventory Inventory = p.getInventory();
 		
-		if(joinMA || joinPVP) {
-			if(p.getGameMode() == GameMode.SURVIVAL)
-			{
-				Handlers.SaveSurvival(p, Inventory);
-			}
-			if(p.getGameMode() == GameMode.ADVENTURE)
-			{
-				Handlers.SaveAdventure(p, Inventory);
-			}
-			
-			if(joinMA) joinMA = false;
-			if(joinPVP) joinPVP = false;
-			return;
-		}
-		
-		if(leaveMA || leavePVP) {
-			if(leaveMA) leaveMA = false;
-			if(leavePVP) leavePVP = false;
-			return;
-		}
-		Handlers.BasicHandler(Inventory, p, e.getNewGameMode(), e.getPlayer().getGameMode());
+		caching(Inventory, p, e.getNewGameMode(), e.getPlayer().getGameMode());
 	}
+	
+	public static HashMap<List<String>, List<List<ItemStack>>> cache = new HashMap<List<String>, List<List<ItemStack>>>();
+	
+	public static void clear(Player p) {
+		p.getInventory().clear();
+    	p.getInventory().setHelmet(AIR);
+    	p.getInventory().setBoots(AIR);
+    	p.getInventory().setLeggings(AIR);
+    	p.getInventory().setChestplate(AIR);
+		
+		for (PotionEffect effect : p.getActivePotionEffects())
+			p.removePotionEffect(effect.getType());
+	}
+    
+    static ItemStack AIR = new ItemStack(Material.AIR, 1);
+    
+    public static void saveMultiInv() {
+		InventoriesDatabase.reloadInvConfig();
+		
+    	for(List<String> key : cache.keySet()) {
+    		String uuid = key.get(0);
+    		String gamemode = key.get(1);
+    		
+        	ItemStack InventoryStack = new ItemStack(Material.AIR, 1);
+    		
+    		for(int i=0; i < 4; i++)
+    			InventoriesDatabase.getInvConfig().set(uuid + "." + gamemode + ".armor." + i, cache.get(key).get(0).get(i));
+    			
+    		for(int i=0; i < 37; i++)
+    		{
+    			if(cache.get(key).get(1).get(i) != null)
+    				InventoryStack = cache.get(key).get(1).get(i);
+    			InventoriesDatabase.getInvConfig().set(uuid + "." + gamemode + ".inventory.slot" + i, InventoryStack);
+    			InventoryStack = AIR;
+    		}
+    	}
+    	InventoriesDatabase.saveInvConfig();
+    	cache.clear();
+	}
+    
+    
+    public static void caching(PlayerInventory inv, Player p, GameMode newgm, GameMode gm) {
+    	
+    	if(gm == GameMode.CREATIVE)
+    		UniversalCaching(p, inv, "creative");
+    	
+    	if(gm == GameMode.SURVIVAL)
+    		UniversalCaching(p, inv, "survival");
+    	
+    	if(gm == GameMode.ADVENTURE)
+    		UniversalCaching(p, inv, "adventure");
+    	
+    	if(newgm == GameMode.CREATIVE)
+    		UniversalPaste(p, "creative");
+
+    	if(newgm == GameMode.SURVIVAL)
+    		UniversalPaste(p, "survival");
+    	
+    	if(newgm == GameMode.ADVENTURE)
+    		UniversalPaste(p, "adventure");
+    	
+    	if(newgm == GameMode.SPECTATOR)
+    		clear(p);
+    	
+    }
+    
+    // HANDLERS
+    
+    public static void UniversalCaching(Player p, PlayerInventory inv, String gamemode) {
+    	List<String> key = new ArrayList<String>();
+    	List<List<ItemStack>> value = new ArrayList<List<ItemStack>>();
+    	
+    	List<ItemStack> armor = new ArrayList<ItemStack>();
+    	List<ItemStack> inventory = new ArrayList<ItemStack>();
+    	
+    	key.add(p.getUniqueId().toString()); key.add(gamemode);
+    	
+    	ItemStack[] ArmorStack = inv.getArmorContents();
+    	ItemStack[] InventoryStack = inv.getContents();
+    	
+    	//INVENTORY
+    	for(int i=0; i < InventoryStack.length; i++)
+    		inventory.add(InventoryStack[i]);
+    			
+    	//ARMOR
+    	for(int i=0; i < ArmorStack.length; i++)
+    		armor.add(ArmorStack[i]);
+    	
+    	value.add(armor); value.add(inventory);
+    	
+    	cache.put(key, value);
+    	
+    	ArmorStack = null;
+    	InventoryStack = null;
+    }
+	
+    public static void UniversalPaste(Player p, String gamemode) {
+    	List<String> key = new ArrayList<String>();
+    	key.add(p.getUniqueId().toString()); key.add(gamemode);
+    	
+    	ItemStack[] ArmorStack = new ItemStack[4];
+    	ItemStack[] InventoryStack = new ItemStack[37];
+    	
+    	clear(p);
+    	
+    	if(cache.containsKey(key))
+    		for(int i=0; i < 4; i++)
+    			ArmorStack[i] = cache.get(key).get(0).get(i);
+    	else
+    		for(int i=0; i < 4; i++)
+    			ArmorStack[i] = InventoriesDatabase.getInvConfig().getItemStack(p.getUniqueId() + "." + gamemode + ".armor." + i, AIR);
+    	
+    	if(cache.containsKey(key))
+    		for(int i=0; i < 37; i++)
+    		{
+    			InventoryStack[i] = cache.get(key).get(1).get(i);
+    			if(InventoryStack[i] == null) InventoryStack[i] = AIR;
+    		}
+    	else
+    		for(int i=0; i < 37; i++)
+    		{
+    			InventoryStack[i] = InventoriesDatabase.getInvConfig().getItemStack(p.getUniqueId() + "." + gamemode + ".inventory.slot" + i, AIR);
+    			if(InventoryStack[i] == null) InventoryStack[i] = AIR;
+    		}
+    	
+    	p.getInventory().setContents(InventoryStack);
+    	p.getInventory().setArmorContents(ArmorStack);
+    	ArmorStack = null;
+    	InventoryStack = null;
+    }
 }

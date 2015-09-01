@@ -19,20 +19,16 @@
 package com.net.h1karo.sharecontrol.configuration;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.net.h1karo.sharecontrol.MessageManager;
 import com.net.h1karo.sharecontrol.MessageManager.MessageType;
 import com.net.h1karo.sharecontrol.ShareControl;
+import com.net.h1karo.sharecontrol.database.InventoriesDatabase;
 import com.net.h1karo.sharecontrol.localization.LanguageFiles;
 import com.net.h1karo.sharecontrol.localization.Localization;
 
@@ -63,9 +59,10 @@ public class Configuration {
     public static List<String> BlockingCreative;
     
     private static File languageFolder;
-    private static File inventoryFolder;
-    private static FileConfiguration InvConfig = null;
-    private static File InvConfigFile = null;
+    public static File inventoryFolder;
+    
+    public static String Database, Host, Port, DBname, Username, Password;
+    public static int DBInterval;
     
     // Config.yml
 	
@@ -74,6 +71,14 @@ public class Configuration {
 		main.getConfig().set("General.CheckUpdates",versionCheck);
 		main.getConfig().set("General.Version", main.version);
 		main.getConfig().set("General.Language", Language);
+		
+		main.getConfig().set("General.Database", Database);
+		main.getConfig().set("General.SaveInterval", DBInterval);
+		main.getConfig().set("General.MySQL.Host", Host);
+		main.getConfig().set("General.MySQL.Port", Port);
+		main.getConfig().set("General.MySQL.Database", DBname);
+		main.getConfig().set("General.MySQL.Username", Username);
+		main.getConfig().set("General.MySQL.Password", Password);
         
 		main.getConfig().set("Notifications.SurvivalNotify", SurvivalNotify);
 		main.getConfig().set("Notifications.CreativeNotify", CreativeNotify);
@@ -110,7 +115,7 @@ public class Configuration {
 	{
 		main.reloadConfig();
 	
-        inventoryFolder = new File(main.getDataFolder(), "data" + File.separator + "inventories");
+        inventoryFolder = new File(main.getDataFolder(), "data");
         if (!inventoryFolder.exists()) inventoryFolder.mkdirs();
         
         languageFolder = new File(main.getDataFolder(), "languages" + File.separator);
@@ -118,6 +123,14 @@ public class Configuration {
 		
 		versionCheck = main.getConfig().getBoolean("General.CheckUpdates", true);
 		Language = main.getConfig().getString("General.Language", "en");
+		
+		Database = main.getConfig().getString("General.Database", "sqlite");
+		DBInterval = main.getConfig().getInt("General.SaveInterval", 5);
+		Host = main.getConfig().getString("General.MySQL.Host", "localhost");
+		Port = main.getConfig().getString("General.MySQL.Port", "3306");
+		DBname = main.getConfig().getString("General.MySQL.Database", "minecraft");
+		Username = main.getConfig().getString("General.MySQL.Username", "minecraft");
+		Password = main.getConfig().getString("General.MySQL.Password", "");
         
         SurvivalNotify = main.getConfig().getBoolean("Notifications.SurvivalNotify", true);
         CreativeNotify = main.getConfig().getBoolean("Notifications.CreativeNotify", true);
@@ -148,8 +161,8 @@ public class Configuration {
         GamemodesControlEnabled = main.getConfig().getBoolean("GamemodesControl.Enabled", false);
         FullGCEnabled = main.getConfig().getBoolean("GamemodesControl.Full", true);
         
-		reloadInvConfig();
-		saveInvConfig();
+		InventoriesDatabase.reloadInvConfig();
+		InventoriesDatabase.saveInvConfig();
 		
 		File languageConfigFile = null;
     	
@@ -170,37 +183,6 @@ public class Configuration {
 		LanguageFiles.reloadlanguageConfig(Language);
 		LanguageFiles.savelanguageConfig(Language);
 	}
-	
-	// inventories.yml
-    
-    public static void reloadInvConfig() {
-    	if (InvConfigFile == null)	InvConfigFile = new File(inventoryFolder + File.separator + "inventories.yml");
-    	
-    	InvConfig = YamlConfiguration.loadConfiguration(InvConfigFile);
-    	 
-    		InputStream defConfigStream = main.getResource(inventoryFolder + File.separator + "inventories.yml");
-    		if (defConfigStream != null) {
-				@SuppressWarnings("deprecation")
-				YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-    			InvConfig.setDefaults(defConfig);
-    		}
-    	}
-    
-    public static FileConfiguration getInvConfig() {
-    	if (InvConfig == null) 	reloadInvConfig();
-    	return InvConfig;
-    	}
-    
-    public static void saveInvConfig() {
-    	if (InvConfig == null || InvConfigFile == null) return;
-    	try {
-    		getInvConfig().save(InvConfigFile);
-    	} 
-    	catch (IOException ex) {
-    		main.getLogger().log(Level.WARNING, "Could not save config to " + InvConfigFile, ex);
-    	}
-    }
-    
 	//
 	//
 	// EXTRA
