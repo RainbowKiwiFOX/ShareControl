@@ -143,6 +143,12 @@ public class ShareControlCommandExecutor implements CommandExecutor {
 				Localization.getSetTool(sender);
 				return true;
 			}
+			if(args[0].equalsIgnoreCase("set") && args.length < 2) {
+				String command = "/sc set <" + LanguageFiles.CreativeType + "/" + LanguageFiles.NaturalType + ">";
+				String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.using.replace("%command%", command));
+				MessageManager.getManager().msg(sender, MessageType.USE, msg);
+				return true;
+			}
 			
 			if(args[0].equalsIgnoreCase("set") && args.length == 2)
 			{
@@ -163,12 +169,9 @@ public class ShareControlCommandExecutor implements CommandExecutor {
 					return true;
 				}
 				
-				
-				
 				WorldEditPlugin WorldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit"); 
 				Selection sel = WorldEdit.getSelection(p); 
 				
-
 				if(sel == null) {
 					Localization.MakeSelection(p);
 					return true;
@@ -190,7 +193,7 @@ public class ShareControlCommandExecutor implements CommandExecutor {
 					for (int x = min.getBlockX(); x <= max.getBlockX(); x++)
 				        for (int y = min.getBlockY(); y <= max.getBlockY(); y++)
 				            for (int z = min.getBlockZ(); z <= max.getBlockZ(); z++)
-				            	if(w.getBlockAt(x, y, z).getType() != Material.AIR) {
+				            	if(w.getBlockAt(x, y, z).getType() != Material.AIR && !Database.CheckCreative(w.getBlockAt(x, y, z))) {
 				            		Database.AddBlock(w.getBlockAt(x, y, z));
 				            		i++;
 				            	}

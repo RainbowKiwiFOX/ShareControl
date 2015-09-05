@@ -98,7 +98,7 @@ public class ShareControl extends JavaPlugin implements Listener
 
 		Configuration.loadCfg();
 		Configuration.saveCfg();
-		if(Configuration.Database.compareToIgnoreCase("yaml") != 0 && Configuration.Database.compareToIgnoreCase("yml") != 0)
+		if(!Configuration.Database.equalsIgnoreCase("yaml") && !Configuration.Database.equalsIgnoreCase("yml"))
 			try {
 				MySQL.connect();
 			} catch (SQLException e1) {
@@ -146,12 +146,21 @@ public class ShareControl extends JavaPlugin implements Listener
 	@Override
 	public void onDisable()
 	{
+		console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&l=================== &9&lShare&f&lControl &7&l==================="));
+		console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Stoping tasks..."));
 		Bukkit.getScheduler().cancelTasks(this);
+		console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Saving inventories and block database..."));
 		Database.saveDatabase();
 		PlayerGameModeChangeListener.saveMultiInv();
-		if(Configuration.Database.compareToIgnoreCase("yaml") != 0 && Configuration.Database.compareToIgnoreCase("yml") != 0)
+		if(!Configuration.Database.equalsIgnoreCase("yaml") && !Configuration.Database.equalsIgnoreCase("yml")) {
+			if(Configuration.Database.equalsIgnoreCase("sqlite"))
+				console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Disconnecting from SQLite..."));
+			if(Configuration.Database.equalsIgnoreCase("mysql"))
+				console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Disconnecting from MySQL..."));
 			MySQL.disconnect();
+		}
 		instance = null;
+		console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&l===================================================="));
 	}
 	
 	public boolean checkSender(CommandSender sender)

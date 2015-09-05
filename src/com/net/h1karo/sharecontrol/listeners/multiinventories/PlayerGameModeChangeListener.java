@@ -15,7 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-
 package com.net.h1karo.sharecontrol.listeners.multiinventories;
 
 import java.util.ArrayList;
@@ -37,6 +36,7 @@ import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
 import com.net.h1karo.sharecontrol.database.InventoriesDatabase;
+
 public class PlayerGameModeChangeListener implements Listener {
 	@SuppressWarnings("unused")
 	private final ShareControl main;
@@ -81,18 +81,11 @@ public class PlayerGameModeChangeListener implements Listener {
     		String uuid = key.get(0);
     		String gamemode = key.get(1);
     		
-        	ItemStack InventoryStack = new ItemStack(Material.AIR, 1);
-    		
-    		for(int i=0; i < 4; i++)
+    		for(int i=0; i < cache.get(key).get(0).size(); i++)
     			InventoriesDatabase.getInvConfig().set(uuid + "." + gamemode + ".armor." + i, cache.get(key).get(0).get(i));
     			
-    		for(int i=0; i < 37; i++)
-    		{
-    			if(cache.get(key).get(1).get(i) != null)
-    				InventoryStack = cache.get(key).get(1).get(i);
-    			InventoriesDatabase.getInvConfig().set(uuid + "." + gamemode + ".inventory.slot" + i, InventoryStack);
-    			InventoryStack = AIR;
-    		}
+    		for(int i=0; i < cache.get(key).get(1).size(); i++)
+    			InventoriesDatabase.getInvConfig().set(uuid + "." + gamemode + ".inventory.slot" + i, cache.get(key).get(1).get(i));
     	}
     	InventoriesDatabase.saveInvConfig();
     	cache.clear();
@@ -159,29 +152,23 @@ public class PlayerGameModeChangeListener implements Listener {
     	key.add(p.getUniqueId().toString()); key.add(gamemode);
     	
     	ItemStack[] ArmorStack = new ItemStack[4];
-    	ItemStack[] InventoryStack = new ItemStack[37];
+    	ItemStack[] InventoryStack = new ItemStack[36];
     	
     	clear(p);
     	
     	if(cache.containsKey(key))
-    		for(int i=0; i < 4; i++)
+    		for(int i=0; i < cache.get(key).get(0).size(); i++)
     			ArmorStack[i] = cache.get(key).get(0).get(i);
     	else
     		for(int i=0; i < 4; i++)
     			ArmorStack[i] = InventoriesDatabase.getInvConfig().getItemStack(p.getUniqueId() + "." + gamemode + ".armor." + i, AIR);
     	
     	if(cache.containsKey(key))
-    		for(int i=0; i < 37; i++)
-    		{
+    		for(int i=0; i < cache.get(key).get(1).size(); i++)
     			InventoryStack[i] = cache.get(key).get(1).get(i);
-    			if(InventoryStack[i] == null) InventoryStack[i] = AIR;
-    		}
     	else
-    		for(int i=0; i < 37; i++)
-    		{
+    		for(int i=0; i < 36; i++) 
     			InventoryStack[i] = InventoriesDatabase.getInvConfig().getItemStack(p.getUniqueId() + "." + gamemode + ".inventory.slot" + i, AIR);
-    			if(InventoryStack[i] == null) InventoryStack[i] = AIR;
-    		}
     	
     	p.getInventory().setContents(InventoryStack);
     	p.getInventory().setArmorContents(ArmorStack);

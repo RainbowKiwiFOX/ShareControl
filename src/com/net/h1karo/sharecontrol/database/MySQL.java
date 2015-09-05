@@ -1,10 +1,26 @@
+/*******************************************************************************
+ * Copyright (C) 2015 H1KaRo (h1karo)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
+
 package com.net.h1karo.sharecontrol.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
@@ -35,15 +51,16 @@ public class MySQL {
 	            Class.forName("org.sqlite.JDBC").newInstance();
 	            connection = DriverManager.getConnection("jdbc:sqlite://" + main.getDataFolder().getAbsolutePath() + "/data/blocks.db");
 	            executeSync("CREATE TABLE IF NOT EXISTS `blocks` (`x` INTEGER NOT NULL,`y` INTEGER NOT NULL,`z` INTEGER NOT NULL,`id` INTEGER NOT NULL)");
-	         } else {
+	            console.sendMessage(" Connected to SQLite.");
+	         }
+	         if(Configuration.Database.equalsIgnoreCase("mysql")) {
 	        	 Class.forName("com.mysql.jdbc.Driver").newInstance();
 	        	 String url = "jdbc:mysql://" + Configuration.Host + ":" + Configuration.Port + "/" + Configuration.DBname;
 	        	 
 	        	 connection = DriverManager.getConnection(url, Configuration.Username, Configuration.Password);
 	        	 executeSync("CREATE TABLE IF NOT EXISTS `blocks` (`x` int(11) NOT NULL,`y` int(11) NOT NULL,`z` int(11) NOT NULL,`id` int(11) NOT NULL)");
+	        	 console.sendMessage(" Connected to MySQL.");
 	         }
-	        
-	        console.sendMessage(" Connected to DB.");
 	         
 	      } catch (Exception var2) {
 	    	  console.sendMessage(" An error occured while connecting to DB.");
@@ -85,41 +102,21 @@ public class MySQL {
 	      }
 
 	   }
-
-	   public static ResultSet executeQuery(String query) {
-	      if(!hasConnected()) {
-	         try {
-				connect();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-	      }
-
-	      ResultSet rs = null;
-
-	      try {
-	         rs = connection.createStatement().executeQuery(strip(query));
-	      } catch (Exception var3) {
-	         var3.printStackTrace();
-	      }
-
-	      return rs;
-	   }
 	   
 	   
 	   public static ResultSet query(String query) {
-			Statement statement = null;
 			ResultSet result = null;
 			
 			try {
-				statement = connection.createStatement();
-				
 				switch(getStatement(query)) {
 				case ALTER:
-					result = statement.executeQuery(query);
+					result = connection.createStatement().executeQuery(query);
+					break;
+				case SELECT:
+					result = connection.createStatement().executeQuery(query);
 					break;
 				default:
-					statement.executeUpdate(query);
+					connection.createStatement().executeUpdate(query);
 				}
 				
 				return result;
@@ -182,7 +179,7 @@ public class MySQL {
 				return Statements.TRUNCATE;
 			}
 			
-			if (trimmedQuery.substring(0, 6).equalsIgnoreCase("RENA,E")) {
+			if (trimmedQuery.substring(0, 6).equalsIgnoreCase("RENAME")) {
 				return Statements.RENAME;
 			}
 			
@@ -212,7 +209,8 @@ public class MySQL {
 	   
 	   
 	   public static void SQLUpdate(Integer x, Integer y, Integer z, Integer id) {
-		   resultSet = executeQuery("SELECT * FROM blocks WHERE x='" + x + "' AND y='" + y + "' AND z='" + z + "'");
+			resultSet = query("SELECT * FROM blocks WHERE x='" + x + "' AND y='" + y + "' AND z='" + z + "'");
+			
 		   try {
 			   boolean SQLexist = false;
 			   
@@ -234,9 +232,9 @@ public class MySQL {
 	   }
 	   
 	   public static int getID(Integer x, Integer y, Integer z) {
-		   resultSet = executeQuery("SELECT * FROM blocks WHERE x='" + x + "' AND y='" + y + "' AND z='" + z + "'");
+		   resultSet = query("SELECT * FROM blocks WHERE x='" + x + "' AND y='" + y + "' AND z='" + z + "'");
 		   try {
-			   if(resultSet.next())
+			   while(resultSet.next())
 				   return resultSet.getInt("id");
 		   } catch (SQLException e) {
 			   e.printStackTrace();

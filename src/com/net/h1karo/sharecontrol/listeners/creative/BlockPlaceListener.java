@@ -42,7 +42,7 @@ public class BlockPlaceListener implements Listener {
 		this.main = h;
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void CreativeBlockPlace(BlockPlaceEvent e)
 	{
 		Player p = e.getPlayer();
@@ -56,7 +56,7 @@ public class BlockPlaceListener implements Listener {
 	
 	
 	@SuppressWarnings("deprecation")
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void DisableBlockPlace(BlockPlaceEvent e)
 	{
 		if(e.isCancelled()) return;

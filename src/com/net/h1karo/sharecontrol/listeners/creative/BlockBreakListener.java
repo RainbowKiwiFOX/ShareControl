@@ -43,7 +43,7 @@ public class BlockBreakListener implements Listener {
 		this.main = h;
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void CreativeBlockBreak(BlockBreakEvent e)
 	{
 		Player p = e.getPlayer();
@@ -54,7 +54,7 @@ public class BlockBreakListener implements Listener {
 	
 	
 	@SuppressWarnings("deprecation")
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void DisableBlockBreak(BlockBreakEvent e)
 	{
 		if(e.isCancelled()) return;
@@ -87,7 +87,7 @@ public class BlockBreakListener implements Listener {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onAutoBreak(BlockBreakEvent e)
 	{
 		if(e.isCancelled()) return;
