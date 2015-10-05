@@ -43,7 +43,8 @@ public class StructureGrowListener implements Listener
 		for(BlockState b : e.getBlocks())
 			if(Database.CheckCreative(b.getBlock()) && b.getBlock().getType() == Material.SAPLING) {
 				e.setCancelled(true);
-				Localization.Saplings(e.getPlayer());
+				if(e.getPlayer() != null)
+					Localization.Saplings(e.getPlayer());
 				return;
 			}
 	}

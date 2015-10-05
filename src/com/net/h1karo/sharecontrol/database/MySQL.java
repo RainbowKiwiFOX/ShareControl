@@ -21,6 +21,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
@@ -241,5 +243,23 @@ public class MySQL {
 		   }
 		   
 		   return 0;
+	   }
+	   
+	   public static void loadCache() {
+		   resultSet = query("SELECT * FROM blocks");
+		   try {
+			   while(resultSet.next()) {
+				   int x = resultSet.getInt("x"),
+					   y = resultSet.getInt("y"),
+					   z = resultSet.getInt("z"),
+					   id = resultSet.getInt("id");
+				   
+				   List<Integer> key = new ArrayList<Integer>();
+				   key.add(x); key.add(y); key.add(z);
+				   Database.fullcache.put(key, id);
+			   }
+		   } catch (SQLException e) {
+			   e.printStackTrace();
+		   }
 	   }
 }

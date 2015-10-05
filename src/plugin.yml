@@ -1,9 +1,9 @@
 name: ShareControl
 main: com.net.h1karo.sharecontrol.ShareControl
-version: 2.3.2
+version: 2.3.9
 authors:
   - H1KaRo
-softdepend: [MobArena, pvparena, Essentials, WorldEdit]
+softdepend: [Essentials, WorldEdit]
 description: Control the player in gamemode creative.
 website: http://dev.bukkit.org/bukkit-plugins/sharecontrol/
 commands:

@@ -98,12 +98,17 @@ public class ShareControl extends JavaPlugin implements Listener
 
 		Configuration.loadCfg();
 		Configuration.saveCfg();
-		if(!Configuration.Database.equalsIgnoreCase("yaml") && !Configuration.Database.equalsIgnoreCase("yml"))
-			try {
-				MySQL.connect();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+		try {
+			MySQL.connect();
+			MySQL.loadCache();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		if(!Configuration.Database.equalsIgnoreCase("mysql") && !Configuration.Database.equalsIgnoreCase("sqlite")) {
+			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &cYOU NOT CONNECTED TO DATABASE!"));
+			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &cIn file configuration you must select \"mysql \" or  \"sqlite \"! You choosed  \"" + Configuration.Database + "\""));
+		}
 		
 		Database.autoSaveDatabase();
     	if(error) Configuration.Error(null);
@@ -150,15 +155,13 @@ public class ShareControl extends JavaPlugin implements Listener
 		console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Stoping tasks..."));
 		Bukkit.getScheduler().cancelTasks(this);
 		console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Saving inventories and block database..."));
-		Database.saveDatabase();
+		Database.SyncSaveDatabase();
 		PlayerGameModeChangeListener.saveMultiInv();
-		if(!Configuration.Database.equalsIgnoreCase("yaml") && !Configuration.Database.equalsIgnoreCase("yml")) {
-			if(Configuration.Database.equalsIgnoreCase("sqlite"))
-				console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Disconnecting from SQLite..."));
-			if(Configuration.Database.equalsIgnoreCase("mysql"))
-				console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Disconnecting from MySQL..."));
-			MySQL.disconnect();
-		}
+		if(Configuration.Database.equalsIgnoreCase("sqlite"))
+			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Disconnecting from SQLite..."));
+		if(Configuration.Database.equalsIgnoreCase("mysql"))
+			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Disconnecting from MySQL..."));
+		MySQL.disconnect();
 		instance = null;
 		console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&l===================================================="));
 	}

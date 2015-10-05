@@ -46,28 +46,27 @@ public class EntityChangeBlockListener implements Listener
 	public void EntityChangeBlock(EntityChangeBlockEvent e)
 	{
 		if(e.isCancelled()) return;
-		
 		Block b = e.getBlock();
 		World w = e.getBlock().getWorld();
 		Entity eventEntity = e.getEntity();
 		
 		Database.DropBlocks(w, b);
 		
-        if (eventEntity.getType() == EntityType.FALLING_BLOCK && Database.CheckCreative(b)) {
-            FallingBlock entity = (FallingBlock) eventEntity;
-            if (e.getTo() == Material.AIR) {
-                   entity.setDropItem(false);
-                   Database.RemoveBlock(b);
-                   entity.setMetadata("ShareControl.CREATIVE_FALLING_BLOCK", new FixedMetadataValue(main, "1"));
-            }
-        }
-        
-        if (e.getTo() != Material.AIR && b.getType() == Material.AIR && eventEntity.getType() == EntityType.FALLING_BLOCK) {
-        	FallingBlock entity = (FallingBlock) eventEntity;
-        	if(entity.hasMetadata("ShareControl.CREATIVE_FALLING_BLOCK")) {
-        		Database.AddBlock(b);
-        		entity.removeMetadata("ShareControl.CREATIVE_FALLING_BLOCK", main);
-        	}
-        }
+		if (eventEntity.getType() == EntityType.FALLING_BLOCK && Database.CheckCreative(b)) {
+			FallingBlock entity = (FallingBlock) eventEntity;
+			if (e.getTo() == Material.AIR) {
+				entity.setDropItem(false);
+				Database.RemoveBlock(b);
+				entity.setMetadata("ShareControl.CREATIVE_FALLING_BLOCK", new FixedMetadataValue(main, "1"));
+			}
+		}
+        	
+		if (e.getTo() != Material.AIR && b.getType() == Material.AIR && eventEntity.getType() == EntityType.FALLING_BLOCK) {
+			FallingBlock entity = (FallingBlock) eventEntity;
+			if(entity.hasMetadata("ShareControl.CREATIVE_FALLING_BLOCK")) {
+				Database.AddBlock(b);
+				entity.removeMetadata("ShareControl.CREATIVE_FALLING_BLOCK", main);
+			}
+		}
 	}
 }

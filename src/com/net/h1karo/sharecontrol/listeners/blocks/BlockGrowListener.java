@@ -24,6 +24,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockGrowEvent;
+
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.database.Database;
 
@@ -39,17 +40,27 @@ public class BlockGrowListener implements Listener
 	
 	@EventHandler
 	public void BlockGrow(BlockGrowEvent e) {
-		final Block newb = e.getBlock();
+		Block newb = e.getBlock();
+		
 		World w = newb.getWorld();
 		int x = newb.getX(), y = newb.getY(), z = newb.getZ();
+		Block b = w.getBlockAt(x, y - 1, z);
 		
-		if(Database.CheckCreative(newb) && (newb.getType() == Material.PUMPKIN_STEM || newb.getType() == Material.MELON_STEM || newb.getType() == Material.CROPS || newb.getType() == Material.CARROT || newb.getType() == Material.POTATO)) {
+		if(Database.CheckCreative(newb) && ifFood(newb.getType())) {
 			e.setCancelled(true);
 		}
 		
-		Block b = w.getBlockAt(x, y - 1, z);
 		if(Database.CheckCreative(b) && (b.getType() == Material.CACTUS || b.getType() == Material.SUGAR_CANE_BLOCK)) {
 			e.setCancelled(true);
 		}
+	}
+	
+	
+	public boolean ifFood(Material m) {
+		return m == Material.PUMPKIN_STEM || 
+			m == Material.MELON_STEM || 
+			m == Material.CROPS || 
+			m == Material.CARROT || 
+			m == Material.POTATO;
 	}
 }

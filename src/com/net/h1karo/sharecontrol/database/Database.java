@@ -17,13 +17,10 @@
 
 package com.net.h1karo.sharecontrol.database;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -31,8 +28,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -51,61 +46,26 @@ public class Database {
 	
 	public static BukkitTask SaveScheduler;
 	
-	private static File dataFolder;
-    private static File blockBaseFolder;
-    private static FileConfiguration blockBase = null;
-    private static File blockBaseFile = null;
-    
-    public static void reloadBlockBase() {
-    	dataFolder = new File(main.getDataFolder(), "data");
-    	if (!dataFolder.exists()) dataFolder.mkdirs();
-    	blockBaseFolder = new File(main.getDataFolder(), "data");
-    	if (!blockBaseFolder.exists()) blockBaseFolder.mkdirs();
-    	if (blockBaseFile == null)	blockBaseFile = new File(blockBaseFolder + File.separator + "blocks.yml");
-    	
-    	blockBase = YamlConfiguration.loadConfiguration(blockBaseFile);
-    	
-    	InputStream defConfigStream = main.getResource(blockBaseFolder + File.separator + "blocks.yml");
-    	if (defConfigStream != null) {
-    		@SuppressWarnings("deprecation")
-    		YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-    		blockBase.setDefaults(defConfig);
-    	}
-    	saveBlockBase();
-    }
-    
-    public static FileConfiguration getBlockBase() {
-    	if (blockBase == null) 	reloadBlockBase();
-		return blockBase;
-    }
-    
-    public static void saveBlockBase() {
-    	if (blockBase == null || blockBaseFile == null) return;
-    	try {
-    		getBlockBase().save(blockBaseFile);
-    	} 
-    	catch (IOException ex) {
-    		main.getLogger().log(Level.WARNING, "Could not save config to " + blockBaseFile, ex);
-    	}
-    }
-    
     /** CACHE **/
-    
+	
     static HashMap<List<Integer>, Integer> cache = new HashMap<List<Integer>, Integer>();
+    static HashMap<List<Integer>, Integer> fullcache = new HashMap<List<Integer>, Integer>();
 	
 	public static void saveDatabase() {
-		if(Configuration.Database.compareToIgnoreCase("yaml") == 0 || Configuration.Database.compareToIgnoreCase("yml") == 0)
-			YAMLSave();
-		else
-			SQLSave();
+		SQLSave();
 		cache.clear();
+	}
+	
+	public static void SyncSaveDatabase() {
+		saveDatabase();
 	}
 	
 	public static void AsyncSaveDatabase() {
 		SaveScheduler = Bukkit.getServer().getScheduler().runTaskAsynchronously(main,  new Runnable() {
             @Override
             public void run() {
-            	saveDatabase();
+            	if(cache.size() != 0)
+            		saveDatabase();
             }
 		});
 	}
@@ -122,10 +82,9 @@ public class Database {
 		});
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static void autoSaveDatabase() {
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleAsyncRepeatingTask(main, new Runnable() {
+        scheduler.runTaskTimerAsynchronously(main, new Runnable() {
             @Override
             public void run() {
             	boolean empty = false;
@@ -154,7 +113,9 @@ public class Database {
 		
 		List<Integer> key = new ArrayList<Integer>();
 		key.add(x); key.add(y); key.add(z);
+		
 		cache.put(key, id);
+		fullcache.put(key, id);
 	}
 	
 	public static void AddLocation(Location l) {
@@ -167,7 +128,9 @@ public class Database {
 		int x = b.getX(), y = b.getY(), z = b.getZ();
 		List<Integer> key = new ArrayList<Integer>();
 		key.add(x); key.add(y); key.add(z);
+		
 		cache.put(key, 0);
+		fullcache.remove(key);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -176,25 +139,13 @@ public class Database {
 		List<Integer> key = new ArrayList<Integer>();
 		key.add(x); key.add(y); key.add(z);
 		
-		if(Configuration.Database.compareToIgnoreCase("yaml") == 0 || Configuration.Database.compareToIgnoreCase("yml") == 0) {
-			FileConfiguration db = getBlockBase();
-			if((db.getInt(x + "." + y + "." + z) == id && (!cache.containsKey(key) || (cache.containsKey(key) && cache.get(key) != 0))) || (cache.containsKey(key) && cache.get(key) == id))
+			if(fullcache.containsKey(key) && fullcache.get(key) == id &&  id != 0)
 				return true;
 			else  {
-				if(db.getInt(x + "." + y + "." + z) != 0 || (cache.containsKey(key) && cache.get(key) != 0 && cache.get(key) != id))
+				if(fullcache.get(key) != null && fullcache.get(key) != id)
 					RemoveBlock(b);
 				return false;
 			}
-		}
-		else {
-			if((MySQL.getID(x, y, z) == id && (!cache.containsKey(key) || (cache.containsKey(key) && cache.get(key) != 0))) || (cache.containsKey(key) && cache.get(key) == id))
-				return true;
-			else  {
-				if(MySQL.getID(x, y, z) != 0 || (cache.containsKey(key) && cache.get(key) != 0 && cache.get(key) != id))
-					RemoveBlock(b);
-				return false;
-			}
-		}
 	}
 	
 	public static boolean ListCheckCreative(List<Block> Blocks) {
@@ -399,34 +350,22 @@ public class Database {
 			b.getType() == Material.RED_MUSHROOM;
 	}
 	
-	public static void YAMLSave() {
-		reloadBlockBase();
-    	Integer id;
-    	for(List<Integer> key : cache.keySet()) {
-    		String coords = "";
-    		for(int i=0; i < key.size(); i++)
-    			if(coords == "") coords = key.get(i).toString();
-    			else coords = coords + "." + key.get(i);
-    		if(cache.get(key) == 0) id = null;
-    		else id = cache.get(key);
-    		getBlockBase().set(coords, id);
-    	}
-    	saveBlockBase();
-    	cache.clear();
-	}
-	
+	@SuppressWarnings("unchecked")
 	public static void SQLSave() {
 		Integer id;
-    	for(List<Integer> key : cache.keySet()) {
-    		Integer x = key.get(0),
+		Set<List<Integer>> keys = cache.keySet();
+		for(int i=0; i < keys.size(); i++) {
+			List<Integer> key = (List<Integer>) keys.toArray()[i];
+			Integer x = key.get(0),
     			y = key.get(1),
     			z = key.get(2);
     		
     		if(cache.get(key) == 0) id = null;
     		else id = cache.get(key);
-			MySQL.SQLUpdate(x, y, z, id);
-    	}
-    	cache.clear();
+    		
+    		MySQL.SQLUpdate(x, y, z, id);
+		}
+    	id = null;
 	}
 	
 	/** DEBUG FUNCTIONS **/

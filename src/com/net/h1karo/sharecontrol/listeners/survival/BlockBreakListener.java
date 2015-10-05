@@ -58,36 +58,50 @@ public class BlockBreakListener implements Listener {
 				e.setCancelled(true);
 				Block piston = w.getBlockAt(b.getX() - 1, b.getY(), b.getZ());
 				ClearPiston(piston, e);
-				ClearBlock(b, p, e);
+				ClearBlock(e);
 			}
 
 			if(b.getData() == 12) {
 				e.setCancelled(true);
 				Block piston = w.getBlockAt(b.getX() + 1, b.getY(), b.getZ());
 				ClearPiston(piston, e);
-				ClearBlock(b, p, e);
+				ClearBlock(e);
 			}
 
 			if(b.getData() == 11) {
 				e.setCancelled(true);
 				Block piston = w.getBlockAt(b.getX(), b.getY(), b.getZ() - 1);
 				ClearPiston(piston, e);
-				ClearBlock(b, p, e);
+				ClearBlock(e);
 			}
 
 			if(b.getData() == 10) {
 				e.setCancelled(true);
 				Block piston = w.getBlockAt(b.getX(), b.getY(), b.getZ() + 1);
 				ClearPiston(piston, e);
-				ClearBlock(b, p, e);
+				ClearBlock(e);
 			}
 			return;
 		}
-		
-		ClearBlock(b, p, e);
+		ClearBlock(e);
 	}
 	
-	public void ClearBlock(Block b, Player p, BlockBreakEvent e) {	
+	public void ClearPiston(Block b, BlockBreakEvent e) {
+		if(Database.CheckCreative(b)){
+			e.setCancelled(true);
+			if(!Configuration.BlockingBreak)
+				b.setType(Material.AIR);
+			else
+				return;
+			Database.RemoveBlock(b);
+			return;
+		}
+	}
+	
+	public void ClearBlock(BlockBreakEvent e) {
+		Block b = e.getBlock();
+		Player p = e.getPlayer();
+		
 		if(Database.CheckCreative(b)) {
 			e.setCancelled(true);
 			if(!Configuration.BlockingBreak)
@@ -100,19 +114,6 @@ public class BlockBreakListener implements Listener {
 				Localization.SurvivalBlockNotBreak(p);
 				return;
 			}
-				
-			Database.RemoveBlock(b);
-			return;
-		}
-	}
-	
-	public void ClearPiston(Block b, BlockBreakEvent e) {
-		if(Database.CheckCreative(b)){
-			e.setCancelled(true);
-			if(!Configuration.BlockingBreak)
-				b.setType(Material.AIR);
-			else
-				return;
 			
 			Database.RemoveBlock(b);
 			return;

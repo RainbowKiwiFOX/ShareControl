@@ -238,7 +238,7 @@ public class LanguageFiles {
 		PlayerListInGamemode = getLangConfig(lang).getString("PlayersInGamemode.List", "&7Players in &9%gamemode%&7 mode: &9%list%&7");
 		UnknownGamemode = getLangConfig(lang).getString("PlayersInGamemode.UnknownGamemode", "&cUnknown gamemode: &6%gamemode%&c.");
 		PlayerInGamemodeNotFound = getLangConfig(lang).getString("PlayersInGamemode.NotFound", "&7Players in the gamemode &9%gamemode%&7 not found!");
-		PlayerListInGamemodeMore = getLangConfig(lang).getString("PlayersInGamemode.More", "&7To find out detailed information about the player, type &9/sc check <ник игрока>&7!");
+		PlayerListInGamemodeMore = getLangConfig(lang).getString("PlayersInGamemode.More", "&7To find out detailed information about the player, type &9/sc check <nickname>&7!");
 		
 		menu = getLangConfig(lang).getString("Menu.This", "&9%command% &f- this menu,");
 		menureload = getLangConfig(lang).getString("Menu.Reload", "&9%command% &f- reloading,");

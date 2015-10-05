@@ -45,7 +45,6 @@ public class BlockPlaceListener implements Listener {
 		if(p.getGameMode() == GameMode.CREATIVE || e.isCancelled())
 			return;
 		Block b = e.getBlockPlaced();
-		if(Database.CheckCreative(b))
-			Database.RemoveBlock(b);
+		Database.RemoveBlock(b);
 	}
 }
