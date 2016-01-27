@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016 H1KaRo (h1karo)
+ * Copyright (C) 2015 H1KaRo (h1karo)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,9 +29,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.net.h1karo.sharecontrol.items.items;
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
+import com.net.h1karo.sharecontrol.items.items;
 import com.net.h1karo.sharecontrol.localization.LanguageFiles;
 import com.net.h1karo.sharecontrol.localization.Localization;
 

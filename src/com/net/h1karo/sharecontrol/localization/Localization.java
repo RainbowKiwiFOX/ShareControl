@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016 H1KaRo (h1karo)
+ * Copyright (C) 2015 H1KaRo (h1karo)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.net.h1karo.sharecontrol.items.items;
 import com.net.h1karo.sharecontrol.MessageManager;
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
@@ -41,6 +40,7 @@ import com.net.h1karo.sharecontrol.MessageManager.MessageType;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
 import com.net.h1karo.sharecontrol.database.Database;
 import com.net.h1karo.sharecontrol.database.MySQL;
+import com.net.h1karo.sharecontrol.items.items;
 
 public class Localization {
 	
@@ -364,7 +364,9 @@ public class Localization {
 		else 
 			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Reloading..."));
 		
-		MySQL.disconnect();
+		
+		if(Configuration.Database.compareToIgnoreCase("yaml") != 0 && Configuration.Database.compareToIgnoreCase("yml") != 0)
+			MySQL.disconnect();
 		
 		Bukkit.getScheduler().cancelTasks(main);
 		
@@ -373,11 +375,12 @@ public class Localization {
 		
 		Database.autoSaveDatabase();
 		
-		try {
-			MySQL.connect();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		if(Configuration.Database.compareToIgnoreCase("yaml") != 0 && Configuration.Database.compareToIgnoreCase("yml") != 0)
+			try {
+				MySQL.connect();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		
 		if(ShareControl.error) {
 			Configuration.Error(sender);

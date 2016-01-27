@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016 H1KaRo (h1karo)
+ * Copyright (C) 2015 H1KaRo (h1karo)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 package com.net.h1karo.sharecontrol.listeners.entity;
 
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -46,9 +47,10 @@ public class EntityChangeBlockListener implements Listener
 	{
 		if(e.isCancelled()) return;
 		Block b = e.getBlock();
+		World w = e.getBlock().getWorld();
 		Entity eventEntity = e.getEntity();
 		
-		Database.DropBlocks(b);
+		Database.DropBlocks(w, b);
 		
 		if (eventEntity.getType() == EntityType.FALLING_BLOCK && Database.CheckCreative(b)) {
 			FallingBlock entity = (FallingBlock) eventEntity;
