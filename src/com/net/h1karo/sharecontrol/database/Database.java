@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2015 H1KaRo (h1karo)
+ * Copyright (C) 2016 H1KaRo (h1karo)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,8 +27,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.net.h1karo.sharecontrol.ShareControl;
@@ -44,16 +42,22 @@ public class Database {
 		Database.main = h;
 	}
 	
-	public static BukkitTask SaveScheduler;
-	
     /** CACHE **/
 	
     static HashMap<List<Integer>, Integer> cache = new HashMap<List<Integer>, Integer>();
+    static HashMap<List<Integer>, Integer> extracache = new HashMap<List<Integer>, Integer>();
     static HashMap<List<Integer>, Integer> fullcache = new HashMap<List<Integer>, Integer>();
+    static boolean saveStatus = false;
+    static BukkitTask AsyncSave = null;
+    static BukkitTask AsyncSaveInv = null;
 	
 	public static void saveDatabase() {
+		saveStatus = true;
 		SQLSave();
 		cache.clear();
+		cache.putAll(extracache);
+		extracache.clear();
+		saveStatus = false;
 	}
 	
 	public static void SyncSaveDatabase() {
@@ -61,7 +65,7 @@ public class Database {
 	}
 	
 	public static void AsyncSaveDatabase() {
-		SaveScheduler = Bukkit.getServer().getScheduler().runTaskAsynchronously(main,  new Runnable() {
+		AsyncSave = Bukkit.getServer().getScheduler().runTaskAsynchronously(main,  new Runnable() {
             @Override
             public void run() {
             	if(cache.size() != 0)
@@ -74,7 +78,7 @@ public class Database {
 	
 	
 	public static void AsyncSaveInvSave() {
-		SaveScheduler = Bukkit.getServer().getScheduler().runTaskAsynchronously(main,  new Runnable() {
+		AsyncSaveInv = Bukkit.getServer().getScheduler().runTaskAsynchronously(main,  new Runnable() {
             @Override
             public void run() {
             	PlayerGameModeChangeListener.saveMultiInv();
@@ -83,38 +87,38 @@ public class Database {
 	}
 	
 	public static void autoSaveDatabase() {
-		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.runTaskTimerAsynchronously(main, new Runnable() {
+		Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(main, new Runnable() {
             @Override
             public void run() {
-            	boolean empty = false;
-            	
-            	if(cache.size() != 0 && PlayerGameModeChangeListener.cache.size() != 0) {
-            		empty = true;
-            		main.getLogger().info("Saving...");
+            	if(cache.size() > 0 || PlayerGameModeChangeListener.cache.size() > 0)  {
+            		if(cache.size() > 0) AsyncSaveDatabase();
+            		if(PlayerGameModeChangeListener.cache.size() > 0) AsyncSaveInvSave();
+            		main.log("Database have been background saved!");
             	}
-            	
-                AsyncSaveDatabase();
-            	AsyncSaveInvSave();
-            	
-            	if(empty)
-            		main.getLogger().info("Database have been background saved!");
-            	
-            	empty = false;
             }
         }, Configuration.DBInterval * 120L, Configuration.DBInterval * 120L);
 	}
 	
 	/** GENERAL FUNCTION OF HANDLER **/
 	
+	public static void AddBlockMoreArguments(Block b, int id) {
+		int x = b.getX(), y = b.getY(), z = b.getZ(), w = Bukkit.getWorlds().indexOf(b.getWorld());
+		List<Integer> key = new ArrayList<Integer>();
+		key.add(x); key.add(y); key.add(z); key.add(w);
+		
+		if(!saveStatus) cache.put(key, id);
+		else extracache.put(key, id);
+		fullcache.put(key, id);
+	}
+	
 	@SuppressWarnings("deprecation")
 	public static void AddBlock(Block b) {
-		int x = b.getX(), y = b.getY(), z = b.getZ(), id = b.getTypeId();
-		
+		int x = b.getX(), y = b.getY(), z = b.getZ(), w = Bukkit.getWorlds().indexOf(b.getWorld()), id = b.getTypeId();
 		List<Integer> key = new ArrayList<Integer>();
-		key.add(x); key.add(y); key.add(z);
+		key.add(x); key.add(y); key.add(z); key.add(w);
 		
-		cache.put(key, id);
+		if(!saveStatus) cache.put(key, id);
+		else extracache.put(key, id);
 		fullcache.put(key, id);
 	}
 	
@@ -125,27 +129,40 @@ public class Database {
 	}
 	
 	public static void RemoveBlock(Block b) {
-		int x = b.getX(), y = b.getY(), z = b.getZ();
+		int x = b.getX(), y = b.getY(), z = b.getZ(), w = Bukkit.getWorlds().indexOf(b.getWorld());
 		List<Integer> key = new ArrayList<Integer>();
-		key.add(x); key.add(y); key.add(z);
+		key.add(x); key.add(y); key.add(z); key.add(w);
 		
-		cache.put(key, 0);
+		if(!saveStatus) cache.put(key, 0);
+		else extracache.put(key, 0);
 		fullcache.remove(key);
 	}
 	
 	@SuppressWarnings("deprecation")
 	public static boolean CheckCreative(Block b) {
-		int x = b.getX(), y = b.getY(), z = b.getZ(), id = b.getTypeId();
+		int x = b.getX(), y = b.getY(), z = b.getZ(), id = b.getTypeId(), w = Bukkit.getWorlds().indexOf(b.getWorld());
 		List<Integer> key = new ArrayList<Integer>();
-		key.add(x); key.add(y); key.add(z);
+		key.add(x); key.add(y); key.add(z); key.add(w);
 		
 			if(fullcache.containsKey(key) && fullcache.get(key) == id &&  id != 0)
 				return true;
 			else  {
-				if(fullcache.get(key) != null && fullcache.get(key) != id)
+				if(fullcache.containsKey(key) && fullcache.get(key) != id)
 					RemoveBlock(b);
 				return false;
 			}
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static int CheckCreativeRough(Block b) {
+		int x = b.getX(), y = b.getY(), z = b.getZ(), id = b.getTypeId(), w = Bukkit.getWorlds().indexOf(b.getWorld());
+		List<Integer> key = new ArrayList<Integer>();
+		key.add(x); key.add(y); key.add(z); key.add(w);
+			
+		if(fullcache.containsKey(key) &&  id != 0)
+			if(fullcache.get(key) == id) return 1;
+			else return 2;
+		return 0;
 	}
 	
 	public static boolean ListCheckCreative(List<Block> Blocks) {
@@ -163,7 +180,6 @@ public class Database {
 		if(!CheckCreative(b)) return;
 		World w = l.getWorld();
 		AddBlock(w.getBlockAt(l));
-		
 	}
 	
 	public static void FullClear(Block b) {
@@ -174,9 +190,10 @@ public class Database {
 	
 	
 	@SuppressWarnings("deprecation")
-	public static void DropBlocks(World w, Block b)
+	public static void DropBlocks(Block b)
 	{
 		int h = b.getLocation().getBlockY();
+		World w = b.getWorld();
 		for(int j = b.getLocation().getBlockY() + 1; j <= 256; j++) {
 			h++;
 			Block thish = w.getBlockAt(b.getX(), j, b.getZ());
@@ -188,59 +205,65 @@ public class Database {
 		for(int j = h; j > b.getLocation().getBlockY(); j--) 
 		{
 			Block NewB = w.getBlockAt(b.getLocation().getBlockX(), j, b.getLocation().getBlockZ());
-				if(ifUpDrop(NewB))	FullClear(NewB);
+				if(ifUpDrop(NewB)) FullClear(NewB);
 		}
 		
 		Block NewB = w.getBlockAt(b.getLocation().getBlockX(), b.getLocation().getBlockY() + 1, b.getLocation().getBlockZ());
 		if(ifOneUpDrop(NewB))	FullClear(NewB);
 		
-		
-		NewB = w.getBlockAt(b.getLocation().getBlockX() + 1, b.getLocation().getBlockY(), b.getLocation().getBlockZ());
+		NewB = w.getBlockAt(b.getLocation().getBlockX(), b.getLocation().getBlockY(), b.getLocation().getBlockZ() - 1);
 		if(ifLaterallyDrop(NewB) && NewB.getData() == 2)
 			FullClear(NewB);
 		
-		NewB = w.getBlockAt(b.getLocation().getBlockX() - 1, b.getLocation().getBlockY(), b.getLocation().getBlockZ());
+		NewB = w.getBlockAt(b.getLocation().getBlockX(), b.getLocation().getBlockY(), b.getLocation().getBlockZ() + 1);
 		if(ifLaterallyDrop(NewB) && NewB.getData() == 3)
 			FullClear(NewB);
 		
-		NewB = w.getBlockAt(b.getLocation().getBlockX(), b.getLocation().getBlockY(), b.getLocation().getBlockZ() + 1);
+		NewB = w.getBlockAt(b.getLocation().getBlockX() + 1, b.getLocation().getBlockY(), b.getLocation().getBlockZ());
 		if(ifLaterallyDrop(NewB) && NewB.getData() == 5)
 			FullClear(NewB);
 		
-		NewB = w.getBlockAt(b.getLocation().getBlockX(), b.getLocation().getBlockY(), b.getLocation().getBlockZ() - 1);
+		NewB = w.getBlockAt(b.getLocation().getBlockX() - 1, b.getLocation().getBlockY(), b.getLocation().getBlockZ());
 		if(ifLaterallyDrop(NewB) && NewB.getData() == 4) 
 			FullClear(NewB);
 	}
 	
-	public static void CheckBlock(Block b) {
-		if(ifWaterDrop(b) && CheckCreative(b))
+	public static boolean CheckBlock(Block b) {
+		if(ifWaterDrop(b) && CheckCreative(b)) {
 				FullClear(b);
+				return true;
+		}
+		return false;
 	}
 	
-	public static void EditBlockByPiston(Block b, BlockFace Dir, World w) {
-		int X = b.getX();
-		int Y = b.getY();
-		int Z = b.getZ();
+	public static void cactusClear(Block b) {
+		Block cactus = null;
 		
-		DropBlocks(w, b);
-		CheckBlock(b);
-		if(Dir == BlockFace.EAST)
-			AddLocation(w.getBlockAt(X + 1, Y, Z).getLocation());
-		if(Dir == BlockFace.WEST)
-			AddLocation(w.getBlockAt(X - 1, Y, Z).getLocation());
-		if(Dir == BlockFace.SOUTH)
-			AddLocation(w.getBlockAt(X, Y, Z + 1).getLocation());
-		if(Dir == BlockFace.NORTH)
-			AddLocation(w.getBlockAt(X, Y, Z - 1).getLocation());
-		if(Dir == BlockFace.UP)
-			AddLocation(w.getBlockAt(X, Y + 1, Z).getLocation());
-		if(Dir == BlockFace.DOWN)
-			AddLocation(w.getBlockAt(X, Y - 1, Z).getLocation());
+		cactus = b.getWorld().getBlockAt(b.getX() + 1, b.getY(), b.getZ());
+		if(cactus.getType().equals(Material.CACTUS) && CheckCreative(cactus)) {
+			DropBlocks(cactus);
+			FullClear(cactus);
+		}
+			
+		cactus = b.getWorld().getBlockAt(b.getX() - 1, b.getY(), b.getZ());
+		if(cactus.getType().equals(Material.CACTUS) && CheckCreative(cactus)) {
+			DropBlocks(cactus);
+			FullClear(cactus);
+		}
+		
+		cactus = b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + 1);
+		if(cactus.getType().equals(Material.CACTUS) && CheckCreative(cactus)) {
+			DropBlocks(cactus);
+			FullClear(cactus);
+		}
+		
+		cactus = b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - 1);
+		if(cactus.getType().equals(Material.CACTUS) && CheckCreative(cactus)) {
+			DropBlocks(cactus);
+			FullClear(cactus);
+		}
 	}
-	
-	
-	
-	
+
 	
 	/** EXTRA **/
 	
@@ -299,7 +322,11 @@ public class Database {
 			b.getType() == Material.STONE_BUTTON ||
 			b.getType() == Material.WOOD_BUTTON ||
 			b.getType() == Material.BROWN_MUSHROOM ||
-			b.getType() == Material.RED_MUSHROOM;
+			b.getType() == Material.RED_MUSHROOM ||
+			b.getType() == Material.GOLD_PLATE ||
+			b.getType() == Material.IRON_PLATE ||
+			b.getType() == Material.STONE_PLATE ||
+			b.getType() == Material.WOOD_PLATE;
 	}
 	
 	public static boolean ifLaterallyDrop(Block b) {
@@ -358,12 +385,14 @@ public class Database {
 			List<Integer> key = (List<Integer>) keys.toArray()[i];
 			Integer x = key.get(0),
     			y = key.get(1),
-    			z = key.get(2);
+    			z = key.get(2),
+    			w = key.get(3);
     		
     		if(cache.get(key) == 0) id = null;
     		else id = cache.get(key);
     		
-    		MySQL.SQLUpdate(x, y, z, id);
+    		MySQL.SQLUpdate(x, y, z, id, w);
+    		MySQL.SQLUpdate(x, y, z, id, w);
 		}
     	id = null;
 	}

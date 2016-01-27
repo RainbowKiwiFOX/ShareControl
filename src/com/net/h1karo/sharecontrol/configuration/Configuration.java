@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2015 H1KaRo (h1karo)
+ * Copyright (C) 2016 H1KaRo (h1karo)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -193,9 +193,8 @@ public class Configuration {
     @SuppressWarnings("deprecation")
 	public static void addToList(CommandSender sender, String list, String material) {
     	Material Material;
-    	isInteger(material);
 		
-		if(ifInt)
+		if(isInteger(material))
 		{
 			int ID = Integer.parseInt(material);
 			Material = org.bukkit.Material.getMaterial(ID);
@@ -234,9 +233,8 @@ public class Configuration {
     @SuppressWarnings("deprecation")
 	public static void removeFromList(CommandSender sender, String list, String material) {
     	Material Material;
-    	isInteger(material);
 		
-		if(ifInt)
+		if(isInteger(material))
 		{
 			int ID = Integer.parseInt(material);
 			Material = org.bukkit.Material.getMaterial(ID);
@@ -279,9 +277,8 @@ public class Configuration {
 		{
 			String String = BlockingBlocksPlaceList.toArray()[i].toString().replace("'", "");
 			Material Material;
-			isInteger(String);
 			
-			if(ifInt)
+			if(isInteger(String))
 			{
 				int ID = Integer.parseInt(String);
 				Material = org.bukkit.Material.getMaterial(ID);
@@ -298,9 +295,7 @@ public class Configuration {
 			String String = BlockingBlocksBreakList.toArray()[i].toString().replace("'", "");
 			Material Material;
 			
-			isInteger(String);
-			
-			if(ifInt)
+			if(isInteger(String))
 			{
 				int ID = Integer.parseInt(String);
 				Material = org.bukkit.Material.getMaterial(ID);
@@ -317,9 +312,8 @@ public class Configuration {
 		{
 			String String = BlockingItemsInvList.toArray()[i].toString().replace("'", "");
 			Material Material;
-			isInteger(String);
 			
-			if(ifInt)
+			if(isInteger(String))
 			{
 				int ID = Integer.parseInt(String);
 				Material = org.bukkit.Material.getMaterial(ID);
@@ -359,10 +353,8 @@ public class Configuration {
 	        Integer.parseInt(s);
 	    }
 	    catch(NumberFormatException e) { 
-	    	ifInt = false;
 	    	return false; 
 	    }
-	    ifInt = true;
 	    return true;
 	}
 	
