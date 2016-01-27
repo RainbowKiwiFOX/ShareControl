@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2015 H1KaRo (h1karo)
+ * Copyright (C) 2016 H1KaRo (h1karo)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,6 @@ import com.net.h1karo.sharecontrol.localization.Localization;
 public class PlayerJoinListener implements Listener
 {
 	private final ShareControl main;
-	boolean ifInt;
 	
 	public PlayerJoinListener(ShareControl h)
 	{

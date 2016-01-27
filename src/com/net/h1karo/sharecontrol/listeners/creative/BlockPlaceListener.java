@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2015 H1KaRo (h1karo)
+ * Copyright (C) 2016 H1KaRo (h1karo)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@ public class BlockPlaceListener implements Listener {
 		Player p = e.getPlayer();
 		Block b = e.getBlockPlaced();
 		if(p.getGameMode() != GameMode.CREATIVE || e.isCancelled()) return;
+		Database.cactusClear(b);
 		if(!Permissions.perms(p, "allow.notlogging"))
 			Database.AddBlock(b);
 		else

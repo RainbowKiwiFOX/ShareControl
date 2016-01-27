@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2015 H1KaRo (h1karo)
+ * Copyright (C) 2016 H1KaRo (h1karo)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ package com.net.h1karo.sharecontrol.listeners.creative;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -93,7 +92,6 @@ public class BlockBreakListener implements Listener {
 		if(e.isCancelled()) return;
 		
 		Block b = e.getBlock();
-		World w = e.getBlock().getWorld();
-		Database.DropBlocks(w, b);
+		Database.DropBlocks(b);
 	}
 }

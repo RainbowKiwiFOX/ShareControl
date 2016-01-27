@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2015 H1KaRo (h1karo)
+ * Copyright (C) 2016 H1KaRo (h1karo)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,6 +95,8 @@ public class ShareControl extends JavaPlugin implements Listener
 		
 		instance = this;
 		setupListeners();
+		
+		currentVersion = getDescription().getVersion();
 
 		Configuration.loadCfg();
 		Configuration.saveCfg();
@@ -103,11 +105,6 @@ public class ShareControl extends JavaPlugin implements Listener
 			MySQL.loadCache();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
-		}
-		
-		if(!Configuration.Database.equalsIgnoreCase("mysql") && !Configuration.Database.equalsIgnoreCase("sqlite")) {
-			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &cYOU NOT CONNECTED TO DATABASE!"));
-			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &cIn file configuration you must select \"mysql \" or  \"sqlite \"! You choosed  \"" + Configuration.Database + "\""));
 		}
 		
 		Database.autoSaveDatabase();
@@ -157,10 +154,7 @@ public class ShareControl extends JavaPlugin implements Listener
 		console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Saving inventories and block database..."));
 		Database.SyncSaveDatabase();
 		PlayerGameModeChangeListener.saveMultiInv();
-		if(Configuration.Database.equalsIgnoreCase("sqlite"))
 			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Disconnecting from SQLite..."));
-		if(Configuration.Database.equalsIgnoreCase("mysql"))
-			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &7Disconnecting from MySQL..."));
 		MySQL.disconnect();
 		instance = null;
 		console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&l===================================================="));
@@ -205,11 +199,10 @@ public class ShareControl extends JavaPlugin implements Listener
     }
 	
 	public void updateCheck() {
-        double CurrentVersionNumber = 0, NewVersionNumber = 0, CurrentBuildNumber = 0, NewBuildNumber = 0;
-        String CurrentBuildString = "", NewBuildString = "";
+        String CBuildString = "", NBuildString = "";
         
-		currentVersion = getDescription().getVersion();
-		
+        int CMajor = 0, CMinor = 0, CMaintenance = 0, CBuild = 0, NMajor = 0, NMinor = 0, NMaintenance = 0, NBuild = 0;
+        
 		try {
             URL url = new URL("https://api.curseforge.com/servermods/files?projectids=90354");
             URLConnection conn = url.openConnection();
@@ -232,52 +225,58 @@ public class ShareControl extends JavaPlugin implements Listener
             /**\    GET VERSIONS    /**\
               /**\\**//**\\**//**\\**/
             
+            CMajor = Integer.parseInt(currentVersion.substring(0, currentVersion.indexOf(".")));
+            CMinor = Integer.parseInt(currentVersion.substring(currentVersion.indexOf(".") + 1, currentVersion.lastIndexOf(".")));
             if(currentVersion.contains("-")) {
-        	CurrentVersionNumber = Double.parseDouble(currentVersion.substring(0, currentVersion.indexOf(".") + 1) + currentVersion.substring(currentVersion.indexOf(".") + 1, currentVersion.indexOf("-")).replace(".", ""));
-        	CurrentBuildString = currentVersion.substring(currentVersion.indexOf("-") + 1);
-        	
-        	if(CurrentBuildString.contains("b")) {
-        		beta = true;
-        		CurrentBuildString = CurrentBuildString.replace("b", "");
-        		if(CurrentBuildString != "")
-        		CurrentBuildNumber = Double.parseDouble(CurrentBuildString) - 1;
-        	}
-        	else if(CurrentBuildString.contains("a")) {
-        		alpha = true;
-        		CurrentBuildString = CurrentBuildString.replace("a", "");
-        		if(CurrentBuildString != "")
-        		CurrentBuildNumber = Double.parseDouble(CurrentBuildString) - 10;
-        	}
-        	else CurrentBuildNumber = Double.parseDouble(CurrentBuildString);
-        }
-        else 
-        	CurrentVersionNumber = Double.parseDouble((currentVersion.substring(0, currentVersion.indexOf(".") + 1) + currentVersion.substring(currentVersion.indexOf(".") + 1).replace(".", "")).replace("b", "").replace("a", ""));
-            
-            if(newVersion.contains("-")) {
-            	NewVersionNumber = Double.parseDouble(newVersion.substring(0, newVersion.indexOf(".") + 1) + newVersion.substring(newVersion.indexOf(".") + 1, newVersion.indexOf("-")).replace(".", ""));
-            	NewBuildString = newVersion.substring(newVersion.indexOf("-") + 1);
+            	CMaintenance = Integer.parseInt(currentVersion.substring(currentVersion.lastIndexOf(".") + 1, currentVersion.indexOf("-")));
+            	CBuildString = currentVersion.substring(currentVersion.indexOf("-") + 1);
             	
-            	if(NewBuildString.contains("b")) {
-            		NewBuildString = NewBuildString.replace("b", "");
-            		if(NewBuildString != "")
-            		NewBuildNumber = Double.parseDouble(NewBuildString) - 1;
+            	if(CBuildString.contains("b")) {
+            		beta = true;
+            		CBuildString = CBuildString.replace("b", "");
+            		if(CBuildString != "")
+            		CBuild = Integer.parseInt(CBuildString) - 1;
             	}
-            	else if(NewBuildString.contains("a")) {
-            		NewBuildString = NewBuildString.replace("a", "");
-            		if(NewBuildString != "")
-            		NewBuildNumber = Double.parseDouble(NewBuildString) - 10;
+            	else if(CBuildString.contains("a")) {
+            		alpha = true;
+            		CBuildString = CBuildString.replace("a", "");
+            		if(CBuildString != "")
+            		CBuild = Integer.parseInt(CBuildString) - 10;
             	}
-            	else NewBuildNumber = Double.parseDouble(NewBuildString);
+            	else CBuild = Integer.parseInt(CBuildString);
             }
-            else 
-            	NewVersionNumber = Double.parseDouble((newVersion.substring(0, newVersion.indexOf(".") + 1) + newVersion.substring(newVersion.indexOf(".") + 1).replace(".", "")).replace("b", "").replace("a", ""));
+            else {
+            	CMaintenance = Integer.parseInt(currentVersion.substring(currentVersion.lastIndexOf(".") + 1));
+            }
+            
+            
+            NMajor = Integer.parseInt(newVersion.substring(0, newVersion.indexOf(".")));
+            NMinor = Integer.parseInt(newVersion.substring(newVersion.indexOf(".") + 1, newVersion.lastIndexOf(".")));
+            if(newVersion.contains("-")) {
+            	NMaintenance = Integer.parseInt(newVersion.substring(newVersion.lastIndexOf(".") + 1, newVersion.indexOf("-")));
+            	NBuildString = newVersion.substring(newVersion.indexOf("-") + 1);
+            	
+            	if(NBuildString.contains("b")) {
+            		NBuildString = NBuildString.replace("b", "");
+            		if(NBuildString != "")
+            		NBuild = Integer.parseInt(NBuildString) - 1;
+            	}
+            	else if(NBuildString.contains("a")) {
+            		NBuildString = NBuildString.replace("a", "");
+            		if(NBuildString != "")
+            		NBuild = Integer.parseInt(NBuildString) - 10;
+            	}
+            	else NBuild = Integer.parseInt(NBuildString);
+            }
+            else {
+            	NMaintenance = Integer.parseInt(newVersion.substring(newVersion.lastIndexOf(".") + 1));
+            }
             
             /**\\**//**\\**//**\\**/
           /**\   CHECK VERSIONS   /**\
             /**\\**//**\\**//**\\**/
-            
-            if (NewVersionNumber > CurrentVersionNumber || (NewVersionNumber == CurrentVersionNumber && NewBuildNumber > CurrentBuildNumber)) 
-				result = UpdateResult.UPDATE_AVAILABLE;
+            if((CMajor < NMajor) || (CMajor == NMajor && CMinor < NMinor) || (CMajor == NMajor && CMinor == NMinor && CMaintenance < NMaintenance) || (CMajor == NMajor && CMinor == NMinor && CMaintenance == NMaintenance && CBuild < NBuild))
+            	result = UpdateResult.UPDATE_AVAILABLE;
             else
             	result = UpdateResult.NO_UPDATE;
             return;
@@ -295,8 +294,7 @@ public class ShareControl extends JavaPlugin implements Listener
 		
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.blocks.BlockFromToListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.blocks.BlockGrowListener(this), this);
-		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.blocks.BlockPistonExtendListener(this), this);
-		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.blocks.BlockPistonRetractListener(this), this);
+		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.blocks.BlockMoveByPistonListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.blocks.BlockPlaceListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.blocks.StructureGrowListener(this), this);
 		
@@ -364,6 +362,10 @@ public class ShareControl extends JavaPlugin implements Listener
         	foundWE = true;
         }
     }
+	
+	public void log(String s) {
+		getLogger().info(s);
+	}
 	
 	public static boolean getFoundMA()
     {

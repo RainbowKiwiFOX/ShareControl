@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2015 H1KaRo (h1karo)
+ * Copyright (C) 2016 H1KaRo (h1karo)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ public class MySQL {
 	
 	private static ShareControl main;
 	public static Connection connection = null;
-	public static ResultSet resultSet = null;
 	
 	static ConsoleCommandSender console = Bukkit.getConsoleSender();
 
@@ -48,22 +47,21 @@ public class MySQL {
 	         if(!main.getDataFolder().mkdirs()) {
 	            main.getDataFolder().mkdirs();
 	         }
-
-	         if(Configuration.Database.equalsIgnoreCase("sqlite")) {
-	            Class.forName("org.sqlite.JDBC").newInstance();
-	            connection = DriverManager.getConnection("jdbc:sqlite://" + main.getDataFolder().getAbsolutePath() + "/data/blocks.db");
-	            executeSync("CREATE TABLE IF NOT EXISTS `blocks` (`x` INTEGER NOT NULL,`y` INTEGER NOT NULL,`z` INTEGER NOT NULL,`id` INTEGER NOT NULL)");
-	            console.sendMessage(" Connected to SQLite.");
-	         }
-	         if(Configuration.Database.equalsIgnoreCase("mysql")) {
-	        	 Class.forName("com.mysql.jdbc.Driver").newInstance();
-	        	 String url = "jdbc:mysql://" + Configuration.Host + ":" + Configuration.Port + "/" + Configuration.DBname;
-	        	 
-	        	 connection = DriverManager.getConnection(url, Configuration.Username, Configuration.Password);
-	        	 executeSync("CREATE TABLE IF NOT EXISTS `blocks` (`x` int(11) NOT NULL,`y` int(11) NOT NULL,`z` int(11) NOT NULL,`id` int(11) NOT NULL)");
-	        	 console.sendMessage(" Connected to MySQL.");
-	         }
 	         
+	         if(Configuration.Database.equalsIgnoreCase("sqlite")) {
+		            Class.forName("org.sqlite.JDBC").newInstance();
+		            connection = DriverManager.getConnection("jdbc:sqlite://" + main.getDataFolder().getAbsolutePath() + "/data/blocks.db");
+		            executeSync("CREATE TABLE IF NOT EXISTS `blocks` (`id` INTEGER PRIMARY KEY, `x` INTEGER NOT NULL,`y` INTEGER NOT NULL,`z` INTEGER NOT NULL,`material` INTEGER NOT NULL, `world` INTEGER NOT NULL)");
+		            console.sendMessage(" Connected to SQLite.");
+		         }
+		         if(Configuration.Database.equalsIgnoreCase("mysql")) {
+		        	 Class.forName("com.mysql.jdbc.Driver").newInstance();
+		        	 String url = "jdbc:mysql://" + Configuration.Host + ":" + Configuration.Port + "/" + Configuration.DBname;
+		        	 
+		        	 connection = DriverManager.getConnection(url, Configuration.Username, Configuration.Password);
+		        	 executeSync("CREATE TABLE IF NOT EXISTS `blocks` (`id` int(11) NOT NULL AUTO_INCREMENT, `x` int(11) NOT NULL,`y` int(11) NOT NULL,`z` int(11) NOT NULL, `material` int(11) NOT NULL, `world` INTEGER NOT NULL, PRIMARY KEY (`id`)) DEFAULT CHARSET=utf8 AUTO_INCREMENT=0");
+		        	 console.sendMessage(" Connected to MySQL.");
+		         }
 	      } catch (Exception var2) {
 	    	  console.sendMessage(" An error occured while connecting to DB.");
 	         var2.printStackTrace();
@@ -210,34 +208,36 @@ public class MySQL {
 	   
 	   
 	   
-	   public static void SQLUpdate(Integer x, Integer y, Integer z, Integer id) {
-			resultSet = query("SELECT * FROM blocks WHERE x='" + x + "' AND y='" + y + "' AND z='" + z + "'");
+	   public static void SQLUpdate(Integer x, Integer y, Integer z, Integer id, Integer world) {
+		  ResultSet resultSet = query("SELECT * FROM `blocks` WHERE `x`='" + x + "' AND `y`='" + y + "' AND `z`='" + z + "' AND `world`='" + world + "'");
 			
 		   try {
 			   boolean SQLexist = false;
+			   int Gid = 0;
 			   
 			   while(resultSet.next()) {
 				   SQLexist = true;
+				   Gid = resultSet.getInt("material");
 			   }
 			   
 			   if(SQLexist) {
-				   if(id != null)
-					   query("UPDATE blocks SET id='" + id + "' WHERE x='" + x + "' AND y='" + y + "' AND z='" + z + "'");
-				   else 
-					   query("DELETE FROM blocks WHERE x='" + x + "' AND y='" + y + "' AND z='" + z + "'");
+				   if(id != null && Gid != id)
+					   query("UPDATE `blocks` SET `material`='" + id + "' WHERE `x`='" + x + "' AND `y`='" + y + "' AND `z`='" + z + "' AND `world`='" + world + "'");
+				   else if(id == null)
+					   query("DELETE FROM `blocks` WHERE `x`='" + x + "' AND `y`='" + y + "' AND `z`='" + z + "' AND `world`='" + world + "'");
 			   }
 			   else if(id != null)
-				   query("INSERT INTO `blocks`(`x`, `y`, `z`, `id`) VALUES ('"+ x +"', '"+ y +"', '"+ z +"', '"+ id +"')");
+				   query("INSERT INTO `blocks`(`x`, `y`, `z`, `material`, `world`) VALUES ('"+ x +"', '"+ y +"', '"+ z +"', '"+ id +"', '" + world + "')");
 		   } catch (SQLException e) {
 			   e.printStackTrace();
 		   }
 	   }
 	   
-	   public static int getID(Integer x, Integer y, Integer z) {
-		   resultSet = query("SELECT * FROM blocks WHERE x='" + x + "' AND y='" + y + "' AND z='" + z + "'");
+	   public static int getID(Integer x, Integer y, Integer z, String world) {
+		   ResultSet resultSet = query("SELECT * FROM `blocks` WHERE `x`='" + x + "' AND `y`='" + y + "' AND `z`='" + z + "' AND `world`='" + world + "'");
 		   try {
 			   while(resultSet.next())
-				   return resultSet.getInt("id");
+				   return resultSet.getInt("material");
 		   } catch (SQLException e) {
 			   e.printStackTrace();
 		   }
@@ -246,16 +246,17 @@ public class MySQL {
 	   }
 	   
 	   public static void loadCache() {
-		   resultSet = query("SELECT * FROM blocks");
+		   ResultSet resultSet = query("SELECT * FROM blocks");
 		   try {
 			   while(resultSet.next()) {
 				   int x = resultSet.getInt("x"),
 					   y = resultSet.getInt("y"),
 					   z = resultSet.getInt("z"),
-					   id = resultSet.getInt("id");
+					   w = resultSet.getInt("world"),
+					   id = resultSet.getInt("material");
 				   
 				   List<Integer> key = new ArrayList<Integer>();
-				   key.add(x); key.add(y); key.add(z);
+				   key.add(x); key.add(y); key.add(z); key.add(w);
 				   Database.fullcache.put(key, id);
 			   }
 		   } catch (SQLException e) {
