@@ -29,6 +29,9 @@ CheckUpdates: true
 #The current version of plugin.
 Version: there will be a version
 
+#Choose language, files of languages are in directory "languages", enter here the name of the file
+Language: en
+
 #Database. SQLite or MySQL or YAML
 Database: sqlite
 #Save interval of database.
