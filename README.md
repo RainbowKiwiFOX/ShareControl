@@ -20,9 +20,7 @@ Latest release version: 2.3.13
 
 ##Configuration (config.yml)
 ```YAML
-
-| GENERAL SETTINGS |
-
+#| GENERAL SETTINGS |
 General:
 
 #If true, then the input to the server and restart the plugin server admins will write messages about the release of a new version of the plugin.
@@ -60,7 +58,7 @@ Material: true
 PrefixEnabled: true
 
 Settings: #| Settings of interaction |
-Blocks: # | Blocks settings |
+Blocks: #| Blocks settings |
 
 #The list of blocks, which players in the creative can not be put.
 #Allow to put all the blocks: 'none' (without the quotes).
@@ -118,7 +116,8 @@ Enabled: true
 #If false, changing the gamemode inventory will be easy to clean.
 Separation: true
 
-WorldsConfig: | Worlds settings |
+WorldsConfig: #| Worlds settings |
+
 #If true, the settings below will work.
 Enabled: false
 #List of worlds where the player using creative (break, put, interact with mobs) will go into survival mode.
@@ -126,8 +125,9 @@ BlockingCreativeInWorlds:
 - world_nether
 - world_the_end
 
-GamemodesControl: # | Gamemodes Control settings |
-#Activation of the control gamemodes.
+GamemodesControl: #| Gamemodes Control settings |
+
+#Activation of the gamemodes control.
 Enabled: false
 #If it is true, and the player has no permissions to change the game mode on this particular mode, then any attempt to change the gamemode the player will display a message telling him about it and canceled the action. Permissions for the GamemodesControl can be found here.
 #If false, it is forbidden to switch the mode to which this player is no law, only the teams that he introduced himself. (If the administrator will change the player mode, the cancellation will not happen).
