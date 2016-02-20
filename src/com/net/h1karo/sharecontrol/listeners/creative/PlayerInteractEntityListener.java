@@ -45,7 +45,7 @@ public class PlayerInteractEntityListener implements Listener
 	{
 		Player p = e.getPlayer();
 		Entity entDamage = e.getRightClicked();
-		if((!(entDamage.toString() == "CraftVillager") || !(entDamage.toString() == "CraftSlime")) && p.getItemInHand().getType() != Material.SADDLE) return;
+		if(entDamage instanceof Player || (!(entDamage.toString() == "CraftVillager") || !(entDamage.toString() == "CraftSlime")) && p.getItemInHand().getType() != Material.SADDLE) return;
 		if(p.getGameMode() == GameMode.CREATIVE && !Permissions.perms(p, "allow.creature-interact"))
 		{
 			e.setCancelled(true);

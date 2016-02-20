@@ -41,7 +41,7 @@ public class EntityExplodeListener implements Listener {
 	@EventHandler
 	public void EntityExplode(EntityExplodeEvent e)
 	{
-		if(e.getEntityType() == EntityType.PRIMED_TNT || e.getEntityType() == EntityType.CREEPER) {
+		if(e.getEntity() == null || e.getEntityType() == null || e.getEntityType() == EntityType.PRIMED_TNT || e.getEntityType() == EntityType.CREEPER) {
 			List<Block> blocks = e.blockList();
 			for(int i=0; i < blocks.size(); i++) {
 				Block b = blocks.get(i);

@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
+
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.localization.Localization;
@@ -43,8 +44,15 @@ public class PlayerDropItemListener implements Listener
 		Player p = e.getPlayer();
 		if(p.getGameMode() == GameMode.CREATIVE && !Permissions.perms(p, "allow.drop"))
 		{
-			e.setCancelled(true);
-			Localization.dropNotify(p);
+			if(!InventoryClickListener.cache.contains(e.getPlayer())) {
+				e.setCancelled(true);
+				Localization.dropNotify(p);
+			}
+			else {
+				InventoryClickListener.cache.remove(e.getPlayer());
+				e.getItemDrop().remove();
+				Localization.dropNotify(p);
+			}
 		}
 	}
 }

@@ -2,7 +2,7 @@
 Control mode of creativity.
 
 Official source code.
-Latest release version: 2.3.13
+Latest release version: 2.4
 
 ##Features
 
@@ -38,11 +38,12 @@ SaveInterval: 5
 
 #Information for MySQL.
 MySQL:
-Host: localhost
-Port: '3306'
-Database: minecraft
-Username: minecraft
-Password: ''
+ Host: localhost
+ Port: '3306'
+ Database: minecraft
+ Username: minecraft
+ Password: ''
+ TableName: blocks
 
 #| Setting of notifications |
 
@@ -112,11 +113,11 @@ BlockingEntityInteract: true
 BlockingPlayerInteract: true
 
 MultiInventories:
-#If true, the system MultiInventories work
-Enabled: true
-#If true, then when you change gamemode will remain inventory and when you return to this mode he will return.
-#If false, changing the gamemode inventory will be easy to clean.
-Separation: true
+ #If true, the system MultiInventories work
+ Enabled: true
+ #If true, then when you change gamemode will remain inventory and when you return to this mode he will return.
+ #If false, changing the gamemode inventory will be easy to clean.
+ Separation: true
 
 WorldsConfig: | Worlds settings |
 #If true, the settings below will work.
@@ -127,9 +128,9 @@ BlockingCreativeInWorlds:
 - world_the_end
 
 GamemodesControl: # | Gamemodes Control settings |
-#Activation of the control gamemodes.
-Enabled: false
-#If it is true, and the player has no permissions to change the game mode on this particular mode, then any attempt to change the gamemode the player will display a message telling him about it and canceled the action. Permissions for the GamemodesControl can be found here.
-#If false, it is forbidden to switch the mode to which this player is no law, only the teams that he introduced himself. (If the administrator will change the player mode, the cancellation will not happen).
-Full: true 
+ #Activation of the control gamemodes.
+ Enabled: false
+ #If it is true, and the player has no permissions to change the game mode on this particular mode, then any attempt to change the gamemode the player will display a message telling him about it and canceled the action. Permissions for the GamemodesControl can be found here.
+ #If false, it is forbidden to switch the mode to which this player is no law, only the teams that he introduced himself. (If the administrator will change the player mode, the cancellation will not happen).
+ Full: true 
 ```

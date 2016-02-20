@@ -285,7 +285,7 @@ public class Database {
 	}
 	
 	public static boolean ifOneUpDrop(Block b) {
-		return b.getType() == Material.BED_BLOCK ||
+		if(b.getType() == Material.BED_BLOCK ||
 			b.getType() == Material.LEVER ||
 			b.getType() == Material.TORCH ||
 			b.getType() == Material.REDSTONE_TORCH_ON ||
@@ -295,7 +295,6 @@ public class Database {
 			b.getType() == Material.GOLD_PLATE ||
 			b.getType() == Material.IRON_PLATE ||
 			b.getType() == Material.WOODEN_DOOR ||
-			b.getType() == Material.ACACIA_DOOR ||
 			b.getType() == Material.IRON_DOOR_BLOCK ||
 			b.getType() == Material.REDSTONE ||
 			b.getType() == Material.REDSTONE_COMPARATOR ||
@@ -311,14 +310,9 @@ public class Database {
 			b.getType() == Material.POWERED_RAIL ||
 			b.getType() == Material.BED ||
 			b.getType() == Material.FLOWER_POT ||
-			b.getType() == Material.SPRUCE_DOOR ||
 			b.getType() == Material.DOUBLE_PLANT ||
 			b.getType() == Material.RED_ROSE ||
 			b.getType() == Material.YELLOW_FLOWER ||
-			b.getType() == Material.BIRCH_DOOR ||
-			b.getType() == Material.JUNGLE_DOOR ||
-			b.getType() == Material.DARK_OAK_DOOR ||
-			b.getType() == Material.STANDING_BANNER ||
 			b.getType() == Material.STONE_BUTTON ||
 			b.getType() == Material.WOOD_BUTTON ||
 			b.getType() == Material.BROWN_MUSHROOM ||
@@ -326,21 +320,35 @@ public class Database {
 			b.getType() == Material.GOLD_PLATE ||
 			b.getType() == Material.IRON_PLATE ||
 			b.getType() == Material.STONE_PLATE ||
-			b.getType() == Material.WOOD_PLATE;
+			b.getType() == Material.WOOD_PLATE)
+			return true;
+		if(ShareControl.isOneDotEightPlus())
+			if(b.getType() == Material.ACACIA_DOOR ||
+				b.getType() == Material.SPRUCE_DOOR ||
+				b.getType() == Material.BIRCH_DOOR ||
+				b.getType() == Material.JUNGLE_DOOR ||
+				b.getType() == Material.DARK_OAK_DOOR ||
+				b.getType() == Material.STANDING_BANNER)
+				return true;
+		return false;
 	}
 	
 	public static boolean ifLaterallyDrop(Block b) {
-		return b.getType() == Material.LEVER ||
-			b.getType() == Material.TORCH ||
-			b.getType() == Material.REDSTONE_TORCH_ON ||
-			b.getType() == Material.REDSTONE_TORCH_OFF ||
-			b.getType() == Material.STONE_BUTTON ||
-			b.getType() == Material.WOOD_BUTTON ||
-			b.getType() == Material.TRAP_DOOR ||
-			b.getType() == Material.LADDER ||
-			b.getType() == Material.STANDING_BANNER ||
-			b.getType() == Material.WALL_SIGN ||
-			b.getType() == Material.IRON_TRAPDOOR;
+		if(b.getType() == Material.LEVER ||
+				b.getType() == Material.TORCH ||
+				b.getType() == Material.REDSTONE_TORCH_ON ||
+				b.getType() == Material.REDSTONE_TORCH_OFF ||
+				b.getType() == Material.STONE_BUTTON ||
+				b.getType() == Material.WOOD_BUTTON ||
+				b.getType() == Material.TRAP_DOOR ||
+				b.getType() == Material.LADDER ||
+				b.getType() == Material.WALL_SIGN)
+		return true;
+		if(ShareControl.isOneDotEightPlus())
+			if(b.getType() == Material.STANDING_BANNER ||
+				b.getType() == Material.IRON_TRAPDOOR)
+				return true;
+		return false;
 	}
 	
 	public static boolean ifWaterDrop(Block b) {

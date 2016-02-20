@@ -112,9 +112,9 @@ public class PlayerGameModeChangeListener implements Listener {
     	if(newgm == GameMode.ADVENTURE)
     		UniversalPaste(p, "adventure");
     	
-    	if(newgm == GameMode.SPECTATOR)
-    		clear(p);
-    	
+    	if(ShareControl.isOneDotEightPlus())
+    		if(newgm == GameMode.SPECTATOR)
+    			clear(p);
     }
     
     // HANDLERS

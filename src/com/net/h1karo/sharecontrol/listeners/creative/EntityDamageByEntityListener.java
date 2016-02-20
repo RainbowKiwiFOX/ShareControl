@@ -19,7 +19,6 @@
 package com.net.h1karo.sharecontrol.listeners.creative;
 
 import org.bukkit.GameMode;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -47,7 +46,10 @@ public class EntityDamageByEntityListener implements Listener
 	{
 		Entity player = e.getDamager();
 		Entity entity = e.getEntity();
-		if(!(player instanceof Player) || !(entity instanceof LivingEntity) || entity instanceof ArmorStand) return;
+		if(ShareControl.isOneDotEightPlus()) {
+			if(!(player instanceof Player) || !(entity instanceof LivingEntity) || entity instanceof org.bukkit.entity.ArmorStand) return;
+		}
+		else if(!(player instanceof Player) || !(entity instanceof LivingEntity)) return;
 		Player p = (Player) e.getDamager();
 		if(p.getGameMode() == GameMode.CREATIVE && !Permissions.perms(p, "allow.creature-interact") && Configuration.CreatureInteract)
 		{

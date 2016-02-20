@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.SQLException;
+import java.util.regex.Pattern;
 
 import com.earth2me.essentials.Essentials;
 
@@ -85,12 +86,17 @@ public class ShareControl extends JavaPlugin implements Listener
     private static boolean foundMA = false, foundPVP = false, foundEss = false, foundWE = false;
     private static boolean alpha = false, beta = false;
     
-    ConsoleCommandSender console = Bukkit.getConsoleSender();
+    ConsoleCommandSender console = null;
     
 	@Override
 	public void onEnable()
 	{
+		console = Bukkit.getConsoleSender();
 		console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&l=================== &9&lShare&f&lControl &7&l==================="));
+		if(!isOneDotEightPlus() && !isOneDotSeven()) {
+			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &c&lYou are using an unsupported version! The plugin supports 1.7+ versions."));
+			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &c&lYou use at your own risk!"));
+		}
 		console.sendMessage(ChatColor.translateAlternateColorCodes('&', " Loading configuration..."));
 		
 		instance = this;
@@ -225,12 +231,13 @@ public class ShareControl extends JavaPlugin implements Listener
             /**\    GET VERSIONS    /**\
               /**\\**//**\\**//**\\**/
             
-            CMajor = Integer.parseInt(currentVersion.substring(0, currentVersion.indexOf(".")));
-            CMinor = Integer.parseInt(currentVersion.substring(currentVersion.indexOf(".") + 1, currentVersion.lastIndexOf(".")));
-            if(currentVersion.contains("-")) {
-            	CMaintenance = Integer.parseInt(currentVersion.substring(currentVersion.lastIndexOf(".") + 1, currentVersion.indexOf("-")));
-            	CBuildString = currentVersion.substring(currentVersion.indexOf("-") + 1);
-            	
+            String[] CStrings = currentVersion.split(Pattern.quote("."));
+            
+            CMajor = Integer.parseInt(CStrings[0]);
+            if(CStrings.length > 1)
+            if(CStrings[1].contains("-")) {
+            	CMinor = Integer.parseInt(CStrings[1].split(Pattern.quote("-"))[0]);
+            	CBuildString = CStrings[1].split(Pattern.quote("-"))[1];
             	if(CBuildString.contains("b")) {
             		beta = true;
             		CBuildString = CBuildString.replace("b", "");
@@ -246,22 +253,43 @@ public class ShareControl extends JavaPlugin implements Listener
             	else CBuild = Integer.parseInt(CBuildString);
             }
             else {
-            	CMaintenance = Integer.parseInt(currentVersion.substring(currentVersion.lastIndexOf(".") + 1));
+            	CMinor = Integer.parseInt(CStrings[1]);
+            	if(CStrings.length > 2)
+            		if(CStrings[2].contains("-")) {
+            			CMaintenance = Integer.parseInt(CStrings[2].split(Pattern.quote("-"))[0]);
+            			CBuildString = CStrings[2].split(Pattern.quote("-"))[1];
+            			if(CBuildString.contains("b")) {
+            				beta = true;
+            				CBuildString = CBuildString.replace("b", "");
+            				if(CBuildString != "")
+            					CBuild = Integer.parseInt(CBuildString) - 1;
+            			}
+            			else if(CBuildString.contains("a")) {
+            				alpha = true;
+            				CBuildString = CBuildString.replace("a", "");
+            				if(CBuildString != "")
+            					CBuild = Integer.parseInt(CBuildString) - 10;
+            			}
+            			else CBuild = Integer.parseInt(CBuildString);
+            		}
+            		else CMaintenance = Integer.parseInt(CStrings[2]);
             }
             
+            String[] NStrings = newVersion.split(Pattern.quote("."));
             
-            NMajor = Integer.parseInt(newVersion.substring(0, newVersion.indexOf(".")));
-            NMinor = Integer.parseInt(newVersion.substring(newVersion.indexOf(".") + 1, newVersion.lastIndexOf(".")));
-            if(newVersion.contains("-")) {
-            	NMaintenance = Integer.parseInt(newVersion.substring(newVersion.lastIndexOf(".") + 1, newVersion.indexOf("-")));
-            	NBuildString = newVersion.substring(newVersion.indexOf("-") + 1);
-            	
+            NMajor = Integer.parseInt(NStrings[0]);
+            if(NStrings.length > 1)
+            if(NStrings[1].contains("-")) {
+            	NMinor = Integer.parseInt(NStrings[1].split(Pattern.quote("-"))[0]);
+            	NBuildString = NStrings[1].split(Pattern.quote("-"))[1];
             	if(NBuildString.contains("b")) {
+            		beta = true;
             		NBuildString = NBuildString.replace("b", "");
             		if(NBuildString != "")
             		NBuild = Integer.parseInt(NBuildString) - 1;
             	}
             	else if(NBuildString.contains("a")) {
+            		alpha = true;
             		NBuildString = NBuildString.replace("a", "");
             		if(NBuildString != "")
             		NBuild = Integer.parseInt(NBuildString) - 10;
@@ -269,7 +297,26 @@ public class ShareControl extends JavaPlugin implements Listener
             	else NBuild = Integer.parseInt(NBuildString);
             }
             else {
-            	NMaintenance = Integer.parseInt(newVersion.substring(newVersion.lastIndexOf(".") + 1));
+            	NMinor = Integer.parseInt(NStrings[1]);
+            	if(NStrings.length > 2)
+            		if(NStrings[2].contains("-")) {
+            			NMaintenance = Integer.parseInt(NStrings[2].split(Pattern.quote("-"))[0]);
+            			NBuildString = NStrings[2].split(Pattern.quote("-"))[1];
+            			if(NBuildString.contains("b")) {
+            				beta = true;
+            				NBuildString = NBuildString.replace("b", "");
+            				if(NBuildString != "")
+            					NBuild = Integer.parseInt(NBuildString) - 1;
+            			}
+            			else if(NBuildString.contains("a")) {
+            				alpha = true;
+            				NBuildString = NBuildString.replace("a", "");
+            				if(NBuildString != "")
+            					NBuild = Integer.parseInt(NBuildString) - 10;
+            			}
+            			else NBuild = Integer.parseInt(NBuildString);
+            		}
+            		else NMaintenance = Integer.parseInt(NStrings[2]);
             }
             
             /**\\**//**\\**//**\\**/
@@ -292,6 +339,7 @@ public class ShareControl extends JavaPlugin implements Listener
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(this, this);
 		
+		
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.blocks.BlockFromToListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.blocks.BlockGrowListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.blocks.BlockMoveByPistonListener(this), this);
@@ -305,9 +353,11 @@ public class ShareControl extends JavaPlugin implements Listener
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.EntityShootBowListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.InventoryClickListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.InventoryOpenListener(this), this);
-		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerArmorStandDestroyListener(this), this);
-		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerArmorStandManipulateListener(this), this);
-		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerArmorStandSpawnListener(this), this);
+		if(isOneDotEightPlus()) {
+			pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerArmorStandDestroyListener(this), this);
+			pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerArmorStandManipulateListener(this), this);
+			pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerArmorStandSpawnListener(this), this);
+		}
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerCommandPreprocessListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerDeathListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerDropItemListener(this), this);
@@ -385,5 +435,22 @@ public class ShareControl extends JavaPlugin implements Listener
     public static boolean getFoundWorldEdit()
     {
         return foundWE;
+    }
+    
+    
+    public static boolean isOneDotEightPlus() {
+    	String bukkitVersion = Bukkit.getServer().getVersion();
+    	String version = bukkitVersion.substring(bukkitVersion.lastIndexOf("(MC: ") + 5, bukkitVersion.lastIndexOf(")"));
+    	if((Integer.parseInt(version.split(Pattern.quote("."))[0]) == 1 && Integer.parseInt(version.split(Pattern.quote("."))[1]) >= 8) || Integer.parseInt(version.split(Pattern.quote("."))[0]) > 1) 
+    			return true;
+    	return false;
+    }
+    
+    public boolean isOneDotSeven() {
+    	String bukkitVersion = Bukkit.getServer().getVersion();
+    	String version = bukkitVersion.substring(bukkitVersion.lastIndexOf("(MC: ") + 5, bukkitVersion.lastIndexOf(")"));
+    	if(version.split(Pattern.quote("."))[0].equalsIgnoreCase("1") && Integer.parseInt(version.split(Pattern.quote("."))[1]) == 7) 
+    			return true;
+    	return false;
     }
 }

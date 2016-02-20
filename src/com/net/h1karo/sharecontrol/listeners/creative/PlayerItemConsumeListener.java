@@ -50,7 +50,7 @@ public class PlayerItemConsumeListener implements Listener
 		for(int i=0; i < Configuration.BlockingItemsInvList.toArray().length; i++)
 		{
 			String StrListItem = (String) Configuration.BlockingItemsInvList.toArray()[i];
-			if(!Permissions.perms(p, "allow.blocking-placement." + StrListItem)) {
+			if(!Permissions.perms(p, "allow.blocking-inventory." + StrListItem)) {
 				Material typeThisItem = e.getItem().getType();
 				Material typeListItem;
 				

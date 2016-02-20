@@ -5,7 +5,7 @@
 
 General:
   CheckUpdates: true
-  Version: 2.3.13
+  Version: 2.4
   Language: en
   Database: sqlite
   MySQL:
@@ -14,10 +14,13 @@ General:
     Database: minecraft
     Username: minecraft
     Password: ''
+    TableName: blocks
+  SaveInterval: 5
 Notifications:
   SurvivalNotify: true
   CreativeNotify: true
   Material: true
+  PrefixEnabled: true
 Settings:
   Blocks:
     BlockingPlacement:
@@ -45,8 +48,8 @@ Settings:
     - POTION
   BlockingCreatureInteract: true
   BlockingPlayerInteract: true
-  BlockingBreak: true
-  InventorySeparation: true
+  BlockingBreak: false
+  ClearDropInInventory: false
   BlockingCmds:
     Enabled: false
     List:

@@ -51,7 +51,7 @@ public class MySQL {
 	         if(Configuration.Database.equalsIgnoreCase("sqlite")) {
 		            Class.forName("org.sqlite.JDBC").newInstance();
 		            connection = DriverManager.getConnection("jdbc:sqlite://" + main.getDataFolder().getAbsolutePath() + "/data/blocks.db");
-		            executeSync("CREATE TABLE IF NOT EXISTS `blocks` (`id` INTEGER PRIMARY KEY, `x` INTEGER NOT NULL,`y` INTEGER NOT NULL,`z` INTEGER NOT NULL,`material` INTEGER NOT NULL, `world` INTEGER NOT NULL)");
+		            executeSync("CREATE TABLE IF NOT EXISTS `" + Configuration.TableName + "` (`id` INTEGER PRIMARY KEY, `x` INTEGER NOT NULL,`y` INTEGER NOT NULL,`z` INTEGER NOT NULL,`material` INTEGER NOT NULL, `world` INTEGER NOT NULL)");
 		            console.sendMessage(" Connected to SQLite.");
 		         }
 		         if(Configuration.Database.equalsIgnoreCase("mysql")) {
@@ -59,7 +59,7 @@ public class MySQL {
 		        	 String url = "jdbc:mysql://" + Configuration.Host + ":" + Configuration.Port + "/" + Configuration.DBname;
 		        	 
 		        	 connection = DriverManager.getConnection(url, Configuration.Username, Configuration.Password);
-		        	 executeSync("CREATE TABLE IF NOT EXISTS `blocks` (`id` int(11) NOT NULL AUTO_INCREMENT, `x` int(11) NOT NULL,`y` int(11) NOT NULL,`z` int(11) NOT NULL, `material` int(11) NOT NULL, `world` INTEGER NOT NULL, PRIMARY KEY (`id`)) DEFAULT CHARSET=utf8 AUTO_INCREMENT=0");
+		        	 executeSync("CREATE TABLE IF NOT EXISTS `" + Configuration.TableName + "` (`id` int(11) NOT NULL AUTO_INCREMENT, `x` int(11) NOT NULL,`y` int(11) NOT NULL,`z` int(11) NOT NULL, `material` int(11) NOT NULL, `world` INTEGER NOT NULL, PRIMARY KEY (`id`)) DEFAULT CHARSET=utf8 AUTO_INCREMENT=0");
 		        	 console.sendMessage(" Connected to MySQL.");
 		         }
 	      } catch (Exception var2) {
@@ -209,7 +209,7 @@ public class MySQL {
 	   
 	   
 	   public static void SQLUpdate(Integer x, Integer y, Integer z, Integer id, Integer world) {
-		  ResultSet resultSet = query("SELECT * FROM `blocks` WHERE `x`='" + x + "' AND `y`='" + y + "' AND `z`='" + z + "' AND `world`='" + world + "'");
+		  ResultSet resultSet = query("SELECT * FROM `" + Configuration.TableName + "` WHERE `x`='" + x + "' AND `y`='" + y + "' AND `z`='" + z + "' AND `world`='" + world + "'");
 			
 		   try {
 			   boolean SQLexist = false;
@@ -222,19 +222,19 @@ public class MySQL {
 			   
 			   if(SQLexist) {
 				   if(id != null && Gid != id)
-					   query("UPDATE `blocks` SET `material`='" + id + "' WHERE `x`='" + x + "' AND `y`='" + y + "' AND `z`='" + z + "' AND `world`='" + world + "'");
+					   query("UPDATE `" + Configuration.TableName + "` SET `material`='" + id + "' WHERE `x`='" + x + "' AND `y`='" + y + "' AND `z`='" + z + "' AND `world`='" + world + "'");
 				   else if(id == null)
-					   query("DELETE FROM `blocks` WHERE `x`='" + x + "' AND `y`='" + y + "' AND `z`='" + z + "' AND `world`='" + world + "'");
+					   query("DELETE FROM `" + Configuration.TableName + "` WHERE `x`='" + x + "' AND `y`='" + y + "' AND `z`='" + z + "' AND `world`='" + world + "'");
 			   }
 			   else if(id != null)
-				   query("INSERT INTO `blocks`(`x`, `y`, `z`, `material`, `world`) VALUES ('"+ x +"', '"+ y +"', '"+ z +"', '"+ id +"', '" + world + "')");
+				   query("INSERT INTO `" + Configuration.TableName + "`(`x`, `y`, `z`, `material`, `world`) VALUES ('"+ x +"', '"+ y +"', '"+ z +"', '"+ id +"', '" + world + "')");
 		   } catch (SQLException e) {
 			   e.printStackTrace();
 		   }
 	   }
 	   
 	   public static int getID(Integer x, Integer y, Integer z, String world) {
-		   ResultSet resultSet = query("SELECT * FROM `blocks` WHERE `x`='" + x + "' AND `y`='" + y + "' AND `z`='" + z + "' AND `world`='" + world + "'");
+		   ResultSet resultSet = query("SELECT * FROM `" + Configuration.TableName + "` WHERE `x`='" + x + "' AND `y`='" + y + "' AND `z`='" + z + "' AND `world`='" + world + "'");
 		   try {
 			   while(resultSet.next())
 				   return resultSet.getInt("material");
@@ -246,7 +246,7 @@ public class MySQL {
 	   }
 	   
 	   public static void loadCache() {
-		   ResultSet resultSet = query("SELECT * FROM blocks");
+		   ResultSet resultSet = query("SELECT * FROM `" + Configuration.TableName + "`");
 		   try {
 			   while(resultSet.next()) {
 				   int x = resultSet.getInt("x"),

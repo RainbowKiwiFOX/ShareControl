@@ -47,7 +47,7 @@ public class Configuration {
 	//
 	public static boolean versionCheck;
 	public static List<String> BlockingBlocksPlaceList, BlockingBlocksBreakList, BlockingItemsInvList, BlockingCmdsList;
-    public static boolean CreatureInteract, PlayerInteract, CreativeNotify, SurvivalNotify, material, BlockingBreak, PrefixEnabled;
+    public static boolean CreatureInteract, PlayerInteract, CreativeNotify, SurvivalNotify, material, BlockingBreak, PrefixEnabled, ClearDropInInventory;
     public static boolean MultiInventoriesEnabled, InventorySeparation;
     public static String Language;
     
@@ -61,7 +61,7 @@ public class Configuration {
     private static File languageFolder;
     public static File inventoryFolder;
     
-    public static String Database, Host, Port, DBname, Username, Password;
+    public static String Database, Host, Port, DBname, Username, Password, TableName;
     public static int DBInterval;
     
     // Config.yml
@@ -74,6 +74,7 @@ public class Configuration {
 		
 		main.getConfig().set("General.Database", Database);
 		main.getConfig().set("General.SaveInterval", DBInterval);
+		main.getConfig().set("General.MySQL.TableName", TableName);
 		main.getConfig().set("General.MySQL.Host", Host);
 		main.getConfig().set("General.MySQL.Port", Port);
 		main.getConfig().set("General.MySQL.Database", DBname);
@@ -88,6 +89,7 @@ public class Configuration {
 		main.getConfig().set("Settings.BlockingCreatureInteract", CreatureInteract);
 		main.getConfig().set("Settings.BlockingPlayerInteract", PlayerInteract);
 		main.getConfig().set("Settings.BlockingBreak", BlockingBreak);
+		main.getConfig().set("Settings.ClearDropInInventory", ClearDropInInventory);
 		
 		main.getConfig().set("Settings.MultiInventories.Enabled", MultiInventoriesEnabled);
 		main.getConfig().set("Settings.MultiInventories.Separation", InventorySeparation);
@@ -126,6 +128,7 @@ public class Configuration {
 		
 		Database = main.getConfig().getString("General.Database", "sqlite");
 		DBInterval = main.getConfig().getInt("General.SaveInterval", 5);
+		TableName = main.getConfig().getString("General.MySQL.TableName", "blocks");
 		Host = main.getConfig().getString("General.MySQL.Host", "localhost");
 		Port = main.getConfig().getString("General.MySQL.Port", "3306");
 		DBname = main.getConfig().getString("General.MySQL.Database", "minecraft");
@@ -142,6 +145,7 @@ public class Configuration {
         CreatureInteract = main.getConfig().getBoolean("Settings.BlockingCreatureInteract", true);
         PlayerInteract = main.getConfig().getBoolean("Settings.BlockingPlayerInteract", true);
         BlockingBreak = main.getConfig().getBoolean("Settings.BlockingBreak", true);
+        ClearDropInInventory = main.getConfig().getBoolean("Settings.ClearDropInInventory", false);
         
         MultiInventoriesEnabled = main.getConfig().getBoolean("Settings.MultiInventories.Enabled", true);
         InventorySeparation = main.getConfig().getBoolean("Settings.MultiInventories.Separation", true);

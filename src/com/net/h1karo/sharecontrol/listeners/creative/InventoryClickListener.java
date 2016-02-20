@@ -18,12 +18,20 @@
 
 package com.net.h1karo.sharecontrol.listeners.creative;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCreativeEvent;
 
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
@@ -33,7 +41,6 @@ import com.net.h1karo.sharecontrol.localization.Localization;
 
 public class InventoryClickListener implements Listener
 {
-	@SuppressWarnings("unused")
 	private final ShareControl main;
 	
 	public InventoryClickListener(ShareControl h)
@@ -41,11 +48,14 @@ public class InventoryClickListener implements Listener
 		this.main = h;
 	}
 	
+	public static List<Player> cache = new ArrayList<Player>();
+	
 	@SuppressWarnings("deprecation")
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void InventoryClick(InventoryClickEvent e)
 	{
 		Player p = (Player) e.getWhoClicked();
+		cache.add((Player) e.getWhoClicked());
 		if(p.getGameMode() != GameMode.CREATIVE || Permissions.perms(p, "allow.blocking-inventory.*") || Configuration.BlockingItemsInvList.toArray().length == 0 || Configuration.BlockingItemsInvList.get(0).toString().compareToIgnoreCase("[none]") == 0) return;
 		for(int i=0; i < Configuration.BlockingItemsInvList.toArray().length; i++)
 		{
@@ -66,8 +76,21 @@ public class InventoryClickListener implements Listener
 				{
 					Localization.invNotify(typeThisItem, p);
 					e.setCancelled(true);
+					return;
 				}
 			}
 		}
+	}
+	
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void InventoryDrop(InventoryCreativeEvent e)
+	{
+		if(!Configuration.ClearDropInInventory) return;
+		final Player p = (Player) e.getWhoClicked();
+		if(p.getGameMode() != GameMode.CREATIVE || Permissions.perms(p, "allow.drop") || !e.getAction().equals(InventoryAction.PLACE_ALL) || !e.getClick().equals(ClickType.CREATIVE) || e.getCursor().getType().equals(Material.AIR) || e.getCurrentItem() != null) return;
+		cache.add(p);
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
+            @Override
+            public void run() { cache.remove(p); }}, 20L);
 	}
 }

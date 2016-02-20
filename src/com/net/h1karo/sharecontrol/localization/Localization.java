@@ -297,6 +297,7 @@ public class Localization {
 				return GameMode.SURVIVAL;
 			if(gamemode.compareToIgnoreCase("adventure") == 0) 
 				return GameMode.ADVENTURE;
+			if(ShareControl.isOneDotEightPlus())
 			if(gamemode.compareToIgnoreCase("spectator") == 0) 
 				return GameMode.SPECTATOR;
 		}

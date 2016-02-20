@@ -20,6 +20,7 @@ package org.mcstats;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.scheduler.BukkitTask;
@@ -266,15 +267,14 @@ public class MetricsLite {
     /**
      * Generic method that posts a plugin to the metrics website
      */
-    private void postPlugin(boolean isPing) throws IOException {
+	private void postPlugin(boolean isPing) throws IOException {
         // Server software specific section
         PluginDescriptionFile description = plugin.getDescription();
         String pluginName = description.getName();
         boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE if online mode is enabled
         String pluginVersion = description.getVersion();
         String serverVersion = Bukkit.getVersion();
-        int playersOnline = Bukkit.getServer().getOnlinePlayers().size();
-
+        int playersOnline = getOnlinePlayers();
         // END server software specific section -- all code below does not use any code outside of this class / Java
 
         // Construct the post data
@@ -498,5 +498,12 @@ public class MetricsLite {
     private static String urlEncode(final String text) throws UnsupportedEncodingException {
         return URLEncoder.encode(text, "UTF-8");
     }
-
+    
+    @SuppressWarnings({ "unused" })
+	private static int getOnlinePlayers() {
+    	int size = 0;
+    	for(Player p : Bukkit.getServer().getOnlinePlayers()) 
+    		size++;
+    	return size;
+    }
 }

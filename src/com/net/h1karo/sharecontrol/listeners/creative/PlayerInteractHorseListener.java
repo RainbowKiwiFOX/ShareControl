@@ -27,7 +27,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
@@ -52,10 +51,9 @@ public class PlayerInteractHorseListener implements Listener
 		{
 			Interact = true;
 			player = e.getPlayer();
-    		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-	        scheduler.scheduleSyncDelayedTask(main, new Runnable() {
+			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
 	            @Override
-	            public void run() { Interact = false; }}, 30L);
+	            public void run() { Interact = false; }}, 20L);
 		}	
 	}
 	
