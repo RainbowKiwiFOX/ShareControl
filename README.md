@@ -135,11 +135,4 @@ GamemodesControl: # | Gamemodes Control settings |
  #If it is true, and the player has no permissions to change the game mode on this particular mode, then any attempt to change the gamemode the player will display a message telling him about it and canceled the action. Permissions for the GamemodesControl can be found here.
  #If false, it is forbidden to switch the mode to which this player is no law, only the teams that he introduced himself. (If the administrator will change the player mode, the cancellation will not happen).
  Full: true 
-
-GamemodesControl: #| Gamemodes Control settings |
- #Activation of the gamemodes control.
- Enabled: false
- #If it is true, and the player has no permissions to change the game mode on this particular mode, then any attempt to change the gamemode the player will display a message telling him about it and canceled the action. Permissions for the GamemodesControl can be found here.
- #If false, it is forbidden to switch the mode to which this player is no law, only the teams that he introduced himself. (If the administrator will change the player mode, the cancellation will not happen).
- Full: true 
 ```
