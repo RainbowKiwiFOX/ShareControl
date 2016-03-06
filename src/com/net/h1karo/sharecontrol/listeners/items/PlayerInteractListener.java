@@ -15,7 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-
 package com.net.h1karo.sharecontrol.listeners.items;
 
 import java.util.Arrays;
@@ -31,9 +30,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.net.h1karo.sharecontrol.items.items;
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
+import com.net.h1karo.sharecontrol.Items;
 import com.net.h1karo.sharecontrol.database.Database;
 import com.net.h1karo.sharecontrol.localization.LanguageFiles;
 import com.net.h1karo.sharecontrol.localization.Localization;
@@ -47,6 +46,7 @@ public class PlayerInteractListener implements Listener {
 		this.main = h;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void InfotoolInteractWithBlocks(PlayerInteractEvent e)
 	{		
@@ -60,7 +60,7 @@ public class PlayerInteractListener implements Listener {
 			loreStr2 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.loreIT2);
 		
 		List<String> loreIT = Arrays.asList(loreStr1, loreStr2);
-		ItemStack infotool = items.setMeta(new ItemStack(Material.BLAZE_POWDER), nameIT, loreIT);
+		ItemStack infotool = Items.setMeta(new ItemStack(Material.BLAZE_POWDER), nameIT, loreIT);
 		
 		if(e.getItem() == null || p.getItemInHand() == null || e.getItem().getType() != infotool.getType() || e.getItem().getItemMeta().getDisplayName() == null) return;
 		if(e.getItem().getItemMeta().getDisplayName().compareToIgnoreCase(nameIT) == 0)
@@ -77,6 +77,7 @@ public class PlayerInteractListener implements Listener {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void ChangetoolInteractWitchBlocks(PlayerInteractEvent e)
 	{
@@ -94,7 +95,7 @@ public class PlayerInteractListener implements Listener {
 
 		List<String> loreST = Arrays.asList(loreST1, loreST2, loreST3);
 		
-		ItemStack settool = items.setMeta(new ItemStack(Material.MAGMA_CREAM), nameST, loreST);
+		ItemStack settool = Items.setMeta(new ItemStack(Material.MAGMA_CREAM), nameST, loreST);
 		if(e.getItem() == null || p.getItemInHand() == null || e.getItem().getType() != settool.getType() || e.getItem().getItemMeta().getDisplayName() == null) return;
 		if(e.getItem().getItemMeta().getDisplayName().compareToIgnoreCase(nameST) == 0)
 		{

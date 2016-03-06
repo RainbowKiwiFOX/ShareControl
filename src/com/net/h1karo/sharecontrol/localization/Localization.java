@@ -15,7 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-
 package com.net.h1karo.sharecontrol.localization;
 
 import java.sql.SQLException;
@@ -33,10 +32,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.net.h1karo.sharecontrol.items.items;
+import com.net.h1karo.sharecontrol.version.CoreVersion;
 import com.net.h1karo.sharecontrol.MessageManager;
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
+import com.net.h1karo.sharecontrol.Items;
 import com.net.h1karo.sharecontrol.MessageManager.MessageType;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
 import com.net.h1karo.sharecontrol.database.Database;
@@ -177,13 +177,13 @@ public class Localization {
 	public static void SurvivalBlockNotDrop(Player p) {
 		if(!Configuration.SurvivalNotify) return;
 		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.CreativeBlockNotDrop);
-		MessageManager.getManager().msg(p, MessageType.PLINFO, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	public static void SurvivalBlockNotBreak(Player p) {
 		if(!Configuration.SurvivalNotify) return;
 		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.CreativeBlockNotBreak);
-		MessageManager.getManager().msg(p, MessageType.PLINFO, msg);
+		MessageManager.getManager().msg(p, MessageType.PLAYERS, msg);
 	}
 	
 	public static void EntityUseNotify(EntityType typeThisEntity, Player p) {
@@ -297,9 +297,9 @@ public class Localization {
 				return GameMode.SURVIVAL;
 			if(gamemode.compareToIgnoreCase("adventure") == 0) 
 				return GameMode.ADVENTURE;
-			if(ShareControl.isOneDotEightPlus())
-			if(gamemode.compareToIgnoreCase("spectator") == 0) 
-				return GameMode.SPECTATOR;
+			if(CoreVersion.getVersionsArray().contains(CoreVersion.OneDotEightPlus))
+				if(gamemode.compareToIgnoreCase("spectator") == 0) 
+					return GameMode.SPECTATOR;
 		}
 		return null;
 	}
@@ -432,7 +432,7 @@ public class Localization {
 			loreStr2 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.loreIT2);
 
 		List<String> loreIT = Arrays.asList(loreStr1, loreStr2);
-		ItemStack infotool = items.setMeta(new ItemStack(Material.BLAZE_POWDER), nameIT, loreIT);
+		ItemStack infotool = Items.setMeta(new ItemStack(Material.BLAZE_POWDER), nameIT, loreIT);
 		
 		((Player) p).getInventory().addItem(infotool);
 	}
@@ -456,7 +456,7 @@ public class Localization {
 		else
 			loreST3 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.loreST3);
 		List<String> loreST = Arrays.asList(loreST1, loreST2, loreST3);
-		ItemStack settool = items.setMeta(new ItemStack(Material.MAGMA_CREAM), nameST, loreST);
+		ItemStack settool = Items.setMeta(new ItemStack(Material.MAGMA_CREAM), nameST, loreST);
 		
 		((Player) p).getInventory().addItem(settool);		
 	}

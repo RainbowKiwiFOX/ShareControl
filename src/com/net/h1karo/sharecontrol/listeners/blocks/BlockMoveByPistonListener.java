@@ -31,6 +31,7 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.database.Database;
+import com.net.h1karo.sharecontrol.version.CoreVersion;
 
 public class BlockMoveByPistonListener implements Listener {
 	@SuppressWarnings("unused")
@@ -88,7 +89,7 @@ public class BlockMoveByPistonListener implements Listener {
 			if(e.getDirection().equals(BlockFace.DOWN))
 				Database.RemoveBlock(b.getWorld().getBlockAt(b.getX(), b.getY() - 1, b.getZ()));
 		}
-		if(ShareControl.isOneDotEightPlus())
+		if(CoreVersion.getVersionsArray().contains(CoreVersion.OneDotEightPlus))
 			blocksHandling(e.getBlocks(), e.getDirection());
 		else 	if(b.getType().equals(Material.PISTON_STICKY_BASE))
 				blockHandling(e.getRetractLocation().getBlock(), e.getDirection());

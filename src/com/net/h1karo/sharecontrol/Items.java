@@ -15,8 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-
-package com.net.h1karo.sharecontrol.items;
+package com.net.h1karo.sharecontrol;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class items {
+public class Items {
 	public static ItemStack setMeta(ItemStack material, String name, List<String> lore)
 	{
 		if(material==null || material.getType() == Material.AIR || (name == null && lore == null))

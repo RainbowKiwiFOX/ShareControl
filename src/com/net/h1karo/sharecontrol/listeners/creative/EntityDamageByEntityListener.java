@@ -15,7 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-
 package com.net.h1karo.sharecontrol.listeners.creative;
 
 import org.bukkit.GameMode;
@@ -30,6 +29,7 @@ import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
 import com.net.h1karo.sharecontrol.localization.Localization;
+import com.net.h1karo.sharecontrol.version.CoreVersion;
 
 public class EntityDamageByEntityListener implements Listener
 {
@@ -46,7 +46,7 @@ public class EntityDamageByEntityListener implements Listener
 	{
 		Entity player = e.getDamager();
 		Entity entity = e.getEntity();
-		if(ShareControl.isOneDotEightPlus()) {
+		if(CoreVersion.getVersionsArray().contains(CoreVersion.OneDotEightPlus)) {
 			if(!(player instanceof Player) || !(entity instanceof LivingEntity) || entity instanceof org.bukkit.entity.ArmorStand) return;
 		}
 		else if(!(player instanceof Player) || !(entity instanceof LivingEntity)) return;

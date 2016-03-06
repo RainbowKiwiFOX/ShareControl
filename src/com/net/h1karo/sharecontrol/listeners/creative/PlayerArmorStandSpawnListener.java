@@ -15,7 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-
 package com.net.h1karo.sharecontrol.listeners.creative;
 
 import org.bukkit.Bukkit;
@@ -55,6 +54,7 @@ public class PlayerArmorStandSpawnListener implements Listener {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void PlayerArmorStandSpawn(PlayerInteractEvent e)
 	{

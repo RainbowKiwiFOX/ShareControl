@@ -32,6 +32,7 @@ import org.bukkit.scheduler.BukkitTask;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
 import com.net.h1karo.sharecontrol.listeners.multiinventories.PlayerGameModeChangeListener;
+import com.net.h1karo.sharecontrol.version.CoreVersion;
 
 public class Database {
 	
@@ -322,7 +323,7 @@ public class Database {
 			b.getType() == Material.STONE_PLATE ||
 			b.getType() == Material.WOOD_PLATE)
 			return true;
-		if(ShareControl.isOneDotEightPlus())
+		if(CoreVersion.getVersionsArray().contains(CoreVersion.OneDotEightPlus))
 			if(b.getType() == Material.ACACIA_DOOR ||
 				b.getType() == Material.SPRUCE_DOOR ||
 				b.getType() == Material.BIRCH_DOOR ||
@@ -344,7 +345,7 @@ public class Database {
 				b.getType() == Material.LADDER ||
 				b.getType() == Material.WALL_SIGN)
 		return true;
-		if(ShareControl.isOneDotEightPlus())
+		if(CoreVersion.getVersionsArray().contains(CoreVersion.OneDotEightPlus))
 			if(b.getType() == Material.STANDING_BANNER ||
 				b.getType() == Material.IRON_TRAPDOOR)
 				return true;
@@ -404,18 +405,4 @@ public class Database {
 		}
     	id = null;
 	}
-	
-	/** DEBUG FUNCTIONS **/
-	
-	public static void getCache() {
-		for(List<Integer> key : cache.keySet()) {
-    		String coords = "";
-    		for(int i=0; i < key.size(); i++)
-    			if(coords == "") coords = key.get(i).toString();
-    			else coords = coords + "." + key.get(i);
-    		main.getLogger().info(coords + " " + cache.get(key));
-    	}
-	}
 }
-
-

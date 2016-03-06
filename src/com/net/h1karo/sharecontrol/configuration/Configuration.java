@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-
 package com.net.h1karo.sharecontrol.configuration;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -31,6 +31,7 @@ import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.database.InventoriesDatabase;
 import com.net.h1karo.sharecontrol.localization.LanguageFiles;
 import com.net.h1karo.sharecontrol.localization.Localization;
+import com.net.h1karo.sharecontrol.version.CoreVersion;
 
 public class Configuration {
 	
@@ -45,26 +46,6 @@ public class Configuration {
 	//
 	// CONFIGURATION
 	//
-	public static boolean versionCheck;
-	public static List<String> BlockingBlocksPlaceList, BlockingBlocksBreakList, BlockingItemsInvList, BlockingCmdsList;
-    public static boolean CreatureInteract, PlayerInteract, CreativeNotify, SurvivalNotify, material, BlockingBreak, PrefixEnabled, ClearDropInInventory;
-    public static boolean MultiInventoriesEnabled, InventorySeparation;
-    public static String Language;
-    
-    public static boolean BlockingCmdsEnabled;
-    
-    public static boolean GamemodesControlEnabled, FullGCEnabled;
-    
-    public static boolean WorldsCfgEnabled;
-    public static List<String> BlockingCreative;
-    
-    private static File languageFolder;
-    public static File inventoryFolder;
-    
-    public static String Database, Host, Port, DBname, Username, Password, TableName;
-    public static int DBInterval;
-    
-    // Config.yml
 	
 	public static void saveCfg()
 	{
@@ -116,7 +97,9 @@ public class Configuration {
 	public static void loadCfg()
 	{
 		main.reloadConfig();
-	
+		
+		loadDef();
+		
         inventoryFolder = new File(main.getDataFolder(), "data");
         if (!inventoryFolder.exists()) inventoryFolder.mkdirs();
         
@@ -151,16 +134,21 @@ public class Configuration {
         InventorySeparation = main.getConfig().getBoolean("Settings.MultiInventories.Separation", true);
 	
         BlockingBlocksPlaceList = main.getConfig().getStringList("Settings.Blocks.BlockingPlacement");
+        if(BlockingBlocksPlaceList.isEmpty()) BlockingBlocksPlaceList.addAll(defBlockingBlocksPlaceList);
         BlockingBlocksBreakList = main.getConfig().getStringList("Settings.Blocks.BlockingBreakage");
+        if(BlockingBlocksBreakList.isEmpty()) BlockingBlocksBreakList.addAll(defBlockingBlocksBreakList);
         
         BlockingItemsInvList = main.getConfig().getStringList("Settings.Items.BlockingInventory");
+        if(BlockingItemsInvList.isEmpty()) BlockingItemsInvList.addAll(defBlockingItemsInvList);
         
         BlockingCmdsList = main.getConfig().getStringList("Settings.BlockingCmds.List");
+        if(BlockingCmdsList.isEmpty()) BlockingCmdsList.addAll(defBlockingCmdsList);
         BlockingCmdsEnabled =  main.getConfig().getBoolean("Settings.BlockingCmds.Enabled", false);
         
         WorldsCfgEnabled = main.getConfig().getBoolean("WorldsConfig.Enabled", false);
         
         BlockingCreative = main.getConfig().getStringList("WorldsConfig.BlockingCreativeInWorlds");
+        if(BlockingCreative.isEmpty()) BlockingCreative.addAll(defBlockingCreative);
         
         GamemodesControlEnabled = main.getConfig().getBoolean("GamemodesControl.Enabled", false);
         FullGCEnabled = main.getConfig().getBoolean("GamemodesControl.Full", true);
@@ -186,6 +174,10 @@ public class Configuration {
 		
 		LanguageFiles.reloadlanguageConfig(Language);
 		LanguageFiles.savelanguageConfig(Language);
+		languageConfigFile = null;
+		defBlockingBlocksPlaceList.clear();
+		defBlockingBlocksBreakList.clear();
+		defBlockingItemsInvList.clear();
 	}
 	//
 	//
@@ -288,7 +280,7 @@ public class Configuration {
 				Material = org.bukkit.Material.getMaterial(ID);
 			}
 			else Material = org.bukkit.Material.getMaterial(String);
-			if(!(Material instanceof Material) && String.compareToIgnoreCase("none") != 0) {
+			if(!(Material instanceof Material) && !String.equalsIgnoreCase("none")) {
 				ShareControl.error = true;
 				errorcode = String;
 			}
@@ -306,7 +298,7 @@ public class Configuration {
 			}
 			else Material = org.bukkit.Material.getMaterial(String);
 			
-			if(!(Material instanceof Material) && String.compareToIgnoreCase("none") != 0){
+			if(!(Material instanceof Material) && !String.equalsIgnoreCase("none")){
 				ShareControl.error = true;
 				errorcode = String;
 			}
@@ -323,7 +315,7 @@ public class Configuration {
 				Material = org.bukkit.Material.getMaterial(ID);
 			}
 			else Material = org.bukkit.Material.getMaterial(String);
-			if(!(Material instanceof Material) && String.compareToIgnoreCase("none") != 0) {
+			if(!(Material instanceof Material) && !String.equalsIgnoreCase("none")) {
 				ShareControl.error = true;
 				errorcode = String;
 			}
@@ -362,4 +354,73 @@ public class Configuration {
 	    return true;
 	}
 	
+	
+	public static void loadDef() {
+		defBlockingBlocksPlaceList = new ArrayList<String>();
+		defBlockingBlocksPlaceList.add("BEDROCK");
+		defBlockingBlocksPlaceList.add("MONSTER_EGGS");
+		defBlockingBlocksPlaceList.add("TNT");
+		defBlockingBlocksPlaceList.add("ENDER_PORTAL_FRAME");
+		
+		defBlockingBlocksBreakList = new ArrayList<String>();
+		defBlockingBlocksBreakList.add("BEDROCK");
+		
+		defBlockingItemsInvList = new ArrayList<String>();
+		defBlockingItemsInvList.add("MONSTER_EGG");
+		defBlockingItemsInvList.add("MINECART");
+		defBlockingItemsInvList.add("BOAT");
+		defBlockingItemsInvList.add("STORAGE_MINECART");
+		defBlockingItemsInvList.add("POWERED_MINECART");
+		defBlockingItemsInvList.add("EXPLOSIVE_MINECART");
+		defBlockingItemsInvList.add("HOPPER_MINECART");
+		defBlockingItemsInvList.add("LAVA_BUCKET");
+		defBlockingItemsInvList.add("ENDER_PEARL");
+		defBlockingItemsInvList.add("EYE_OF_ENDER");
+		defBlockingItemsInvList.add("EXP_BOTTLE");
+		defBlockingItemsInvList.add("FIREBALL");
+		defBlockingItemsInvList.add("FLINT_AND_STEEL");
+		defBlockingItemsInvList.add("POTION");
+		if(CoreVersion.getVersionsArray().contains(CoreVersion.OneDotNinePlus)) {
+			defBlockingItemsInvList.add("SPLASH_POTION");
+			defBlockingItemsInvList.add("LINGERING_POTION");
+			defBlockingItemsInvList.add("CHORUS_PLANT");
+			defBlockingItemsInvList.add("CHORUS_FLOWER");
+			defBlockingItemsInvList.add("END_CRYSTAL");
+			defBlockingItemsInvList.add("BOAT_ACACIA");
+			defBlockingItemsInvList.add("BOAT_BIRCH");
+			defBlockingItemsInvList.add("BOAT_DARK_OAK");
+			defBlockingItemsInvList.add("BOAT_JUNGLE");
+			defBlockingItemsInvList.add("BOAT_SPRUCE");
+		}
+		
+		defBlockingCmdsList = new ArrayList<String>();
+		defBlockingCmdsList.add("kit start");
+		
+		defBlockingCreative = new ArrayList<String>();
+		defBlockingCreative.add("world_nether");
+		defBlockingCreative.add("world_the_end");
+	}
+	
+	
+	public static boolean versionCheck;
+	public static List<String> BlockingBlocksPlaceList, BlockingBlocksBreakList, BlockingItemsInvList, BlockingCmdsList;
+    public static boolean CreatureInteract, PlayerInteract, CreativeNotify, SurvivalNotify, material, BlockingBreak, PrefixEnabled, ClearDropInInventory;
+    public static boolean MultiInventoriesEnabled, InventorySeparation;
+    public static String Language;
+    
+    public static boolean BlockingCmdsEnabled;
+    
+    public static boolean GamemodesControlEnabled, FullGCEnabled;
+    
+    public static boolean WorldsCfgEnabled;
+    public static List<String> BlockingCreative;
+    
+    private static File languageFolder;
+    public static File inventoryFolder;
+    
+    public static String Database, Host, Port, DBname, Username, Password, TableName;
+    public static int DBInterval;
+    
+
+	public static List<String> defBlockingBlocksPlaceList, defBlockingBlocksBreakList, defBlockingItemsInvList, defBlockingCmdsList, defBlockingCreative;
 }

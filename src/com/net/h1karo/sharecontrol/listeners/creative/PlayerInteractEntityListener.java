@@ -15,7 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-
 package com.net.h1karo.sharecontrol.listeners.creative;
 
 import org.bukkit.GameMode;
@@ -26,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.localization.Localization;
@@ -40,6 +40,7 @@ public class PlayerInteractEntityListener implements Listener
 		this.main = h;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void PlayerInteractCreature(PlayerInteractEntityEvent e)
 	{

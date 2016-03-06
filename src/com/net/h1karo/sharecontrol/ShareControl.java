@@ -15,7 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-
 package com.net.h1karo.sharecontrol;
 
 import java.io.BufferedReader;
@@ -46,6 +45,7 @@ import com.net.h1karo.sharecontrol.database.MySQL;
 import com.net.h1karo.sharecontrol.listeners.multiinventories.PlayerGameModeChangeListener;
 import com.net.h1karo.sharecontrol.localization.LanguageFiles;
 import com.net.h1karo.sharecontrol.localization.Localization;
+import com.net.h1karo.sharecontrol.version.CoreVersion;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 import org.json.simple.JSONArray;
@@ -93,8 +93,8 @@ public class ShareControl extends JavaPlugin implements Listener
 	{
 		console = Bukkit.getConsoleSender();
 		console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&l=================== &9&lShare&f&lControl &7&l==================="));
-		if(!isOneDotEightPlus() && !isOneDotSeven()) {
-			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &c&lYou are using an unsupported version! The plugin supports 1.7+ versions."));
+		if(!CoreVersion.getVersion().equals(CoreVersion.OneDotSeven) && !CoreVersion.getVersion().equals(CoreVersion.OneDotEight) && !CoreVersion.getVersion().equals(CoreVersion.OneDotNine)) {
+			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &c&lYou are using an unsupported version! The plugin supports 1.7.X, 1.8.X and 1.9.X versions."));
 			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &c&lYou use at your own risk!"));
 		}
 		console.sendMessage(ChatColor.translateAlternateColorCodes('&', " Loading configuration..."));
@@ -353,7 +353,7 @@ public class ShareControl extends JavaPlugin implements Listener
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.EntityShootBowListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.InventoryClickListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.InventoryOpenListener(this), this);
-		if(isOneDotEightPlus()) {
+		if(CoreVersion.getVersionsArray().contains(CoreVersion.OneDotEightPlus)) {
 			pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerArmorStandDestroyListener(this), this);
 			pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerArmorStandManipulateListener(this), this);
 			pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.creative.PlayerArmorStandSpawnListener(this), this);
@@ -435,22 +435,5 @@ public class ShareControl extends JavaPlugin implements Listener
     public static boolean getFoundWorldEdit()
     {
         return foundWE;
-    }
-    
-    
-    public static boolean isOneDotEightPlus() {
-    	String bukkitVersion = Bukkit.getServer().getVersion();
-    	String version = bukkitVersion.substring(bukkitVersion.lastIndexOf("(MC: ") + 5, bukkitVersion.lastIndexOf(")"));
-    	if((Integer.parseInt(version.split(Pattern.quote("."))[0]) == 1 && Integer.parseInt(version.split(Pattern.quote("."))[1]) >= 8) || Integer.parseInt(version.split(Pattern.quote("."))[0]) > 1) 
-    			return true;
-    	return false;
-    }
-    
-    public boolean isOneDotSeven() {
-    	String bukkitVersion = Bukkit.getServer().getVersion();
-    	String version = bukkitVersion.substring(bukkitVersion.lastIndexOf("(MC: ") + 5, bukkitVersion.lastIndexOf(")"));
-    	if(version.split(Pattern.quote("."))[0].equalsIgnoreCase("1") && Integer.parseInt(version.split(Pattern.quote("."))[1]) == 7) 
-    			return true;
-    	return false;
     }
 }
