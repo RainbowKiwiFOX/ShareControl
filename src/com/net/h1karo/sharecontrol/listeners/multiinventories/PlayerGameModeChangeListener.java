@@ -139,27 +139,33 @@ public class PlayerGameModeChangeListener implements Listener {
     		
     		// INVENTORY
     		for(int i=0; i < InventoryStack.length; i++) {
-    			ItemStack item = InventoryStack[i].clone();
-    			if(item != null && item.getType().equals(Material.SKULL_ITEM)) {
-    				if(((SkullMeta)item.getItemMeta()).getOwner() == null && item.getData().getData() == 3) {
-    					ItemStack skull = new ItemStack(Material.SKULL_ITEM);
-    					skull.setData(new MaterialData(3));
-    					item = skull;
-    				}
+    			ItemStack item = null;
+    			if(InventoryStack[i] != null) {
+    				item = InventoryStack[i].clone();
+    				if(item.getType().equals(Material.SKULL_ITEM))
+    					if(((SkullMeta)item.getItemMeta()).getOwner() == null && item.getData().getData() == 3) {
+    						ItemStack skull = new ItemStack(Material.SKULL_ITEM);
+    						skull.setData(new MaterialData(3));
+    						item = skull.clone();
+    					}
     			}
     			inventory.add(item);
+    			item = null;
     		}
     		// ARMOR
     		for(int i=0; i < ArmorStack.length; i++) {
-    			ItemStack item = InventoryStack[i].clone();
-    			if(item != null && item.getType().equals(Material.SKULL_ITEM)) {
-    				if(((SkullMeta)item.getItemMeta()).getOwner() == null && item.getData().getData() == 3) {
-    					ItemStack skull = new ItemStack(Material.SKULL_ITEM);
-    					skull.setData(new MaterialData(3));
-    					item = skull;
-    				}
+    			ItemStack item = null;
+    			if(ArmorStack[i] != null) {
+    				item = ArmorStack[i].clone();
+    				if(item.getType().equals(Material.SKULL_ITEM))
+    					if(((SkullMeta)item.getItemMeta()).getOwner() == null && item.getData().getData() == 3) {
+    						ItemStack skull = new ItemStack(Material.SKULL_ITEM);
+    						skull.setData(new MaterialData(3));
+    						item = skull.clone();
+    					}
     			}
     			armor.add(item);
+    			item = null;
     		}
     		
     		value.add(armor); value.add(inventory);
@@ -174,13 +180,15 @@ public class PlayerGameModeChangeListener implements Listener {
     		
     		//INVENTORY
     		for(int i=0; i < inv.getSize(); i++) {
-    			ItemStack item = inv.getItem(i);
-    			if(item != null && item.getType().equals(Material.SKULL_ITEM)) {
-    				if(((SkullMeta)item.getItemMeta()).getOwner() == null && item.getData().getData() == 3) {
-    					ItemStack skull = new ItemStack(Material.SKULL_ITEM);
-    					skull.setData(new MaterialData(3));
-    					item = skull;
-    				}
+    			ItemStack item = null;
+    			if(inv.getItem(i) != null) {
+    				 item = inv.getItem(i);
+    				 if(item.getType().equals(Material.SKULL_ITEM))
+    					 if(((SkullMeta)item.getItemMeta()).getOwner() == null && item.getData().getData() == 3) {
+    						 ItemStack skull = new ItemStack(Material.SKULL_ITEM);
+    						 skull.setData(new MaterialData(3));
+    						 item = skull;
+    					 }
     			}
     			inventory.add(item);
     		}

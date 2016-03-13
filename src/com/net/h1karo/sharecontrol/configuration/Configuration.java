@@ -171,6 +171,13 @@ public class Configuration {
     		LanguageFiles.reloadlanguageConfig("ru");
     		LanguageFiles.savelanguageConfig("ru");
     	}
+    	
+    	languageConfigFile = new File(main.getDataFolder(), "languages" + File.separator + "de.yml");
+    	if(!languageConfigFile.exists()) {
+    		main.getLogger().info("German language file not found! Loading...");
+    		LanguageFiles.reloadlanguageConfig("de");
+    		LanguageFiles.savelanguageConfig("de");
+    	}
 		
 		LanguageFiles.reloadlanguageConfig(Language);
 		LanguageFiles.savelanguageConfig(Language);

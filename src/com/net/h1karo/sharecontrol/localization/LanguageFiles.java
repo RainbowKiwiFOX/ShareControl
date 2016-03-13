@@ -57,10 +57,11 @@ public class LanguageFiles {
     public static void savelanguageConfig(String lang) {
     	if (languageConfig == null || languageConfigFile == null) return;
     	
-    	if(lang.compareToIgnoreCase("ru") == 0)
+    	if(lang.equalsIgnoreCase("ru"))
     		RussianStrings(lang);
-    	else
-    		EnglishStrings(lang);
+    	else if(lang.equalsIgnoreCase("de"))
+    		GermanStrings(lang);
+    	else EnglishStrings(lang);
     	
     	languageConfig.options().header(header);
     	
@@ -319,124 +320,253 @@ public class LanguageFiles {
     	  	+ " |-------------------------------| \n"
     	  	+ "\n"
     	  	+ " HELP:\n"
-    	  	+ " %block% - блок \n"
-    	  	+ " %item% - предмет \n"
-    	  	+ " %gamemode% - игровой режим игрока\n"
-    	  	+ " %type% - тип блока (естественный или творческий) \n"
-    	  	+ " %coords% - координаты \n"
-    	  	+ " %name% - название блока \n"
-    	  	+ " %id% - ID блока \n"
-    	  	+ " %command% - команда \n"
+    	  	+ " %block% - Р±Р»РѕРє \n"
+    	  	+ " %item% - РїСЂРµРґРјРµС‚ \n"
+    	  	+ " %gamemode% - РёРіСЂРѕРІРѕР№ СЂРµР¶РёРј РёРіСЂРѕРєР°\n"
+    	  	+ " %type% - С‚РёРї Р±Р»РѕРєР° (РµСЃС‚РµСЃС‚РІРµРЅРЅС‹Р№ РёР»Рё С‚РІРѕСЂС‡РµСЃРєРёР№) \n"
+    	  	+ " %coords% - РєРѕРѕСЂРґРёРЅР°С‚С‹ \n"
+    	  	+ " %name% - РЅР°Р·РІР°РЅРёРµ Р±Р»РѕРєР° \n"
+    	  	+ " %id% - ID Р±Р»РѕРєР° \n"
+    	  	+ " %command% - РєРѕРјР°РЅРґР° \n"
     	  	+ " %plugin% - ShareControl \n"
-    	  	+ " %update% - новая версия \n"
-    	  	+ " %version% - установленная версия \n"
-    	  	+ " %link% - ссылка на сайт плагина \n"
-    	  	+ " %development-team% - команда разработчиков \n"
-    	  	+ " %nickname% - ник игрока \n"
-    	  	+ " %uuid% - универсальный уникальный индетификатор игрока";
+    	  	+ " %update% - РЅРѕРІР°СЏ РІРµСЂСЃРёСЏ \n"
+    	  	+ " %version% - СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅР°СЏ РІРµСЂСЃРёСЏ \n"
+    	  	+ " %link% - СЃСЃС‹Р»РєР° РЅР° СЃР°Р№С‚ РїР»Р°РіРёРЅР° \n"
+    	  	+ " %development-team% - РєРѕРјР°РЅРґР° СЂР°Р·СЂР°Р±РѕС‚С‡РёРєРѕРІ \n"
+    	  	+ " %nickname% - РЅРёРє РёРіСЂРѕРєР° \n"
+    	  	+ " %uuid% - СѓРЅРёРІРµСЂСЃР°Р»СЊРЅС‹Р№ СѓРЅРёРєР°Р»СЊРЅС‹Р№ РёРЅРґРµС‚РёС„РёРєР°С‚РѕСЂ РёРіСЂРѕРєР°";
     	
-    	UpdateNotFound = getLangConfig(lang).getString("Update.UpdateNotFound", "&7Обновлений не найдено. Вы используете последнюю версию!");
-		UpdateAvailable = getLangConfig(lang).getString("Update.Available", "&7Вышло обновление: &9%update%&7, скачать по этой ссылке: &9%link%&7!");
+    	UpdateNotFound = getLangConfig(lang).getString("Update.UpdateNotFound", "&7РћР±РЅРѕРІР»РµРЅРёР№ РЅРµ РЅР°Р№РґРµРЅРѕ. Р’С‹ РёСЃРїРѕР»СЊР·СѓРµС‚Рµ РїРѕСЃР»РµРґРЅСЋСЋ РІРµСЂСЃРёСЋ!");
+		UpdateAvailable = getLangConfig(lang).getString("Update.Available", "&7Р’С‹С€Р»Рѕ РѕР±РЅРѕРІР»РµРЅРёРµ: &9%update%&7, СЃРєР°С‡Р°С‚СЊ РїРѕ СЌС‚РѕР№ СЃСЃС‹Р»РєРµ: &9%link%&7!");
 		
-		NoPerms = getLangConfig(lang).getString("NoPermission", "&cУ Вас недостаточно прав для этого!");
+		NoPerms = getLangConfig(lang).getString("NoPermission", "&cРЈ Р’Р°СЃ РЅРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РїСЂР°РІ РґР»СЏ СЌС‚РѕРіРѕ!");
 		
-		OnDrop = getLangConfig(lang).getString("Events.Drop", "&cВы не можете выбрасывать вещи!");
-		OnMonsterInteract = getLangConfig(lang).getString("Events.MobsInteract", "&cВы не можете взаимодействовать с мобами!");
-		OnPlayerInteract = getLangConfig(lang).getString("Events.PlayerInteract", "&cВы не можете взаимодействовать с игроками!");
-		OnInventoryClick = getLangConfig(lang).getString("Events.Inventory.Message", "&cВы не можете использовать этот предмет!");
-		OnInventoryClickMaterial = getLangConfig(lang).getString("Events.Inventory.Material", "&cВы не можете использовать &6%item%&c!");
-		OnOpenOtherInventory = getLangConfig(lang).getString("Events.OpenInventory", "&cВы не можете использовать инвентарь!");
-		OnBlockBreak = getLangConfig(lang).getString("Events.BlockBreak.Message", "&cВы не можете ломать этот блок!");
-		OnBlockPlace = getLangConfig(lang).getString("Events.BlockPlace.Message", "&cВы не можете ставить этот блок!");
-		OnBlockBreakMaterial = getLangConfig(lang).getString("Events.BlockBreak.Material", "&cВы не можете ломать &6%block%&c!");
-		OnBlockPlaceMaterial = getLangConfig(lang).getString("Events.BlockPlace.Material", "&cВы не можете ставить &6%block%&c!");
-		OnBowShoot = getLangConfig(lang).getString("Events.ShootBow", "&cВы не можете стрелять из лука!");
-		AnotherWorld = getLangConfig(lang).getString("Events.InteractWithWorlds", "&cВы не можете взаимодействовать с этим миром!");
-		CreativeBlockNotDrop = getLangConfig(lang).getString("Events.NotDropBlock", "&7Этот блок из творчества, поэтому он не выпал!");
-		CreativeBlockNotBreak = getLangConfig(lang).getString("Events.NotBreakBlock", "&7Этот блок из творчества, поэтому вы не можете его сломать!");
-		EntityInteract = getLangConfig(lang).getString("Events.EntityInteract.Message", "&cВы не можете использовать этот предмет!");
-		EntityInteractMaterial = getLangConfig(lang).getString("Events.EntityInteract.Material", "&cВы не можете использовать этот &6%item%&c!");
-		UseBlocks = getLangConfig(lang).getString("Events.UseBlock", "&cВы не можете использовать это!");
-		OnFishing = getLangConfig(lang).getString("Events.Fishing", "&cВы не можете рыбачить!");
-		ArmorStand = getLangConfig(lang).getString("Events.ArmorStand", "&cВы не можете взаимодействовать с стойкой для брони!");
-		OnCommand = getLangConfig(lang).getString("Events.ProhibitedCommand", "&cВы не можете использовать эту команду!");
-		Saplings = getLangConfig(lang).getString("Events.Saplings", "&7Этот саженец из творчества, поэтому вы не можете его вырастить!");
+		OnDrop = getLangConfig(lang).getString("Events.Drop", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ РІС‹Р±СЂР°СЃС‹РІР°С‚СЊ РІРµС‰Рё!");
+		OnMonsterInteract = getLangConfig(lang).getString("Events.MobsInteract", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРѕРІР°С‚СЊ СЃ РјРѕР±Р°РјРё!");
+		OnPlayerInteract = getLangConfig(lang).getString("Events.PlayerInteract", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРѕРІР°С‚СЊ СЃ РёРіСЂРѕРєР°РјРё!");
+		OnInventoryClick = getLangConfig(lang).getString("Events.Inventory.Message", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЌС‚РѕС‚ РїСЂРµРґРјРµС‚!");
+		OnInventoryClickMaterial = getLangConfig(lang).getString("Events.Inventory.Material", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ &6%item%&c!");
+		OnOpenOtherInventory = getLangConfig(lang).getString("Events.OpenInventory", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РёРЅРІРµРЅС‚Р°СЂСЊ!");
+		OnBlockBreak = getLangConfig(lang).getString("Events.BlockBreak.Message", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ Р»РѕРјР°С‚СЊ СЌС‚РѕС‚ Р±Р»РѕРє!");
+		OnBlockPlace = getLangConfig(lang).getString("Events.BlockPlace.Message", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ СЃС‚Р°РІРёС‚СЊ СЌС‚РѕС‚ Р±Р»РѕРє!");
+		OnBlockBreakMaterial = getLangConfig(lang).getString("Events.BlockBreak.Material", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ Р»РѕРјР°С‚СЊ &6%block%&c!");
+		OnBlockPlaceMaterial = getLangConfig(lang).getString("Events.BlockPlace.Material", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ СЃС‚Р°РІРёС‚СЊ &6%block%&c!");
+		OnBowShoot = getLangConfig(lang).getString("Events.ShootBow", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ СЃС‚СЂРµР»СЏС‚СЊ РёР· Р»СѓРєР°!");
+		AnotherWorld = getLangConfig(lang).getString("Events.InteractWithWorlds", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРѕРІР°С‚СЊ СЃ СЌС‚РёРј РјРёСЂРѕРј!");
+		CreativeBlockNotDrop = getLangConfig(lang).getString("Events.NotDropBlock", "&7Р­С‚РѕС‚ Р±Р»РѕРє РёР· С‚РІРѕСЂС‡РµСЃС‚РІР°, РїРѕСЌС‚РѕРјСѓ РѕРЅ РЅРµ РІС‹РїР°Р»!");
+		CreativeBlockNotBreak = getLangConfig(lang).getString("Events.NotBreakBlock", "&7Р­С‚РѕС‚ Р±Р»РѕРє РёР· С‚РІРѕСЂС‡РµСЃС‚РІР°, РїРѕСЌС‚РѕРјСѓ РІС‹ РЅРµ РјРѕР¶РµС‚Рµ РµРіРѕ СЃР»РѕРјР°С‚СЊ!");
+		EntityInteract = getLangConfig(lang).getString("Events.EntityInteract.Message", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЌС‚РѕС‚ РїСЂРµРґРјРµС‚!");
+		EntityInteractMaterial = getLangConfig(lang).getString("Events.EntityInteract.Material", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЌС‚РѕС‚ &6%item%&c!");
+		UseBlocks = getLangConfig(lang).getString("Events.UseBlock", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЌС‚Рѕ!");
+		OnFishing = getLangConfig(lang).getString("Events.Fishing", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ СЂС‹Р±Р°С‡РёС‚СЊ!");
+		ArmorStand = getLangConfig(lang).getString("Events.ArmorStand", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ РІР·Р°РёРјРѕРґРµР№СЃС‚РІРѕРІР°С‚СЊ СЃ СЃС‚РѕР№РєРѕР№ РґР»СЏ Р±СЂРѕРЅРё!");
+		OnCommand = getLangConfig(lang).getString("Events.ProhibitedCommand", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЌС‚Сѓ РєРѕРјР°РЅРґСѓ!");
+		Saplings = getLangConfig(lang).getString("Events.Saplings", "&7Р­С‚РѕС‚ СЃР°Р¶РµРЅРµС† РёР· С‚РІРѕСЂС‡РµСЃС‚РІР°, РїРѕСЌС‚РѕРјСѓ РІС‹ РЅРµ РјРѕР¶РµС‚Рµ РµРіРѕ РІС‹СЂР°СЃС‚РёС‚СЊ!");
 		
-		GamemodesControl = getLangConfig(lang).getString("GamemodesControl.NotAllowedGamemode", "&cВы не можете перейти в режим игры &6%gamemode%&c!");
+		GamemodesControl = getLangConfig(lang).getString("GamemodesControl.NotAllowedGamemode", "&cР’С‹ РЅРµ РјРѕР¶РµС‚Рµ РїРµСЂРµР№С‚Рё РІ СЂРµР¶РёРј РёРіСЂС‹ &6%gamemode%&c!");
 		
-		PlayerListInGamemode = getLangConfig(lang).getString("PlayersInGamemode.List", "&7Игроки в режиме игры &9%gamemode%&7: &9%list%&7");
-		UnknownGamemode = getLangConfig(lang).getString("PlayersInGamemode.UnknownGamemode", "&cНеизвестный тип игрового режима: &6%gamemode%&c.");
-		PlayerInGamemodeNotFound = getLangConfig(lang).getString("PlayersInGamemode.NotFound", "&7Игроки в игровом режиме &9%gamemode%&7 не найдены!");
-		PlayerListInGamemodeMore = getLangConfig(lang).getString("PlayersInGamemode.More", "&7Чтобы узнать подробную информацию о игроке, напишите &9/sc check <ник игрока>&7!");
+		PlayerListInGamemode = getLangConfig(lang).getString("PlayersInGamemode.List", "&7РРіСЂРѕРєРё РІ СЂРµР¶РёРјРµ РёРіСЂС‹ &9%gamemode%&7: &9%list%&7");
+		UnknownGamemode = getLangConfig(lang).getString("PlayersInGamemode.UnknownGamemode", "&cРќРµРёР·РІРµСЃС‚РЅС‹Р№ С‚РёРї РёРіСЂРѕРІРѕРіРѕ СЂРµР¶РёРјР°: &6%gamemode%&c.");
+		PlayerInGamemodeNotFound = getLangConfig(lang).getString("PlayersInGamemode.NotFound", "&7РРіСЂРѕРєРё РІ РёРіСЂРѕРІРѕРј СЂРµР¶РёРјРµ &9%gamemode%&7 РЅРµ РЅР°Р№РґРµРЅС‹!");
+		PlayerListInGamemodeMore = getLangConfig(lang).getString("PlayersInGamemode.More", "&7Р§С‚РѕР±С‹ СѓР·РЅР°С‚СЊ РїРѕРґСЂРѕР±РЅСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РёРіСЂРѕРєРµ, РЅР°РїРёС€РёС‚Рµ &9/sc check <РЅРёРє РёРіСЂРѕРєР°>&7!");
 		
 		
-		menu = getLangConfig(lang).getString("Menu.This", "&9%command% &f- данное меню,");
-		menureload = getLangConfig(lang).getString("Menu.Reload", "&9%command% &f- перезагрузка,");
-		menuinfo = getLangConfig(lang).getString("Menu.Version", "&9%command% &f- информация,");
-		menuupdate = getLangConfig(lang).getString("Menu.Update", "&9%command% &f- проверить обновления,");
-		menugetlist = getLangConfig(lang).getString("Menu.GetList", "&9%command% &f- получить список игроков, которые используют данный режим,");
-		menuadd = getLangConfig(lang).getString("Menu.AddToList", "&9%command% &f- добавить блок или предмет в список из конфига,");
-		menuremove = getLangConfig(lang).getString("Menu.RemoveFromList", "&9%command% &f- удалить блок или предмет из списка из конфига,");
-		menutools = getLangConfig(lang).getString("Menu.Tools", "&9%command% &f- список инструментов,");
-		menusettool = getLangConfig(lang).getString("Menu.ChangeTool", "&9%command% &f- получить изменяющий предмет,");
-		menuinfotool = getLangConfig(lang).getString("Menu.InfoTool", "&9%command% &f- получить информационный предмет,");
-		menuselectionset = getLangConfig(lang).getString("Menu.SelectionSet", "&9%command% &f- изменить тип блоков в выделенном регионе,");
-		menucheck = getLangConfig(lang).getString("Menu.Check", "&9%command% &f- получить информацию о игроку.");
+		menu = getLangConfig(lang).getString("Menu.This", "&9%command% &f- РґР°РЅРЅРѕРµ РјРµРЅСЋ,");
+		menureload = getLangConfig(lang).getString("Menu.Reload", "&9%command% &f- РїРµСЂРµР·Р°РіСЂСѓР·РєР°,");
+		menuinfo = getLangConfig(lang).getString("Menu.Version", "&9%command% &f- РёРЅС„РѕСЂРјР°С†РёСЏ,");
+		menuupdate = getLangConfig(lang).getString("Menu.Update", "&9%command% &f- РїСЂРѕРІРµСЂРёС‚СЊ РѕР±РЅРѕРІР»РµРЅРёСЏ,");
+		menugetlist = getLangConfig(lang).getString("Menu.GetList", "&9%command% &f- РїРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє РёРіСЂРѕРєРѕРІ, РєРѕС‚РѕСЂС‹Рµ РёСЃРїРѕР»СЊР·СѓСЋС‚ РґР°РЅРЅС‹Р№ СЂРµР¶РёРј,");
+		menuadd = getLangConfig(lang).getString("Menu.AddToList", "&9%command% &f- РґРѕР±Р°РІРёС‚СЊ Р±Р»РѕРє РёР»Рё РїСЂРµРґРјРµС‚ РІ СЃРїРёСЃРѕРє РёР· РєРѕРЅС„РёРіР°,");
+		menuremove = getLangConfig(lang).getString("Menu.RemoveFromList", "&9%command% &f- СѓРґР°Р»РёС‚СЊ Р±Р»РѕРє РёР»Рё РїСЂРµРґРјРµС‚ РёР· СЃРїРёСЃРєР° РёР· РєРѕРЅС„РёРіР°,");
+		menutools = getLangConfig(lang).getString("Menu.Tools", "&9%command% &f- СЃРїРёСЃРѕРє РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ,");
+		menusettool = getLangConfig(lang).getString("Menu.ChangeTool", "&9%command% &f- РїРѕР»СѓС‡РёС‚СЊ РёР·РјРµРЅСЏСЋС‰РёР№ РїСЂРµРґРјРµС‚,");
+		menuinfotool = getLangConfig(lang).getString("Menu.InfoTool", "&9%command% &f- РїРѕР»СѓС‡РёС‚СЊ РёРЅС„РѕСЂРјР°С†РёРѕРЅРЅС‹Р№ РїСЂРµРґРјРµС‚,");
+		menuselectionset = getLangConfig(lang).getString("Menu.SelectionSet", "&9%command% &f- РёР·РјРµРЅРёС‚СЊ С‚РёРї Р±Р»РѕРєРѕРІ РІ РІС‹РґРµР»РµРЅРЅРѕРј СЂРµРіРёРѕРЅРµ,");
+		menucheck = getLangConfig(lang).getString("Menu.Check", "&9%command% &f- РїРѕР»СѓС‡РёС‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РёРіСЂРѕРєСѓ.");
 		
-		using = getLangConfig(lang).getString("Using", "&7Использование: &c%command%");
+		using = getLangConfig(lang).getString("Using", "&7РСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ: &c%command%");
 		
-		reloading = getLangConfig(lang).getString("Reload.Reloading", "&7Перезагрузка...");
-		reloadsuccess = getLangConfig(lang).getString("Reload.Success", "&7Перезагрузка плагина завершена успешно!");
+		reloading = getLangConfig(lang).getString("Reload.Reloading", "&7РџРµСЂРµР·Р°РіСЂСѓР·РєР°...");
+		reloadsuccess = getLangConfig(lang).getString("Reload.Success", "&7РџРµСЂРµР·Р°РіСЂСѓР·РєР° РїР»Р°РіРёРЅР° Р·Р°РІРµСЂС€РµРЅР° СѓСЃРїРµС€РЅРѕ!");
 		
-		AMtoPlaceList = getLangConfig(lang).getString("ChangeConfig.AddToBlockingPlacement", "&7Блок &9%material%&7 успешно добавлен в список блоков, которые запрещено ставить!");
-		AMtoBreakList = getLangConfig(lang).getString("ChangeConfig.AddToBlockingBreakage", "&7Блок &9%material%&7 успешно добавлен в список блоков, которые запрещено ломать!");
-		AMtoUseList = getLangConfig(lang).getString("ChangeConfig.AddToBlockingInventory", "&7Предмет &9%material%&7 успешно добавлен в список предметов, которые запрещено использовать!");
-		RMtoPlaceList = getLangConfig(lang).getString("ChangeConfig.RemoveFromBlockingPlacement", "&7Блок &9%material%&7 успешно удален из списка блоков, которые запрещено ставить!");
-		RMtoBreakList = getLangConfig(lang).getString("ChangeConfig.RemoveFromBlockingBreakage", "&7Блок &9%material%&7 успешно удален из списка блоков, которые запрещено ломать!");
-		RMtoUseList = getLangConfig(lang).getString("ChangeConfig.RemoveFromBlockingInventory", "&7Предмет &9%material%&7 успешно удален из списка предметов, которые запрещено использовать!");
-		ThisNotMaterialandId = getLangConfig(lang).getString("ChangeConfig.ThisNotMaterialAndId", "&7Ошибка: &9%material%&7 не является материалом или ID блока или предмета.");
+		AMtoPlaceList = getLangConfig(lang).getString("ChangeConfig.AddToBlockingPlacement", "&7Р‘Р»РѕРє &9%material%&7 СѓСЃРїРµС€РЅРѕ РґРѕР±Р°РІР»РµРЅ РІ СЃРїРёСЃРѕРє Р±Р»РѕРєРѕРІ, РєРѕС‚РѕСЂС‹Рµ Р·Р°РїСЂРµС‰РµРЅРѕ СЃС‚Р°РІРёС‚СЊ!");
+		AMtoBreakList = getLangConfig(lang).getString("ChangeConfig.AddToBlockingBreakage", "&7Р‘Р»РѕРє &9%material%&7 СѓСЃРїРµС€РЅРѕ РґРѕР±Р°РІР»РµРЅ РІ СЃРїРёСЃРѕРє Р±Р»РѕРєРѕРІ, РєРѕС‚РѕСЂС‹Рµ Р·Р°РїСЂРµС‰РµРЅРѕ Р»РѕРјР°С‚СЊ!");
+		AMtoUseList = getLangConfig(lang).getString("ChangeConfig.AddToBlockingInventory", "&7РџСЂРµРґРјРµС‚ &9%material%&7 СѓСЃРїРµС€РЅРѕ РґРѕР±Р°РІР»РµРЅ РІ СЃРїРёСЃРѕРє РїСЂРµРґРјРµС‚РѕРІ, РєРѕС‚РѕСЂС‹Рµ Р·Р°РїСЂРµС‰РµРЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ!");
+		RMtoPlaceList = getLangConfig(lang).getString("ChangeConfig.RemoveFromBlockingPlacement", "&7Р‘Р»РѕРє &9%material%&7 СѓСЃРїРµС€РЅРѕ СѓРґР°Р»РµРЅ РёР· СЃРїРёСЃРєР° Р±Р»РѕРєРѕРІ, РєРѕС‚РѕСЂС‹Рµ Р·Р°РїСЂРµС‰РµРЅРѕ СЃС‚Р°РІРёС‚СЊ!");
+		RMtoBreakList = getLangConfig(lang).getString("ChangeConfig.RemoveFromBlockingBreakage", "&7Р‘Р»РѕРє &9%material%&7 СѓСЃРїРµС€РЅРѕ СѓРґР°Р»РµРЅ РёР· СЃРїРёСЃРєР° Р±Р»РѕРєРѕРІ, РєРѕС‚РѕСЂС‹Рµ Р·Р°РїСЂРµС‰РµРЅРѕ Р»РѕРјР°С‚СЊ!");
+		RMtoUseList = getLangConfig(lang).getString("ChangeConfig.RemoveFromBlockingInventory", "&7РџСЂРµРґРјРµС‚ &9%material%&7 СѓСЃРїРµС€РЅРѕ СѓРґР°Р»РµРЅ РёР· СЃРїРёСЃРєР° РїСЂРµРґРјРµС‚РѕРІ, РєРѕС‚РѕСЂС‹Рµ Р·Р°РїСЂРµС‰РµРЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ!");
+		ThisNotMaterialandId = getLangConfig(lang).getString("ChangeConfig.ThisNotMaterialAndId", "&7РћС€РёР±РєР°: &9%material%&7 РЅРµ СЏРІР»СЏРµС‚СЃСЏ РјР°С‚РµСЂРёР°Р»РѕРј РёР»Рё ID Р±Р»РѕРєР° РёР»Рё РїСЂРµРґРјРµС‚Р°.");
 		
-		getsettool = getLangConfig(lang).getString("Tools.ChangeTool.Get", "&7Вы получили &9изменяющий предмет&7!");
-		namesettool = getLangConfig(lang).getString("Tools.ChangeTool.Name", "&9&lИзменяющий предмет");
-		loreST1 = getLangConfig(lang).getString("Tools.ChangeTool.Lore.1", "&7Нажмите ЛКМ, чтобы &cИЗМЕНИТЬ&7 режим на &cтворческий");
-		loreST2 = getLangConfig(lang).getString("Tools.ChangeTool.Lore.2", "&7Нажмите ПКМ, чтобы &cИЗМЕНИТЬ&7 режим на &cестественный");
-		loreST3 = getLangConfig(lang).getString("Tools.ChangeTool.Lore.3", "&7Инструмент плагина %plugin%");
-		getinfotool = getLangConfig(lang).getString("Tools.InfoTool.Get", "&7Вы получили &9информационный предмет&7!");
-		nameinfotool = getLangConfig(lang).getString("Tools.InfoTool.Name", "&9&lИнформационный предмет");
-		loreIT1 = getLangConfig(lang).getString("Tools.InfoTool.Lore.1", "&7Нажмите &cЛКМ&7 или &cПКМ&7, чтобы получить информацию о блоке или игроке");
-		loreIT2 = getLangConfig(lang).getString("Tools.InfoTool.Lore.2", "&7Инструмент плагина %plugin%");
-		Type = getLangConfig(lang).getString("Tools.Type", "&7Тип: &9%type%");
-		CreativeType = getLangConfig(lang).getString("Tools.Types.Creative", "творческий");
-		NaturalType = getLangConfig(lang).getString("Tools.Types.Natural", "естественный");
-		Name = getLangConfig(lang).getString("Tools.Name", "&7Название: &9%name%");
+		getsettool = getLangConfig(lang).getString("Tools.ChangeTool.Get", "&7Р’С‹ РїРѕР»СѓС‡РёР»Рё &9РёР·РјРµРЅСЏСЋС‰РёР№ РїСЂРµРґРјРµС‚&7!");
+		namesettool = getLangConfig(lang).getString("Tools.ChangeTool.Name", "&9&lРР·РјРµРЅСЏСЋС‰РёР№ РїСЂРµРґРјРµС‚");
+		loreST1 = getLangConfig(lang).getString("Tools.ChangeTool.Lore.1", "&7РќР°Р¶РјРёС‚Рµ Р›РљРњ, С‡С‚РѕР±С‹ &cРР—РњР•РќРРўР¬&7 СЂРµР¶РёРј РЅР° &cС‚РІРѕСЂС‡РµСЃРєРёР№");
+		loreST2 = getLangConfig(lang).getString("Tools.ChangeTool.Lore.2", "&7РќР°Р¶РјРёС‚Рµ РџРљРњ, С‡С‚РѕР±С‹ &cРР—РњР•РќРРўР¬&7 СЂРµР¶РёРј РЅР° &cРµСЃС‚РµСЃС‚РІРµРЅРЅС‹Р№");
+		loreST3 = getLangConfig(lang).getString("Tools.ChangeTool.Lore.3", "&7РРЅСЃС‚СЂСѓРјРµРЅС‚ РїР»Р°РіРёРЅР° %plugin%");
+		getinfotool = getLangConfig(lang).getString("Tools.InfoTool.Get", "&7Р’С‹ РїРѕР»СѓС‡РёР»Рё &9РёРЅС„РѕСЂРјР°С†РёРѕРЅРЅС‹Р№ РїСЂРµРґРјРµС‚&7!");
+		nameinfotool = getLangConfig(lang).getString("Tools.InfoTool.Name", "&9&lРРЅС„РѕСЂРјР°С†РёРѕРЅРЅС‹Р№ РїСЂРµРґРјРµС‚");
+		loreIT1 = getLangConfig(lang).getString("Tools.InfoTool.Lore.1", "&7РќР°Р¶РјРёС‚Рµ &cР›РљРњ&7 РёР»Рё &cРџРљРњ&7, С‡С‚РѕР±С‹ РїРѕР»СѓС‡РёС‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ Р±Р»РѕРєРµ РёР»Рё РёРіСЂРѕРєРµ");
+		loreIT2 = getLangConfig(lang).getString("Tools.InfoTool.Lore.2", "&7РРЅСЃС‚СЂСѓРјРµРЅС‚ РїР»Р°РіРёРЅР° %plugin%");
+		Type = getLangConfig(lang).getString("Tools.Type", "&7РўРёРї: &9%type%");
+		CreativeType = getLangConfig(lang).getString("Tools.Types.Creative", "С‚РІРѕСЂС‡РµСЃРєРёР№");
+		NaturalType = getLangConfig(lang).getString("Tools.Types.Natural", "РµСЃС‚РµСЃС‚РІРµРЅРЅС‹Р№");
+		Name = getLangConfig(lang).getString("Tools.Name", "&7РќР°Р·РІР°РЅРёРµ: &9%name%");
 		ID = getLangConfig(lang).getString("Tools.ID", "&7ID: &9%id%");
-		Coordinates = getLangConfig(lang).getString("Tools.Coordinates", "&7Координаты: &9%coords%");
-		World = getLangConfig(lang).getString("Tools.World", "&7Мир: &9%world%");
-		Nick = getLangConfig(lang).getString("Tools.Nickname", "&7Ник: &9%nickname%");
-		UUID =  getLangConfig(lang).getString("Tools.UUID", "&7Уникальный индетификатор (UUID): &9%uuid%");
-		GM = getLangConfig(lang).getString("Tools.Gamemode", "&7Режим: &9%gamemode%");
-		Health = getLangConfig(lang).getString("Tools.Health", "&7Здоровье: &9%health%");
-		Exp = getLangConfig(lang).getString("Tools.Exp", "&7Опыт: &9%exp%");
-		BlockHas = getLangConfig(lang).getString("Tools.BlockHas", "&7Этот блок уже &6%type%&7!");
-		BlockNow = getLangConfig(lang).getString("Tools.BlockNow", "&7Теперь этот блок &6%type%&7!");
+		Coordinates = getLangConfig(lang).getString("Tools.Coordinates", "&7РљРѕРѕСЂРґРёРЅР°С‚С‹: &9%coords%");
+		World = getLangConfig(lang).getString("Tools.World", "&7РњРёСЂ: &9%world%");
+		Nick = getLangConfig(lang).getString("Tools.Nickname", "&7РќРёРє: &9%nickname%");
+		UUID =  getLangConfig(lang).getString("Tools.UUID", "&7РЈРЅРёРєР°Р»СЊРЅС‹Р№ РёРЅРґРµС‚РёС„РёРєР°С‚РѕСЂ (UUID): &9%uuid%");
+		GM = getLangConfig(lang).getString("Tools.Gamemode", "&7Р РµР¶РёРј: &9%gamemode%");
+		Health = getLangConfig(lang).getString("Tools.Health", "&7Р—РґРѕСЂРѕРІСЊРµ: &9%health%");
+		Exp = getLangConfig(lang).getString("Tools.Exp", "&7РћРїС‹С‚: &9%exp%");
+		BlockHas = getLangConfig(lang).getString("Tools.BlockHas", "&7Р­С‚РѕС‚ Р±Р»РѕРє СѓР¶Рµ &6%type%&7!");
+		BlockNow = getLangConfig(lang).getString("Tools.BlockNow", "&7РўРµРїРµСЂСЊ СЌС‚РѕС‚ Р±Р»РѕРє &6%type%&7!");
 		
-		Creative = getLangConfig(lang).getString("Gamemodes.Creative", "творчество");
-		Survival = getLangConfig(lang).getString("Gamemodes.Survival", "выживание");
-		Adventure = getLangConfig(lang).getString("Gamemodes.Adventure", "приключение");
-		Spectator = getLangConfig(lang).getString("Gamemodes.Spectator", "наблюдение");
+		Creative = getLangConfig(lang).getString("Gamemodes.Creative", "С‚РІРѕСЂС‡РµСЃС‚РІРѕ");
+		Survival = getLangConfig(lang).getString("Gamemodes.Survival", "РІС‹Р¶РёРІР°РЅРёРµ");
+		Adventure = getLangConfig(lang).getString("Gamemodes.Adventure", "РїСЂРёРєР»СЋС‡РµРЅРёРµ");
+		Spectator = getLangConfig(lang).getString("Gamemodes.Spectator", "РЅР°Р±Р»СЋРґРµРЅРёРµ");
 		
-		WENotFound = getLangConfig(lang).getString("Selections.WorldEditNotFound", "&6WorldEdit&c не был найден, поэтому вы не можете использовать эту команду.");
-		UnknownType = getLangConfig(lang).getString("Selections.UnknownType", "&cНеизвестный тип: &6%type%&c! Доступные типы: &6%types%.");
-		MakeSelection = getLangConfig(lang).getString("Selections.MakeSelection", "&cПервым делом выдели регион топором!");
-		NotCuboid = getLangConfig(lang).getString("Selections.NotCuboid", "&cДанный регион не является кубоидом!");
-		PleaseWait = getLangConfig(lang).getString("Selections.PleaseWait", "&7Это может занять какое-то время.. Пожалуйста, подождите!");
-		BlocksChanged = getLangConfig(lang).getString("Selections.BlocksChanged", "&7Блоков изменено: &9%number%&7!");
+		WENotFound = getLangConfig(lang).getString("Selections.WorldEditNotFound", "&6WorldEdit&c РЅРµ Р±С‹Р» РЅР°Р№РґРµРЅ, РїРѕСЌС‚РѕРјСѓ РІС‹ РЅРµ РјРѕР¶РµС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ СЌС‚Сѓ РєРѕРјР°РЅРґСѓ.");
+		UnknownType = getLangConfig(lang).getString("Selections.UnknownType", "&cРќРµРёР·РІРµСЃС‚РЅС‹Р№ С‚РёРї: &6%type%&c! Р”РѕСЃС‚СѓРїРЅС‹Рµ С‚РёРїС‹: &6%types%.");
+		MakeSelection = getLangConfig(lang).getString("Selections.MakeSelection", "&cРџРµСЂРІС‹Рј РґРµР»РѕРј РІС‹РґРµР»Рё СЂРµРіРёРѕРЅ С‚РѕРїРѕСЂРѕРј!");
+		NotCuboid = getLangConfig(lang).getString("Selections.NotCuboid", "&cР”Р°РЅРЅС‹Р№ СЂРµРіРёРѕРЅ РЅРµ СЏРІР»СЏРµС‚СЃСЏ РєСѓР±РѕРёРґРѕРј!");
+		PleaseWait = getLangConfig(lang).getString("Selections.PleaseWait", "&7Р­С‚Рѕ РјРѕР¶РµС‚ Р·Р°РЅСЏС‚СЊ РєР°РєРѕРµ-С‚Рѕ РІСЂРµРјСЏ.. РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РїРѕРґРѕР¶РґРёС‚Рµ!");
+		BlocksChanged = getLangConfig(lang).getString("Selections.BlocksChanged", "&7Р‘Р»РѕРєРѕРІ РёР·РјРµРЅРµРЅРѕ: &9%number%&7!");
 		
-		CurrentVersion = getLangConfig(lang).getString("Version", "&7Текущая версия плагина: &9%version%&7!");
-		DevelopmentTeam = getLangConfig(lang).getString("DevelopmentTeam", "&7Команда разработчиков: &9%development-team%");
-		WebSite = getLangConfig(lang).getString("Site", "&7Сайт: &9%link%");
-		Author = getLangConfig(lang).getString("Author", "&9%nickname% &7[&cавтор&7]");
+		CurrentVersion = getLangConfig(lang).getString("Version", "&7РўРµРєСѓС‰Р°СЏ РІРµСЂСЃРёСЏ РїР»Р°РіРёРЅР°: &9%version%&7!");
+		DevelopmentTeam = getLangConfig(lang).getString("DevelopmentTeam", "&7РљРѕРјР°РЅРґР° СЂР°Р·СЂР°Р±РѕС‚С‡РёРєРѕРІ: &9%development-team%");
+		WebSite = getLangConfig(lang).getString("Site", "&7РЎР°Р№С‚: &9%link%");
+		Author = getLangConfig(lang).getString("Author", "&9%nickname% &7[&cР°РІС‚РѕСЂ&7]");
     }
+    
+	/**\ GERMAN \**/
+	/**\-----------\**/
+
+private static void GermanStrings(String lang) {
+	header = 
+	  	  " |-------------------------------| \n"
+	  	+ " | Language file of ShareControl | \n"
+	  	+ " |-------------------------------| \n"
+	  	+ "\n"
+	  	+ " HELP:\n"
+	  	+ " %block% - block that place\\break\\use \n"
+	  	+ " %item% - item that use \n"
+	  	+ " %gamemode% - the gamemode of player \n"
+	  	+ " %type% - type of block (natural or creative) \n"
+	  	+ " %coords% - coordinates of block \n"
+	  	+ " %name% - block name \n"
+	  	+ " %id% - block ID \n"
+	  	+ " %command% - ShareControl's command \n"
+	  	+ " %plugin% - ShareControl \n"
+	  	+ " %update% - new version \n"
+	  	+ " %version% - the current version \n"
+	  	+ " %link% - link to site of plugin \n"
+	  	+ " %development-team% - development team of the plugin \n"
+	  	+ " %nickname% - player \n"
+	  	+ " %uuid% - universally unique identifier of player";
+	
+	UpdateNotFound = getLangConfig(lang).getString("Update.UpdateNotFound", "&7Keine Updates gefunden! Du verwendest die neuste Version!");
+	UpdateAvailable = getLangConfig(lang).getString("Update.Available", "&7Update verfГјgbar: &9%update%&7 hier &9%link%&7!");
+	
+	NoPerms = getLangConfig(lang).getString("NoPermission", "&cDu hast keine Berechtigung!");
+	
+	OnDrop = getLangConfig(lang).getString("Events.Drop", "&cDu kannst nichts werfen!");
+	OnMonsterInteract = getLangConfig(lang).getString("Events.MobsInteract", "&cDu kannst mit Monster nicht interagieren!");
+	OnPlayerInteract = getLangConfig(lang).getString("Events.PlayerInteract", "&cDu kannst mit Spieler nicht interagieren!");
+	OnInventoryClick = getLangConfig(lang).getString("Events.Inventory.Message", "&cDu kannst dieses Item nicht benutzen!");
+	OnInventoryClickMaterial = getLangConfig(lang).getString("Events.Inventory.Material", "&cDu kannst &6%item%&c nicht benutzen!");
+	OnOpenOtherInventory = getLangConfig(lang).getString("Events.OpenInventory", "&cDu kannst das nicht tun!");
+	OnBlockBreak = getLangConfig(lang).getString("Events.BlockBreak.Message", "&cDu kannst diesen Block nicht brechen!");
+	OnBlockPlace = getLangConfig(lang).getString("Events.BlockPlace.Message", "&cDu kannst diesen Block nicht platzieren!");
+	OnBlockBreakMaterial = getLangConfig(lang).getString("Events.BlockBreak.Material", "&cDu kannst &6%block%&c nicht brechen!");
+	OnBlockPlaceMaterial = getLangConfig(lang).getString("Events.BlockPlace.Material", "&cDu kannst &6%block%&c nicht platzieren!");
+	OnBowShoot = getLangConfig(lang).getString("Events.ShootBow", "&cDu kannst keinen Bogen schieГџen!");
+	AnotherWorld = getLangConfig(lang).getString("Events.InteractWithWorlds", "&cDu kannst nicht mit der Umwelt agieren!");
+	CreativeBlockNotDrop = getLangConfig(lang).getString("Events.NotDropBlock", "&7Block wurde nicht fallen gelassen, weil er aus dem Kreativ-Modus ist!");
+	CreativeBlockNotBreak = getLangConfig(lang).getString("Events.NotBreakBlock", "&7Block wurde nicht abgebaut, weil er aus dem Kreativ-Modus ist!");
+	EntityInteract = getLangConfig(lang).getString("Events.EntityInteract.Message", "&cDu kannst diesen Gegenstand nicht benutzen!");
+	EntityInteractMaterial = getLangConfig(lang).getString("Events.EntityInteract.Material", "&cDu kannst &6%item% &cnicht benutzen!");
+	UseBlocks = getLangConfig(lang).getString("Events.UseBlock", "&cDu kannst dies nicht benutzen!");
+	OnFishing = getLangConfig(lang).getString("Events.Fishing", "&cDu kannst nicht fischen!");
+	ArmorStand = getLangConfig(lang).getString("Events.ArmorStand", "&cDu kannst nicht mit RГјstungsstГ¤nder agieren!");
+	OnCommand = getLangConfig(lang).getString("Events.ProhibitedCommand", "&cDu kannst diesen Befehl nicht benutzen!");
+	Saplings = getLangConfig(lang).getString("Events.Saplings", "&7Dieser Setzling ist aus dem Kreativ-Modus, du kannst ihn nicht wachsen lassen!");
+	
+	GamemodesControl = getLangConfig(lang).getString("GamemodesControl.NotAllowedGamemode", "&cDu kannst nicht in den Modus &6%gamemode% &cgehen!");
+	
+	PlayerListInGamemode = getLangConfig(lang).getString("PlayersInGamemode.List", "&7Spieler im &9%gamemode%-Modus&7: &9%list%&7");
+	UnknownGamemode = getLangConfig(lang).getString("PlayersInGamemode.UnknownGamemode", "&cUnbekannter Modus: &6%gamemode%&c.");
+	PlayerInGamemodeNotFound = getLangConfig(lang).getString("PlayersInGamemode.NotFound", "&7Spieler im Modus &9%gamemode%&7 nicht gefunden!");
+	PlayerListInGamemodeMore = getLangConfig(lang).getString("PlayersInGamemode.More", "&7Erweiterte Informationen Гјber ein Spieler, benutze &9/sc check <nickname>&7!");
+	
+	menu = getLangConfig(lang).getString("Menu.This", "&9%command% &f- dieses MenГј,");
+	menureload = getLangConfig(lang).getString("Menu.Reload", "&9%command% &f- reload,");
+	menuinfo = getLangConfig(lang).getString("Menu.Version", "&9%command% &f- Informationen,");
+	menuupdate = getLangConfig(lang).getString("Menu.Update", "&9%command% &f- nach Updates prГјfen,");
+	menugetlist = getLangConfig(lang).getString("Menu.GetList", "&9%command% &f- erhalte eine Liste mit Spielern in diesem Modus,");
+	menuadd = getLangConfig(lang).getString("Menu.AddToList", "&9%command% &f- fГјge einen Block zur Liste hinzu,");
+	menuremove = getLangConfig(lang).getString("Menu.RemoveFromList", "&9%command% &f- entferne einen Block von der Liste,");
+	menutools = getLangConfig(lang).getString("Menu.Tools", "&9%command% &f- Liste der Werkzeuge,");
+	menusettool = getLangConfig(lang).getString("Menu.ChangeTool", "&9%command% &f- erhalte das Wechsel-Tool,");
+	menuinfotool = getLangConfig(lang).getString("Menu.InfoTool", "&9%command% &f- erhalte das Informationen-Tool.");
+	menuselectionset = getLangConfig(lang).getString("Menu.SelectionSet", "&9%command% &f- Г¤ndert den Typ des Block in der Markierung,");
+	menucheck = getLangConfig(lang).getString("Menu.Check", "&9%command% &f- erhalte Informationen Гјber einen Spieler.");
+	
+	
+	using = getLangConfig(lang).getString("Using", "&7Benutze: &c%command%");
+	
+	reloading = getLangConfig(lang).getString("Reload.Reloading", "&7Reload...");
+	reloadsuccess = getLangConfig(lang).getString("Reload.Success", "&7Reload erfolgreich!");
+	
+	AMtoPlaceList = getLangConfig(lang).getString("ChangeConfig.AddToBlockingPlacement", "&7Der Block &9%material%&7 wurde auf die Liste der verbotenen BlГ¶cke hinzugefГјgt!");
+	AMtoBreakList = getLangConfig(lang).getString("ChangeConfig.AddToBlockingBreakage", "&7Der Block &9%material%&7 wurde auf die Liste der verbotenen BlГ¶cke hinzugefГјgt!");
+	AMtoUseList = getLangConfig(lang).getString("ChangeConfig.AddToBlockingInventory", "&7Der Gegenstand &9%material%&7 wurde auf die Liste der verbotenen GegenstГ¤nde hinzugefГјgt!");
+	RMtoPlaceList = getLangConfig(lang).getString("ChangeConfig.RemoveFromBlockingPlacement", "&7Der Block &9%material%&7 wurde von der Liste verbotenen BlГ¶cke entfernt!");
+	RMtoBreakList = getLangConfig(lang).getString("ChangeConfig.RemoveFromBlockingBreakage", "&7Der Block &9%material%&7 wurde von der Liste verbotenen BlГ¶cke entfernt!");
+	RMtoUseList = getLangConfig(lang).getString("ChangeConfig.RemoveFromBlockingInventory", "&7Der Gegenstand &9%material%&7 wurde von der Liste verbotenen GegenstГ¤nde entfernt!");
+	ThisNotMaterialandId = getLangConfig(lang).getString("ChangeConfig.ThisNotMaterialAndId", "&7FEHLER: &9%material%&7 ist keine bekannte ID oder kein bekannter Name!");
+	
+	getsettool = getLangConfig(lang).getString("Tools.ChangeTool.Get", "&7Du erhГ¤lst &9Wechsel-Tool&7!");
+	namesettool = getLangConfig(lang).getString("Tools.ChangeTool.Name", "&9&lWechsel-Tool");
+	loreST1 = getLangConfig(lang).getString("Tools.ChangeTool.Lore.1", "&7Linksklick um den Modus des Blocks zu &cSETZEN&7!");
+	loreST2 = getLangConfig(lang).getString("Tools.ChangeTool.Lore.2", "&7Rechtsklick um den Modus des Blocks zu &cENTFERNEN&7!");
+	loreST3 = getLangConfig(lang).getString("Tools.ChangeTool.Lore.3", "&7Tool von %plugin%");
+	getinfotool = getLangConfig(lang).getString("Tools.InfoTool.Get", "&7You got the &9information tool&7!");
+	nameinfotool = getLangConfig(lang).getString("Tools.InfoTool.Name", "&9&lInformation Tool");
+	loreIT1 = getLangConfig(lang).getString("Tools.InfoTool.Lore.1", "&7Links- oder Rechtsklick auf den Block,");
+	loreIT2 = getLangConfig(lang).getString("Tools.InfoTool.Lore.2", "&7um Informationen zu erhalten");
+	Type = getLangConfig(lang).getString("Tools.Type", "&7Typ: &9%type%");
+	CreativeType = getLangConfig(lang).getString("Tools.Types.Creative", "kreativ");
+	NaturalType = getLangConfig(lang).getString("Tools.Types.Natural", "natГјrlich");
+	Name = getLangConfig(lang).getString("Tools.Name", "&7Name: &9%name%");
+	ID = getLangConfig(lang).getString("Tools.ID", "&7ID: &9%id%");
+	Coordinates = getLangConfig(lang).getString("Tools.Coordinates", "&7Koordinaten: &9%coords%");
+	World = getLangConfig(lang).getString("Tools.World", "&7Welt: &9%world%");
+	Nick = getLangConfig(lang).getString("Tools.Nickname", "&7Nickname: &9%nickname%");
+	UUID =  getLangConfig(lang).getString("Tools.UUID", "&7UUID: &9%uuid%");
+	GM = getLangConfig(lang).getString("Tools.Gamemode", "&7Modus: &9%gamemode%");
+	Health = getLangConfig(lang).getString("Tools.Health", "&7leben: &9%health%");
+	Exp = getLangConfig(lang).getString("Tools.Exp", "&7EXP: &9%exp%");
+	BlockHas = getLangConfig(lang).getString("Tools.BlockHas", "&7This block is has a &6%type%&7!");
+	BlockNow = getLangConfig(lang).getString("Tools.BlockNow", "&7Now this block &6%type%&7!");
+	
+	Creative = getLangConfig(lang).getString("Gamemodes.Creative", "Kreativ");
+	Survival = getLangConfig(lang).getString("Gamemodes.Survival", "Гњberleben");
+	Adventure = getLangConfig(lang).getString("Gamemodes.Adventure", "Abenteuer");
+	Spectator = getLangConfig(lang).getString("Gamemodes.Spectator", "Zuschauer");
+	
+	WENotFound = getLangConfig(lang).getString("Selections.WorldEditNotFound", "&6WorldEdit&c nicht gefunden, Befehl konnte nicht ausgefГјhrt werden.");
+	UnknownType = getLangConfig(lang).getString("Selections.UnknownType", "&cUnbekannter Typ: &6%type%&c! Bekannte Typen: &6%types%.");
+	MakeSelection = getLangConfig(lang).getString("Selections.MakeSelection", "&cMarkiere zuerst eine Region!");
+	NotCuboid = getLangConfig(lang).getString("Selections.NotCuboid", "&cMarkierung ist kein Rechteck!");
+	PleaseWait = getLangConfig(lang).getString("Selections.PleaseWait", "&7Dies kann etwas dauern... Bitte warte!");
+	BlocksChanged = getLangConfig(lang).getString("Selections.BlocksChanged", "&7Erfolgreich &9%number% BlГ¶cke &7geГ¤ndert!");
+	
+	CurrentVersion = getLangConfig(lang).getString("Version", "&7Derzeitige Version des Plugins: &9%version%&7!");
+	DevelopmentTeam = getLangConfig(lang).getString("DevelopmentTeam", "&7Development team: &9%development-team%");
+	WebSite = getLangConfig(lang).getString("Site", "&7Seite: &9%link%");
+	Author = getLangConfig(lang).getString("Author", "&9%nickname% &7[&cAutor&7]");
+}
     
     private static String header;
 
