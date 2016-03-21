@@ -70,6 +70,9 @@ public class PlayerGameModeChangeListener implements Listener {
     	p.getInventory().setBoots(AIR);
     	p.getInventory().setLeggings(AIR);
     	p.getInventory().setChestplate(AIR);
+    	
+    	if(p.getOpenInventory() != null)
+    		p.getOpenInventory().close();
 		
 		for (PotionEffect effect : p.getActivePotionEffects())
 			p.removePotionEffect(effect.getType());
