@@ -18,7 +18,6 @@
 package com.net.h1karo.sharecontrol.listeners.creative;
 
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,38 +49,16 @@ public class BlockBreakListener implements Listener {
 		Database.RemoveBlock(b);
 	}
 	
-	
 	@SuppressWarnings("deprecation")
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void DisableBlockBreak(BlockBreakEvent e)
-	{
-		if(e.isCancelled()) return;
-		Player p = e.getPlayer();
-		if(Permissions.perms(p, "allow.blocking-breakage.*") || Configuration.BlockingBlocksBreakList.toArray().length == 0  || Configuration.BlockingBlocksBreakList.get(0).toString() == "[none]" || !(p.getGameMode() == GameMode.CREATIVE))	return;
-		
-		Material typeThisBlock = e.getBlock().getType();
-		Material typeListBlock;
-		
-		for(int i=0; i < Configuration.BlockingBlocksBreakList.toArray().length; i++)
-		{
-			String StrListBlock = (String) Configuration.BlockingBlocksBreakList.toArray()[i];
-			if(!Permissions.perms(p, "allow.blocking-breakage." + StrListBlock)) {
-				if(Database.isInteger(StrListBlock))
-				{
-					String NewStr = StrListBlock.replace("'", "");
-					int ID = Integer.parseInt(NewStr);
-					typeListBlock = Material.getMaterial(ID);
-				}
-				else
-					typeListBlock = Material.getMaterial(StrListBlock);
-			
-				if(typeThisBlock == typeListBlock)
-				{
-					Localization.BreakBlock(typeThisBlock, p);
-					e.setCancelled(true);
-					return;
-				}
-			}
+	@EventHandler(priority = EventPriority.HIGH)
+	public void DisableBlockBreak(BlockBreakEvent e) {
+    	if(e.isCancelled() || Configuration.BlockingBlocksBreakList.contains("none") || e.getBlock() == null) return;
+    	Player p = e.getPlayer();
+    	Block b = e.getBlock();
+		if(Permissions.perms(p, "allow.blocking-breakage.*") || p.getGameMode() != GameMode.CREATIVE)	return;
+		if((Configuration.BlockingBlocksBreakList.contains(b.getTypeId()) && !Permissions.perms(p, "allow.blocking-breakage." + b.getTypeId())) || (Configuration.BlockingBlocksBreakList.contains(b.getType().toString()) && !Permissions.perms(p, "allow.blocking-breakage." + b.getType().toString()))) {
+			Localization.BreakBlock(b.getType(), p);
+			e.setCancelled(true);
 		}
 	}
 	

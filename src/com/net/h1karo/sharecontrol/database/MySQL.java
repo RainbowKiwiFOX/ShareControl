@@ -209,6 +209,15 @@ public class MySQL {
 	   
 	   
 	   public static void SQLUpdate(Integer x, Integer y, Integer z, Integer id, Integer world) {
+		   if(!hasConnected()) {
+			   try {
+					MySQL.connect();
+					MySQL.loadCache();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+		   }
+		   
 		  ResultSet resultSet = query("SELECT * FROM `" + Configuration.TableName + "` WHERE `x`='" + x + "' AND `y`='" + y + "' AND `z`='" + z + "' AND `world`='" + world + "'");
 			
 		   try {
@@ -234,6 +243,15 @@ public class MySQL {
 	   }
 	   
 	   public static int getID(Integer x, Integer y, Integer z, String world) {
+		   if(!hasConnected()) {
+			   try {
+					MySQL.connect();
+					MySQL.loadCache();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+		   }
+		   
 		   ResultSet resultSet = query("SELECT * FROM `" + Configuration.TableName + "` WHERE `x`='" + x + "' AND `y`='" + y + "' AND `z`='" + z + "' AND `world`='" + world + "'");
 		   try {
 			   while(resultSet.next())
@@ -246,6 +264,14 @@ public class MySQL {
 	   }
 	   
 	   public static void loadCache() {
+		   if(!hasConnected()) {
+			   try {
+					MySQL.connect();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+		   }
+		   
 		   ResultSet resultSet = query("SELECT * FROM `" + Configuration.TableName + "`");
 		   try {
 			   while(resultSet.next()) {

@@ -31,6 +31,7 @@ import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
 import com.net.h1karo.sharecontrol.database.Database;
 import com.net.h1karo.sharecontrol.localization.Localization;
+import com.net.h1karo.sharecontrol.version.CoreVersion;
 
 public class BlockBreakListener implements Listener {
 	
@@ -50,42 +51,77 @@ public class BlockBreakListener implements Listener {
 		if(p.getGameMode() == GameMode.CREATIVE) return;
 		Block b = e.getBlock();
 
-		if(b.getType() == Material.PISTON_EXTENSION) {
+		if(b.getType().equals(Material.PISTON_EXTENSION)) {
 			World w = b.getWorld();
 			if(!Database.CheckCreative(b)) return;
-			if(b.getData() == 13) {
+			if(b.getData() == 13 || b.getData() == 5) {
 				e.setCancelled(true);
 				Block piston = w.getBlockAt(b.getX() - 1, b.getY(), b.getZ());
-				ClearPiston(piston, e);
+				AClearBlock(piston, e);
 				ClearBlock(e);
 			}
 
-			if(b.getData() == 12) {
+			if(b.getData() == 12 || b.getData() == 4) {
 				e.setCancelled(true);
 				Block piston = w.getBlockAt(b.getX() + 1, b.getY(), b.getZ());
-				ClearPiston(piston, e);
+				AClearBlock(piston, e);
 				ClearBlock(e);
 			}
 
-			if(b.getData() == 11) {
+			if(b.getData() == 11 || b.getData() == 3) {
 				e.setCancelled(true);
 				Block piston = w.getBlockAt(b.getX(), b.getY(), b.getZ() - 1);
-				ClearPiston(piston, e);
+				AClearBlock(piston, e);
 				ClearBlock(e);
 			}
 
-			if(b.getData() == 10) {
+			if(b.getData() == 10 || b.getData() == 2) {
 				e.setCancelled(true);
 				Block piston = w.getBlockAt(b.getX(), b.getY(), b.getZ() + 1);
-				ClearPiston(piston, e);
+				AClearBlock(piston, e);
+				ClearBlock(e);
+			}
+
+			if(b.getData() == 0 || b.getData() == 8) {
+				e.setCancelled(true);
+				Block piston = w.getBlockAt(b.getX(), b.getY() + 1, b.getZ());
+				AClearBlock(piston, e);
+				ClearBlock(e);
+			}
+
+			if(b.getData() == 1 || b.getData() == 9) {
+				e.setCancelled(true);
+				Block piston = w.getBlockAt(b.getX(), b.getY() - 1, b.getZ());
+				AClearBlock(piston, e);
 				ClearBlock(e);
 			}
 			return;
 		}
+		
+		if(isDoor(b)) {
+			World w = b.getWorld();
+			Block door;
+			if(b.getData() == 8 || b.getData() == 9) {
+				e.setCancelled(true);
+				door = w.getBlockAt(b.getX(), b.getY() - 1, b.getZ());
+				if(Database.CheckCreative(door)) {
+					if(!Configuration.BlockingBreak) {
+						door.setType(Material.AIR);
+						Localization.SurvivalBlockNotDrop(p);
+						Database.RemoveBlock(door);
+					}
+					else {
+						Localization.SurvivalBlockNotBreak(p);
+						return;
+					}
+				}
+				return;
+			}
+		}
 		ClearBlock(e);
 	}
 	
-	public void ClearPiston(Block b, BlockBreakEvent e) {
+	public void AClearBlock(Block b, BlockBreakEvent e) {
 		if(Database.CheckCreative(b)){
 			e.setCancelled(true);
 			if(!Configuration.BlockingBreak)
@@ -103,13 +139,11 @@ public class BlockBreakListener implements Listener {
 		
 		if(Database.CheckCreative(b)) {
 			e.setCancelled(true);
-			if(!Configuration.BlockingBreak)
-			{
+			if(!Configuration.BlockingBreak) {
 				b.setType(Material.AIR);
 				Localization.SurvivalBlockNotDrop(p);
 			}
-			else
-			{
+			else {
 				Localization.SurvivalBlockNotBreak(p);
 				return;
 			}
@@ -117,5 +151,19 @@ public class BlockBreakListener implements Listener {
 			Database.RemoveBlock(b);
 			return;
 		}
+	}
+	
+	
+	public boolean isDoor(Block b) {
+		if(b.getType().equals(Material.WOODEN_DOOR) ||
+			b.getType().equals(Material.IRON_DOOR_BLOCK))
+			 return true;
+		if(CoreVersion.getVersionsArray().contains(CoreVersion.OneDotEightPlus))
+			if(b.getType().equals(Material.ACACIA_DOOR) ||
+			b.getType().equals(Material.SPRUCE_DOOR) ||
+			b.getType().equals(Material.BIRCH_DOOR) ||
+			b.getType().equals(Material.JUNGLE_DOOR) ||
+			b.getType().equals(Material.DARK_OAK_DOOR)) return true;
+		 return false;
 	}
 }

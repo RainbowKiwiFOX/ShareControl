@@ -40,11 +40,11 @@ public class InventoriesDatabase {
     private static File InvConfigFile = null;
     
     public static void reloadInvConfig() {
-    	if (InvConfigFile == null)	InvConfigFile = new File(Configuration.inventoryFolder + File.separator + "inventories.yml");
+    	if (InvConfigFile == null)	InvConfigFile = new File(Configuration.dataFolder + File.separator + "inventories.yml");
     	
     	InvConfig = YamlConfiguration.loadConfiguration(InvConfigFile);
     	 
-    		InputStream defConfigStream = main.getResource(Configuration.inventoryFolder + File.separator + "inventories.yml");
+    		InputStream defConfigStream = main.getResource(Configuration.dataFolder + File.separator + "inventories.yml");
     		if (defConfigStream != null) {
 				@SuppressWarnings("deprecation")
 				YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);

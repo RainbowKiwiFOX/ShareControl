@@ -77,6 +77,7 @@ public class Configuration {
         
 		main.getConfig().set("Settings.Blocks.BlockingPlacement", BlockingBlocksPlaceList);
 		main.getConfig().set("Settings.Blocks.BlockingBreakage", BlockingBlocksBreakList);
+		main.getConfig().set("Settings.Blocks.BlockingInteract", BlockingInteractList);
 		
 		main.getConfig().set("Settings.Items.BlockingInventory", BlockingItemsInvList);
 		
@@ -100,8 +101,8 @@ public class Configuration {
 		
 		loadDef();
 		
-        inventoryFolder = new File(main.getDataFolder(), "data");
-        if (!inventoryFolder.exists()) inventoryFolder.mkdirs();
+        dataFolder = new File(main.getDataFolder(), "data");
+        if (!dataFolder.exists()) dataFolder.mkdirs();
         
         languageFolder = new File(main.getDataFolder(), "languages" + File.separator);
         if (!languageFolder.exists()) languageFolder.mkdirs();
@@ -137,6 +138,8 @@ public class Configuration {
         if(BlockingBlocksPlaceList.isEmpty()) BlockingBlocksPlaceList.addAll(defBlockingBlocksPlaceList);
         BlockingBlocksBreakList = main.getConfig().getStringList("Settings.Blocks.BlockingBreakage");
         if(BlockingBlocksBreakList.isEmpty()) BlockingBlocksBreakList.addAll(defBlockingBlocksBreakList);
+        BlockingInteractList = main.getConfig().getStringList("Settings.Blocks.BlockingInteract");
+        if(BlockingInteractList.isEmpty()) BlockingInteractList.addAll(defBlockingInteractList);
         
         BlockingItemsInvList = main.getConfig().getStringList("Settings.Items.BlockingInventory");
         if(BlockingItemsInvList.isEmpty()) BlockingItemsInvList.addAll(defBlockingItemsInvList);
@@ -178,6 +181,13 @@ public class Configuration {
     		LanguageFiles.reloadlanguageConfig("de");
     		LanguageFiles.savelanguageConfig("de");
     	}
+    	
+    	languageConfigFile = new File(main.getDataFolder(), "languages" + File.separator + "cn.yml");
+    	if(!languageConfigFile.exists()) {
+    		main.getLogger().info("Simplified Chinese language file not found! Loading...");
+    		LanguageFiles.reloadlanguageConfig("cn");
+    		LanguageFiles.savelanguageConfig("cn");
+    	}
 		
 		LanguageFiles.reloadlanguageConfig(Language);
 		LanguageFiles.savelanguageConfig(Language);
@@ -185,6 +195,7 @@ public class Configuration {
 		defBlockingBlocksPlaceList.clear();
 		defBlockingBlocksBreakList.clear();
 		defBlockingItemsInvList.clear();
+		defBlockingInteractList.clear();
 	}
 	//
 	//
@@ -225,8 +236,16 @@ public class Configuration {
 				Localization.AddSuccess(sender, list, material);
 				return;
 			}
+			if(list.compareToIgnoreCase("interact") == 0) {
+				BlockingInteractList.add(material);
+				saveCfg();
+				Localization.AddSuccess(sender, list, material);
+				return;
+			}
 			
-			String command = "/sc add <break/place/use> <material>";
+			
+			
+			String command = "/sc add <break/place/use/interact> <material>";
 			String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.using.replace("%command%", command));
 			MessageManager.getManager().msg(sender, MessageType.USE, msg);
 		}
@@ -265,8 +284,14 @@ public class Configuration {
 				Localization.RemoveSuccess(sender, list, material);
 				return;
 			}
+			if(list.compareToIgnoreCase("interact") == 0) {
+				BlockingInteractList.remove(material);
+				saveCfg();
+				Localization.RemoveSuccess(sender, list, material);
+				return;
+			}
 			
-			String command = "/sc remove <break/place/use> <material>";
+			String command = "/sc remove <break/place/use/interact> <material>";
 			String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.using.replace("%command%", command));
 			MessageManager.getManager().msg(sender, MessageType.USE, msg);
 		}
@@ -314,6 +339,23 @@ public class Configuration {
 		for(int i=0; i < j; i++)
 		{
 			String String = BlockingItemsInvList.toArray()[i].toString().replace("'", "");
+			Material Material;
+			
+			if(isInteger(String))
+			{
+				int ID = Integer.parseInt(String);
+				Material = org.bukkit.Material.getMaterial(ID);
+			}
+			else Material = org.bukkit.Material.getMaterial(String);
+			if(!(Material instanceof Material) && !String.equalsIgnoreCase("none")) {
+				ShareControl.error = true;
+				errorcode = String;
+			}
+		}
+		j = BlockingInteractList.toArray().length;
+		for(int i=0; i < j; i++)
+		{
+			String String = BlockingInteractList.toArray()[i].toString().replace("'", "");
 			Material Material;
 			
 			if(isInteger(String))
@@ -406,11 +448,14 @@ public class Configuration {
 		defBlockingCreative = new ArrayList<String>();
 		defBlockingCreative.add("world_nether");
 		defBlockingCreative.add("world_the_end");
+		
+		defBlockingInteractList = new ArrayList<String>();
+		defBlockingInteractList.add("none");
 	}
 	
 	
 	public static boolean versionCheck;
-	public static List<String> BlockingBlocksPlaceList, BlockingBlocksBreakList, BlockingItemsInvList, BlockingCmdsList;
+	public static List<String> BlockingBlocksPlaceList, BlockingBlocksBreakList, BlockingItemsInvList, BlockingCmdsList, BlockingInteractList;
     public static boolean CreatureInteract, PlayerInteract, CreativeNotify, SurvivalNotify, material, BlockingBreak, PrefixEnabled, ClearDropInInventory;
     public static boolean MultiInventoriesEnabled, InventorySeparation;
     public static String Language;
@@ -423,11 +468,11 @@ public class Configuration {
     public static List<String> BlockingCreative;
     
     private static File languageFolder;
-    public static File inventoryFolder;
+    public static File dataFolder;
     
     public static String Database, Host, Port, DBname, Username, Password, TableName;
     public static int DBInterval;
     
 
-	public static List<String> defBlockingBlocksPlaceList, defBlockingBlocksBreakList, defBlockingItemsInvList, defBlockingCmdsList, defBlockingCreative;
+	public static List<String> defBlockingBlocksPlaceList, defBlockingBlocksBreakList, defBlockingItemsInvList, defBlockingCmdsList, defBlockingCreative, defBlockingInteractList;
 }

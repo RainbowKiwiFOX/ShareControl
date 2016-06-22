@@ -1,6 +1,6 @@
 name: ShareControl
 main: com.net.h1karo.sharecontrol.ShareControl
-version: 2.5.3
+version: 2.6
 authors:
   - H1KaRo
 softdepend: [Essentials, WorldEdit]
@@ -60,8 +60,8 @@ permissions:
     sharecontrol.allow.blocking-inventory.*:
         description: Allow use all items
         default: op
-    sharecontrol.allow.blocking-interact:
-        description: Allow interact to all entity
+    sharecontrol.allow.blocking-interact.*:
+        description: Allow interact with all blocks
         default: op
     sharecontrol.allow.pickup:
         description: Allow pickup item

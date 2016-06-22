@@ -347,7 +347,6 @@ public class Localization {
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg10);
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg11);
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg12);
-		MessageManager.getManager().msg(sender, MessageType.HELP, ChatColor.GRAY + "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 	}
 	
 	public static void reloadMsg(CommandSender sender)
@@ -408,7 +407,6 @@ public class Localization {
 		MessageManager.getManager().msg(p, MessageType.HELP, msg1);
 		MessageManager.getManager().msg(p, MessageType.HELP, msg2);
 		MessageManager.getManager().msg(p, MessageType.HELP, msg3);
-		MessageManager.getManager().msg(p, MessageType.HELP, ChatColor.GRAY + "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 	}
 	
 	 // TOOLS
@@ -467,7 +465,7 @@ public class Localization {
 		String id = b.getTypeId() + "";
 		String material = b.getType().toString();
 		String coords = b.getX() + ", " + b.getY() + ", " + b.getZ();
-		String type;
+		String type; String data = b.getData() + "";
 		
 		if(Database.CheckCreative(b))
 			type = ChatColor.translateAlternateColorCodes('&', LanguageFiles.CreativeType);
@@ -478,13 +476,14 @@ public class Localization {
 		String msg2 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.ID.replace("%id%", id));
 		String msg3 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Coordinates.replace("%coords%", coords));
 		String msg4 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Type.replace("%type%", type));
+		String msg5 = ChatColor.translateAlternateColorCodes('&', LanguageFiles.Data.replace("%data%", data));
 		
 		MessageManager.getManager().msg(p, MessageType.HELP, "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 " + ChatColor.BLUE + " Block Information" + ChatColor.GRAY + " \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 		MessageManager.getManager().msg(p, MessageType.HELP, msg1);
 		MessageManager.getManager().msg(p, MessageType.HELP, msg2);
 		MessageManager.getManager().msg(p, MessageType.HELP, msg3);
 		MessageManager.getManager().msg(p, MessageType.HELP, msg4);
-		MessageManager.getManager().msg(p, MessageType.HELP, ChatColor.GRAY + "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
+		MessageManager.getManager().msg(p, MessageType.HELP, msg5);
 	}
 	
 	public static void PlayerInfo(CommandSender sender, Player m)
@@ -513,7 +512,6 @@ public class Localization {
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg5);
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg6);
 		MessageManager.getManager().msg(sender, MessageType.HELP, msg7);
-		MessageManager.getManager().msg(sender, MessageType.HELP, ChatColor.GRAY + "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 	}
 	
 	public static void CreativeTypeNow(Player p)

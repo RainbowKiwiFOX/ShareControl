@@ -19,6 +19,7 @@ package com.net.h1karo.sharecontrol.listeners.creative;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -30,7 +31,6 @@ import org.bukkit.inventory.ItemStack;
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.configuration.Configuration;
-import com.net.h1karo.sharecontrol.database.Database;
 import com.net.h1karo.sharecontrol.localization.Localization;
 
 public class PlayerInteractListener implements Listener
@@ -76,36 +76,31 @@ public class PlayerInteractListener implements Listener
 		}
 	}
     
-	@SuppressWarnings("deprecation")
-	@EventHandler
-	public void BlockingUseItem(PlayerInteractEvent e)
+    @SuppressWarnings("deprecation")
+	@EventHandler(priority = EventPriority.HIGH)
+	public void BlockingInteractWithBlock(PlayerInteractEvent e)
 	{
-		for(int i=0; i < Configuration.BlockingItemsInvList.toArray().length; i++)
-		{
-			if(!(e.getPlayer() instanceof Player) || e.getPlayer().getItemInHand().getType() == Material.AIR) return;
-			Player p = (Player) e.getPlayer();
-			if(Permissions.perms(p, "allow.blocking-inventory") || Configuration.BlockingItemsInvList.toArray()[i].toString() == "[none]" || e.getItem() == null)	return;
-			
-			Material typeThisItem = e.getItem().getType();
-			String StrListItem = (String) Configuration.BlockingItemsInvList.toArray()[i];
-			Material typeListItem;
-			
-			if(Database.isInteger(StrListItem))
-			{
-				String NewStr = StrListItem.replace("'", "");
-				int ID = Integer.parseInt(NewStr);
-				typeListItem = Material.getMaterial(ID);
-			}
-			else
-				typeListItem = Material.getMaterial(StrListItem);
-			
-			if(typeThisItem == typeListItem && p.getGameMode() == GameMode.CREATIVE)
-			{
-				
-				Localization.invNotify(typeThisItem, p);
-				p.setItemInHand(new ItemStack(Material.AIR));
-				e.setCancelled(true);
-			}
+    	if(e.isCancelled() || Configuration.BlockingInteractList.contains("none") || e.getClickedBlock() == null) return;
+    	Player p = e.getPlayer();
+    	Block b = e.getClickedBlock();
+		if(Permissions.perms(p, "allow.blocking-interact.*") || p.getGameMode() != GameMode.CREATIVE)	return;
+		if((Configuration.BlockingInteractList.contains(b.getTypeId()) && !Permissions.perms(p, "allow.blocking-interact." + b.getTypeId())) || (Configuration.BlockingInteractList.contains(b.getType().toString()) && !Permissions.perms(p, "allow.blocking-interact." + b.getType().toString()))) {
+			Localization.interact(p);
+			e.setCancelled(true);
+		}
+	}
+    
+    @SuppressWarnings("deprecation")
+	@EventHandler(priority = EventPriority.HIGH)
+	public void BlockingUseItem(PlayerInteractEvent e) {
+    	if(e.isCancelled() || Configuration.BlockingItemsInvList.contains("none") || e.getItem() == null || e.getItem().getType().equals(Material.AIR)) return;
+    	Player p = e.getPlayer();
+    	ItemStack b = e.getItem();
+		if(Permissions.perms(p, "allow.blocking-inventory.*") || p.getGameMode() != GameMode.CREATIVE)	return;
+		if((Configuration.BlockingItemsInvList.contains(b.getTypeId()) && !Permissions.perms(p, "allow.blocking-inventory." + b.getTypeId())) || (Configuration.BlockingItemsInvList.contains(b.getType().toString()) && !Permissions.perms(p, "allow.blocking-inventory." + b.getType().toString()))) {
+			Localization.invNotify(b.getType(), p);
+			p.setItemInHand(new ItemStack(Material.AIR));
+			e.setCancelled(true);
 		}
 	}
 }

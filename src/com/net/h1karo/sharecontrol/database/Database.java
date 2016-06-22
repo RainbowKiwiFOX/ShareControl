@@ -195,11 +195,11 @@ public class Database {
 	{
 		int h = b.getLocation().getBlockY();
 		World w = b.getWorld();
-		for(int j = b.getLocation().getBlockY() + 1; j <= 256; j++) {
+		for(int j = b.getLocation().getBlockY() + 1; j <= Bukkit.getWorlds().get(0).getMaxHeight(); j++) {
 			h++;
 			Block thish = w.getBlockAt(b.getX(), j, b.getZ());
 			if(!ifUpDrop(thish) && !ifOneUpDrop(thish)) {
-				j = 257;
+				j = Bukkit.getWorlds().get(0).getMaxHeight() + 1;
 			}
 		}
 		
@@ -209,24 +209,51 @@ public class Database {
 				if(ifUpDrop(NewB)) FullClear(NewB);
 		}
 		
-		Block NewB = w.getBlockAt(b.getLocation().getBlockX(), b.getLocation().getBlockY() + 1, b.getLocation().getBlockZ());
-		if(ifOneUpDrop(NewB))	FullClear(NewB);
+		Block NewB = w.getBlockAt(b.getX(), b.getY() + 1, b.getZ());
+		if(ifOneUpDrop(NewB)) {
+			if(ifLaterallyDrop(NewB) == 0) FullClear(NewB);
+			else {
+				if(ifLaterallyDrop(NewB) == 1 && NewB.getData() == 12)  FullClear(NewB);
+				if(ifLaterallyDrop(NewB) == 2 && NewB.getData() == 5)  FullClear(NewB);
+				if(ifLaterallyDrop(NewB) == 4 && (NewB.getData() == 6 || NewB.getData() == 14 || NewB.getData() == 5 || NewB.getData() == 13))  FullClear(NewB);
+				if(ifLaterallyDrop(NewB) == 5 && (NewB.getData() == 5 || NewB.getData() == 13))  FullClear(NewB);
+			}
+		}
 		
-		NewB = w.getBlockAt(b.getLocation().getBlockX(), b.getLocation().getBlockY(), b.getLocation().getBlockZ() - 1);
-		if(ifLaterallyDrop(NewB) && NewB.getData() == 2)
-			FullClear(NewB);
+		NewB = w.getBlockAt(b.getX() + 1, b.getY(), b.getZ());
+		if(ifLaterallyDrop(NewB) == 0) FullClear(NewB);
+		else {
+			if(ifLaterallyDrop(NewB) == 1 && NewB.getData() == 5)  FullClear(NewB);
+			if(ifLaterallyDrop(NewB) == 2 && NewB.getData() == 1) FullClear(NewB);
+			if(ifLaterallyDrop(NewB) == 3 && NewB.getData() == 3)  FullClear(NewB);
+			if((ifLaterallyDrop(NewB) == 4  || ifLaterallyDrop(NewB) == 5) && (NewB.getData() == 1 || NewB.getData() == 9))  FullClear(NewB);
+		}
 		
-		NewB = w.getBlockAt(b.getLocation().getBlockX(), b.getLocation().getBlockY(), b.getLocation().getBlockZ() + 1);
-		if(ifLaterallyDrop(NewB) && NewB.getData() == 3)
-			FullClear(NewB);
+		NewB = w.getBlockAt(b.getX() - 1, b.getY(), b.getZ());
+		if(ifLaterallyDrop(NewB) == 0) FullClear(NewB);
+		else {
+			if(ifLaterallyDrop(NewB) == 1 && NewB.getData() == 4)  FullClear(NewB);
+			if(ifLaterallyDrop(NewB) == 2 && NewB.getData() == 2) FullClear(NewB);
+			if(ifLaterallyDrop(NewB) == 3 && NewB.getData() == 1)  FullClear(NewB);
+			if((ifLaterallyDrop(NewB) == 4  || ifLaterallyDrop(NewB) == 5) && (NewB.getData() == 2 || NewB.getData() == 10))  FullClear(NewB);
+		}
 		
-		NewB = w.getBlockAt(b.getLocation().getBlockX() + 1, b.getLocation().getBlockY(), b.getLocation().getBlockZ());
-		if(ifLaterallyDrop(NewB) && NewB.getData() == 5)
-			FullClear(NewB);
+		NewB = w.getBlockAt(b.getX(), b.getY(), b.getZ() + 1);
+		if(ifLaterallyDrop(NewB) == 0) FullClear(NewB);
+		else {
+			if((ifLaterallyDrop(NewB) == 1 || ifLaterallyDrop(NewB) == 2) && NewB.getData() == 3)  FullClear(NewB);
+			if(ifLaterallyDrop(NewB) == 3 && NewB.getData() == 0)  FullClear(NewB);
+			if((ifLaterallyDrop(NewB) == 4  || ifLaterallyDrop(NewB) == 5) && (NewB.getData() == 3 || NewB.getData() == 11))  FullClear(NewB);
+		}
 		
-		NewB = w.getBlockAt(b.getLocation().getBlockX() - 1, b.getLocation().getBlockY(), b.getLocation().getBlockZ());
-		if(ifLaterallyDrop(NewB) && NewB.getData() == 4) 
-			FullClear(NewB);
+		NewB = w.getBlockAt(b.getX(), b.getY(), b.getZ() - 1);
+		if(ifLaterallyDrop(NewB) == 0) FullClear(NewB);
+		else {
+			if(ifLaterallyDrop(NewB) == 1 && NewB.getData() == 2)  FullClear(NewB);
+			if(ifLaterallyDrop(NewB) == 2 && NewB.getData() == 4) FullClear(NewB);
+			if(ifLaterallyDrop(NewB) == 3 && NewB.getData() == 2)  FullClear(NewB);
+			if((ifLaterallyDrop(NewB) == 4  || ifLaterallyDrop(NewB) == 5) && (NewB.getData() == 4 || NewB.getData() == 12))  FullClear(NewB);
+		}
 	}
 	
 	public static boolean CheckBlock(Block b) {
@@ -289,12 +316,9 @@ public class Database {
 		if(b.getType() == Material.BED_BLOCK ||
 			b.getType() == Material.LEVER ||
 			b.getType() == Material.TORCH ||
+			b.getType() == Material.SAPLING ||
 			b.getType() == Material.REDSTONE_TORCH_ON ||
 			b.getType() == Material.REDSTONE_TORCH_OFF ||
-			b.getType() == Material.STONE_PLATE ||
-			b.getType() == Material.WOOD_PLATE ||
-			b.getType() == Material.GOLD_PLATE ||
-			b.getType() == Material.IRON_PLATE ||
 			b.getType() == Material.WOODEN_DOOR ||
 			b.getType() == Material.IRON_DOOR_BLOCK ||
 			b.getType() == Material.REDSTONE ||
@@ -318,10 +342,15 @@ public class Database {
 			b.getType() == Material.WOOD_BUTTON ||
 			b.getType() == Material.BROWN_MUSHROOM ||
 			b.getType() == Material.RED_MUSHROOM ||
+			b.getType() == Material.STONE_PLATE ||
+			b.getType() == Material.WOOD_PLATE ||
 			b.getType() == Material.GOLD_PLATE ||
 			b.getType() == Material.IRON_PLATE ||
-			b.getType() == Material.STONE_PLATE ||
-			b.getType() == Material.WOOD_PLATE)
+			b.getType() == Material.POTATO ||
+			b.getType() == Material.CARROT ||
+			b.getType() == Material.CROPS ||
+			b.getType() == Material.MELON_STEM ||
+			b.getType() == Material.PUMPKIN_STEM)
 			return true;
 		if(CoreVersion.getVersionsArray().contains(CoreVersion.OneDotEightPlus))
 			if(b.getType() == Material.ACACIA_DOOR ||
@@ -334,26 +363,29 @@ public class Database {
 		return false;
 	}
 	
-	public static boolean ifLaterallyDrop(Block b) {
-		if(b.getType() == Material.LEVER ||
-				b.getType() == Material.TORCH ||
-				b.getType() == Material.REDSTONE_TORCH_ON ||
-				b.getType() == Material.REDSTONE_TORCH_OFF ||
-				b.getType() == Material.STONE_BUTTON ||
-				b.getType() == Material.WOOD_BUTTON ||
-				b.getType() == Material.TRAP_DOOR ||
-				b.getType() == Material.LADDER ||
-				b.getType() == Material.WALL_SIGN)
-		return true;
-		if(CoreVersion.getVersionsArray().contains(CoreVersion.OneDotEightPlus))
-			if(b.getType() == Material.STANDING_BANNER ||
-				b.getType() == Material.IRON_TRAPDOOR)
-				return true;
-		return false;
+	public static int ifLaterallyDrop(Block b) {
+		if(b.getType().equals(Material.LADDER) ||
+			b.getType().equals(Material.WALL_SIGN))
+			return 1;
+		if(b.getType().equals(Material.REDSTONE_TORCH_ON) ||
+			b.getType().equals(Material.REDSTONE_TORCH_OFF))
+			return 2;
+		if(b.getType().equals(Material.TRIPWIRE_HOOK) ||
+			b.getType().equals(Material.TRIPWIRE))
+			return 3;
+		if(b.getType().equals(Material.LEVER))
+			return 4;
+		if(b.getType().equals(Material.STONE_BUTTON) ||
+			b.getType().equals(Material.WOOD_BUTTON))
+			return 5;
+		if(CoreVersion.getVersionsArray().contains(CoreVersion.OneDotEightPlus)) {
+			if(b.getType().equals(Material.STANDING_BANNER)) return 1;
+		}
+		return 0;
 	}
 	
 	public static boolean ifWaterDrop(Block b) {
-		return b.getType() == Material.LEVER ||
+		if(b.getType() == Material.LEVER ||
 			b.getType() == Material.WOOD_BUTTON ||
 			b.getType() == Material.TORCH ||
 			b.getType() == Material.REDSTONE_TORCH_ON ||
@@ -383,7 +415,12 @@ public class Database {
 			b.getType() == Material.SKULL_ITEM ||
 			b.getType() == Material.ITEM_FRAME ||
 			b.getType() == Material.BROWN_MUSHROOM ||
-			b.getType() == Material.RED_MUSHROOM;
+			b.getType() == Material.RED_MUSHROOM)
+			return true;
+		if(CoreVersion.getVersionsArray().contains(CoreVersion.OneDotNinePlus))
+			if(b.getType() == Material.END_ROD)
+				return true;
+		return false;
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -38,7 +38,7 @@ public class StructureGrowListener implements Listener
 	}
 	
 	@EventHandler
-	public void StructureGrow(final StructureGrowEvent e) {
+	public void StructureGrow(StructureGrowEvent e) {
 		for(BlockState b : e.getBlocks())
 			if(Database.CheckCreative(b.getBlock()) && b.getBlock().getType() == Material.SAPLING) {
 				e.setCancelled(true);

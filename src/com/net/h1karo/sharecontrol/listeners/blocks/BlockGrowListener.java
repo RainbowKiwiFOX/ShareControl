@@ -27,8 +27,7 @@ import org.bukkit.event.block.BlockGrowEvent;
 import com.net.h1karo.sharecontrol.ShareControl;
 import com.net.h1karo.sharecontrol.database.Database;
 
-public class BlockGrowListener implements Listener
-{
+public class BlockGrowListener implements Listener {
 	@SuppressWarnings("unused")
 	private final ShareControl main;
 	

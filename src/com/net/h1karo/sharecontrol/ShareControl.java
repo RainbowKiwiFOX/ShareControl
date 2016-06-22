@@ -93,8 +93,8 @@ public class ShareControl extends JavaPlugin implements Listener
 	{
 		console = Bukkit.getConsoleSender();
 		console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&l=================== &9&lShare&f&lControl &7&l==================="));
-		if(!CoreVersion.getVersion().equals(CoreVersion.OneDotSeven) && !CoreVersion.getVersion().equals(CoreVersion.OneDotEight) && !CoreVersion.getVersion().equals(CoreVersion.OneDotNine)) {
-			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &c&lYou are using an unsupported version! The plugin supports 1.7.X, 1.8.X and 1.9.X versions."));
+		if(!CoreVersion.getVersion().equals(CoreVersion.OneDotSeven) && !CoreVersion.getVersion().equals(CoreVersion.OneDotEight) && !CoreVersion.getVersion().equals(CoreVersion.OneDotNine) && !CoreVersion.getVersion().equals(CoreVersion.OneDotTen)) {
+			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &c&lYou are using an unsupported version! The plugin supports 1.7.x, 1.8.x, 1.9.x and 1.10.x versions."));
 			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &c&lYou use at your own risk!"));
 		}
 		console.sendMessage(ChatColor.translateAlternateColorCodes('&', " Loading configuration..."));
@@ -190,7 +190,6 @@ public class ShareControl extends JavaPlugin implements Listener
 		MessageManager.getManager().msg(sender, MessageType.HELP, version);
 		MessageManager.getManager().msg(sender, MessageType.HELP, team);
 		MessageManager.getManager().msg(sender, MessageType.HELP, site);
-		MessageManager.getManager().msg(sender, MessageType.HELP, ChatColor.GRAY + "\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550");
 	}
 	
 	
@@ -380,7 +379,7 @@ public class ShareControl extends JavaPlugin implements Listener
 		
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.gamemodescontrol.PlayerCommandPreprocessListener(this), this);
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.gamemodescontrol.PlayerGameModeChangeListener(this), this);
-		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.gamemodescontrol.PlayerJoinListener(this), this);
+		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.gamemodescontrol.AccessCheckListener(this), this);
 		
 		pm.registerEvents(new com.net.h1karo.sharecontrol.listeners.multiinventories.PlayerGameModeChangeListener(this), this);
 		

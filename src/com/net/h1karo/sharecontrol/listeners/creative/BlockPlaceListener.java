@@ -18,7 +18,6 @@
 package com.net.h1karo.sharecontrol.listeners.creative;
 
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,8 +41,7 @@ public class BlockPlaceListener implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void CreativeBlockPlace(BlockPlaceEvent e)
-	{
+	public void CreativeBlockPlace(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
 		Block b = e.getBlockPlaced();
 		if(p.getGameMode() != GameMode.CREATIVE || e.isCancelled()) return;
@@ -54,37 +52,16 @@ public class BlockPlaceListener implements Listener {
 			Database.RemoveBlock(b);
 	}
 	
-	
 	@SuppressWarnings("deprecation")
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void DisableBlockPlace(BlockPlaceEvent e)
-	{
-		if(e.isCancelled()) return;
-		Player p = e.getPlayer();
-		if(Permissions.perms(p, "allow.blocking-placement.*") || Configuration.BlockingBlocksPlaceList.toArray().length == 0  || Configuration.BlockingBlocksPlaceList.get(0).toString() == "[none]" || !(p.getGameMode() == GameMode.CREATIVE))	return;
-		
-		for(int i=0; i < Configuration.BlockingBlocksPlaceList.toArray().length; i++)
-		{
-			String StrListBlock = (String) Configuration.BlockingBlocksPlaceList.toArray()[i];
-			if(!Permissions.perms(p, "allow.blocking-placement." + StrListBlock)) {
-				Material typeThisBlock = e.getBlock().getType();
-				Material typeListBlock;
-				
-				if(Database.isInteger(StrListBlock))
-				{
-					String NewStr = StrListBlock.replace("'", "");
-					int ID = Integer.parseInt(NewStr);
-					typeListBlock = Material.getMaterial(ID);
-				}
-				else
-					typeListBlock = Material.getMaterial(StrListBlock);
-				
-				if(typeThisBlock == typeListBlock)
-				{
-					Localization.PlaceBlock(typeThisBlock, p);
-					e.setCancelled(true);
-				}
-			}
+	@EventHandler(priority = EventPriority.HIGH)
+	public void DisableBlockPlace(BlockPlaceEvent e) {
+    	if(e.isCancelled() || Configuration.BlockingBlocksPlaceList.contains("none") || e.getBlock() == null) return;
+    	Player p = e.getPlayer();
+    	Block b = e.getBlock();
+		if(Permissions.perms(p, "allow.blocking-placement.*") || p.getGameMode() != GameMode.CREATIVE)	return;
+		if((Configuration.BlockingBlocksPlaceList.contains(b.getTypeId()) && !Permissions.perms(p, "allow.blocking-placement." + b.getTypeId())) || (Configuration.BlockingBlocksPlaceList.contains(b.getType().toString()) && !Permissions.perms(p, "allow.blocking-placement." + b.getType().toString()))) {
+			Localization.PlaceBlock(b.getType(), p);
+			e.setCancelled(true);
 		}
 	}
 }
