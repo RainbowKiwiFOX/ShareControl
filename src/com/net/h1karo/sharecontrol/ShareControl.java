@@ -31,7 +31,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -53,15 +52,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.mcstats.MetricsLite;
 
-public class ShareControl extends JavaPlugin implements Listener
-{
+public class ShareControl extends JavaPlugin implements Listener {
 	private static ShareControl instance;
-	FileConfiguration config = getConfig();
 	
     public static boolean error;
 	
-	public static ShareControl instance()
-	{
+	public static ShareControl instance() {
 		return instance;
 	}
 	public String version = getDescription().getVersion();
@@ -89,11 +85,10 @@ public class ShareControl extends JavaPlugin implements Listener
     ConsoleCommandSender console = null;
     
 	@Override
-	public void onEnable()
-	{
+	public void onEnable() {
 		console = Bukkit.getConsoleSender();
 		console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7&l=================== &9&lShare&f&lControl &7&l==================="));
-		if(!CoreVersion.getVersion().equals(CoreVersion.OneDotSeven) && !CoreVersion.getVersion().equals(CoreVersion.OneDotEight) && !CoreVersion.getVersion().equals(CoreVersion.OneDotNine) && !CoreVersion.getVersion().equals(CoreVersion.OneDotTen)) {
+		if(!CoreVersion.getVersion().equals(CoreVersion.OneDotSeven) && !CoreVersion.getVersion().equals(CoreVersion.OneDotEight) && !CoreVersion.getVersion().equals(CoreVersion.OneDotNine) && !CoreVersion.getVersion().equals(CoreVersion.OneDotTen) && !CoreVersion.getVersion().equals(CoreVersion.OneDotEleven)) {
 			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &c&lYou are using an unsupported version! The plugin supports 1.7.x, 1.8.x, 1.9.x and 1.10.x versions."));
 			console.sendMessage(ChatColor.translateAlternateColorCodes('&', " &c&lYou use at your own risk!"));
 		}
@@ -103,7 +98,10 @@ public class ShareControl extends JavaPlugin implements Listener
 		setupListeners();
 		
 		currentVersion = getDescription().getVersion();
-
+		
+		Executor = new ShareControlCommandExecutor(this);
+		getCommand("sharecontrol").setExecutor(Executor);
+		
 		Configuration.loadCfg();
 		Configuration.saveCfg();
 		try {
@@ -123,10 +121,6 @@ public class ShareControl extends JavaPlugin implements Listener
            getLogger().warning("Failed to submit the stats!");
         }
         
-        Executor = new ShareControlCommandExecutor(this);
-		getCommand("sharecontrol").setExecutor(Executor);
-		getCommand("sharecontrol").setPermissionMessage(MessageManager.prefix + ChatColor.translateAlternateColorCodes('&', LanguageFiles.NoPerms));
-		
 		Permissions.RegisterCustomPermissions();
 		
 		console.sendMessage(ChatColor.translateAlternateColorCodes('&', " Configuration successfully uploaded!"));
@@ -333,8 +327,7 @@ public class ShareControl extends JavaPlugin implements Listener
         result = UpdateResult.ERROR;
 	}
 	
-	private void setupListeners()
-    {
+	private void setupListeners() {
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(this, this);
 		

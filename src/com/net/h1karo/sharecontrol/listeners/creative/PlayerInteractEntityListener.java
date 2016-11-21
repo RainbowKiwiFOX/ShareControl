@@ -35,15 +35,13 @@ public class PlayerInteractEntityListener implements Listener
 	@SuppressWarnings("unused")
 	private final ShareControl main;
 	
-	public PlayerInteractEntityListener(ShareControl h)
-	{
+	public PlayerInteractEntityListener(ShareControl h) {
 		this.main = h;
 	}
 	
 	@SuppressWarnings("deprecation")
 	@EventHandler
-	public void PlayerInteractCreature(PlayerInteractEntityEvent e)
-	{
+	public void PlayerInteractCreature(PlayerInteractEntityEvent e) {
 		Player p = e.getPlayer();
 		Entity entDamage = e.getRightClicked();
 		if(entDamage instanceof Player || (!(entDamage.toString() == "CraftVillager") || !(entDamage.toString() == "CraftSlime")) && p.getItemInHand().getType() != Material.SADDLE) return;
@@ -55,8 +53,7 @@ public class PlayerInteractEntityListener implements Listener
 	}
 	
 	@EventHandler
-	public void PlayerInteractEntity(PlayerInteractEntityEvent e)
-	{
+	public void PlayerInteractEntity(PlayerInteractEntityEvent e) {
 		if(e.isCancelled()) return;
 		Player p = (Player) e.getPlayer();
 		if(Permissions.perms(p, "allow.blocking-inventory") || p.getGameMode() != GameMode.CREATIVE)	return;
@@ -65,6 +62,18 @@ public class PlayerInteractEntityListener implements Listener
 		{
 			Localization.EntityUseNotify(typeThisEntity, p);
 			e.setCancelled(true);
+		}
+	}
+	
+	@EventHandler
+	public void PlayerInteractMinecartInventory(PlayerInteractEntityEvent e) {
+		if(e.isCancelled()) return;
+		Player p = (Player) e.getPlayer();
+		
+		if(Permissions.perms(p, "allow.blocking-interact") || p.getGameMode() != GameMode.CREATIVE) return;
+		if(e.getRightClicked().getType().name().toLowerCase().startsWith("minecart_")) {
+			e.setCancelled(true);
+			Localization.openInv(p);
 		}
 	}
 }

@@ -29,11 +29,13 @@ public enum CoreVersion {
     OneDotEight,
     OneDotNine,
     OneDotTen,
+    OneDotEleven,
     Unknown,
     OneDotEightPlus,
     OneDotNinePlus,
     OneDotTenPlus,
-    NewerThanOneDotTen;
+    OneDotElevenPlus,
+    NewerThanOneDotEleven;
     
     public static CoreVersion getVersion() {
     	String bukkitVersion = Bukkit.getServer().getVersion();
@@ -52,8 +54,10 @@ public enum CoreVersion {
     				return OneDotNine;
     			if(secondNum == 10)
     				return OneDotTen;
-    			if(secondNum	> 10)
-    				return NewerThanOneDotTen;
+    			if(secondNum == 11)
+    				return OneDotEleven;
+    			if(secondNum	> 11)
+    				return NewerThanOneDotEleven;
     			return Unknown;
     		}
     		else return OlderThanOneDotSeven;
@@ -79,6 +83,8 @@ public enum CoreVersion {
     				arr.add(OneDotNinePlus);
     			if(secondNum >= 10)
     				arr.add(OneDotTenPlus);
+    			if(secondNum >= 11)
+    				arr.add(OneDotElevenPlus);
     			if(arr.size() == 0)
     				arr.add(Unknown);
     		}

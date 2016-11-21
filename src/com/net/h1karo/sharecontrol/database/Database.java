@@ -97,7 +97,7 @@ public class Database {
             		main.log("Database have been background saved!");
             	}
             }
-        }, Configuration.DBInterval * 120L, Configuration.DBInterval * 120L);
+        }, Configuration.DBInterval * 1200, Configuration.DBInterval * 1200);
 	}
 	
 	/** GENERAL FUNCTION OF HANDLER **/
@@ -211,49 +211,34 @@ public class Database {
 		
 		Block NewB = w.getBlockAt(b.getX(), b.getY() + 1, b.getZ());
 		if(ifOneUpDrop(NewB)) {
-			if(ifLaterallyDrop(NewB) == 0) FullClear(NewB);
-			else {
-				if(ifLaterallyDrop(NewB) == 1 && NewB.getData() == 12)  FullClear(NewB);
-				if(ifLaterallyDrop(NewB) == 2 && NewB.getData() == 5)  FullClear(NewB);
-				if(ifLaterallyDrop(NewB) == 4 && (NewB.getData() == 6 || NewB.getData() == 14 || NewB.getData() == 5 || NewB.getData() == 13))  FullClear(NewB);
-				if(ifLaterallyDrop(NewB) == 5 && (NewB.getData() == 5 || NewB.getData() == 13))  FullClear(NewB);
-			}
+			if(ifLaterallyDrop(NewB) == 1 && NewB.getData() == 12)  FullClear(NewB);
+			if(ifLaterallyDrop(NewB) == 2 && NewB.getData() == 5)  FullClear(NewB);
+			if(ifLaterallyDrop(NewB) == 4 && (NewB.getData() == 6 || NewB.getData() == 14 || NewB.getData() == 5 || NewB.getData() == 13))  FullClear(NewB);
+			if(ifLaterallyDrop(NewB) == 5 && (NewB.getData() == 5 || NewB.getData() == 13))  FullClear(NewB);
 		}
 		
 		NewB = w.getBlockAt(b.getX() + 1, b.getY(), b.getZ());
-		if(ifLaterallyDrop(NewB) == 0) FullClear(NewB);
-		else {
-			if(ifLaterallyDrop(NewB) == 1 && NewB.getData() == 5)  FullClear(NewB);
-			if(ifLaterallyDrop(NewB) == 2 && NewB.getData() == 1) FullClear(NewB);
-			if(ifLaterallyDrop(NewB) == 3 && NewB.getData() == 3)  FullClear(NewB);
-			if((ifLaterallyDrop(NewB) == 4  || ifLaterallyDrop(NewB) == 5) && (NewB.getData() == 1 || NewB.getData() == 9))  FullClear(NewB);
-		}
+		if(ifLaterallyDrop(NewB) == 1 && NewB.getData() == 5)  FullClear(NewB);
+		if(ifLaterallyDrop(NewB) == 2 && NewB.getData() == 1) FullClear(NewB);
+		if(ifLaterallyDrop(NewB) == 3 && NewB.getData() == 3)  FullClear(NewB);
+		if((ifLaterallyDrop(NewB) == 4  || ifLaterallyDrop(NewB) == 5) && (NewB.getData() == 1 || NewB.getData() == 9))  FullClear(NewB);
 		
 		NewB = w.getBlockAt(b.getX() - 1, b.getY(), b.getZ());
-		if(ifLaterallyDrop(NewB) == 0) FullClear(NewB);
-		else {
-			if(ifLaterallyDrop(NewB) == 1 && NewB.getData() == 4)  FullClear(NewB);
-			if(ifLaterallyDrop(NewB) == 2 && NewB.getData() == 2) FullClear(NewB);
-			if(ifLaterallyDrop(NewB) == 3 && NewB.getData() == 1)  FullClear(NewB);
-			if((ifLaterallyDrop(NewB) == 4  || ifLaterallyDrop(NewB) == 5) && (NewB.getData() == 2 || NewB.getData() == 10))  FullClear(NewB);
-		}
+		if(ifLaterallyDrop(NewB) == 1 && NewB.getData() == 4)  FullClear(NewB);
+		if(ifLaterallyDrop(NewB) == 2 && NewB.getData() == 2) FullClear(NewB);
+		if(ifLaterallyDrop(NewB) == 3 && NewB.getData() == 1)  FullClear(NewB);
+		if((ifLaterallyDrop(NewB) == 4  || ifLaterallyDrop(NewB) == 5) && (NewB.getData() == 2 || NewB.getData() == 10))  FullClear(NewB);
 		
 		NewB = w.getBlockAt(b.getX(), b.getY(), b.getZ() + 1);
-		if(ifLaterallyDrop(NewB) == 0) FullClear(NewB);
-		else {
-			if((ifLaterallyDrop(NewB) == 1 || ifLaterallyDrop(NewB) == 2) && NewB.getData() == 3)  FullClear(NewB);
-			if(ifLaterallyDrop(NewB) == 3 && NewB.getData() == 0)  FullClear(NewB);
-			if((ifLaterallyDrop(NewB) == 4  || ifLaterallyDrop(NewB) == 5) && (NewB.getData() == 3 || NewB.getData() == 11))  FullClear(NewB);
-		}
+		if((ifLaterallyDrop(NewB) == 1 || ifLaterallyDrop(NewB) == 2) && NewB.getData() == 3)  FullClear(NewB);
+		if(ifLaterallyDrop(NewB) == 3 && NewB.getData() == 0)  FullClear(NewB);
+		if((ifLaterallyDrop(NewB) == 4  || ifLaterallyDrop(NewB) == 5) && (NewB.getData() == 3 || NewB.getData() == 11))  FullClear(NewB);
 		
 		NewB = w.getBlockAt(b.getX(), b.getY(), b.getZ() - 1);
-		if(ifLaterallyDrop(NewB) == 0) FullClear(NewB);
-		else {
-			if(ifLaterallyDrop(NewB) == 1 && NewB.getData() == 2)  FullClear(NewB);
-			if(ifLaterallyDrop(NewB) == 2 && NewB.getData() == 4) FullClear(NewB);
-			if(ifLaterallyDrop(NewB) == 3 && NewB.getData() == 2)  FullClear(NewB);
-			if((ifLaterallyDrop(NewB) == 4  || ifLaterallyDrop(NewB) == 5) && (NewB.getData() == 4 || NewB.getData() == 12))  FullClear(NewB);
-		}
+		if(ifLaterallyDrop(NewB) == 1 && NewB.getData() == 2)  FullClear(NewB);
+		if(ifLaterallyDrop(NewB) == 2 && NewB.getData() == 4) FullClear(NewB);
+		if(ifLaterallyDrop(NewB) == 3 && NewB.getData() == 2)  FullClear(NewB);
+		if((ifLaterallyDrop(NewB) == 4  || ifLaterallyDrop(NewB) == 5) && (NewB.getData() == 4 || NewB.getData() == 12))  FullClear(NewB);
 	}
 	
 	public static boolean CheckBlock(Block b) {

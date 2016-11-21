@@ -94,6 +94,8 @@ public class LanguageFiles {
     	getLangConfig(lang).set("Events.ArmorStand", ArmorStand);
     	getLangConfig(lang).set("Events.ProhibitedCommand", OnCommand);
     	getLangConfig(lang).set("Events.Saplings", Saplings);
+    	getLangConfig(lang).set("Events.OnEssentialsSignUse", OnEssentialsSignUse);
+    	
     	
     	getLangConfig(lang).set("GamemodesControl.NotAllowedGamemode", GamemodesControl);
     	
@@ -237,6 +239,7 @@ public class LanguageFiles {
 		ArmorStand = getLangConfig(lang).getString("Events.ArmorStand", "&cYou not can interact with armor stand!");
 		OnCommand = getLangConfig(lang).getString("Events.ProhibitedCommand", "&cYou not can use this command!");
 		Saplings = getLangConfig(lang).getString("Events.Saplings", "&7This sapling from the creative mode, so you can not grow!");
+		OnEssentialsSignUse = getLangConfig(lang).getString("Events.OnEssentialsSignUse", "&cYou not can use this signs!");
 		
 		GamemodesControl = getLangConfig(lang).getString("GamemodesControl.NotAllowedGamemode", "&cYou can not go in gamemode &6%gamemode%&c!");
 		
@@ -367,6 +370,7 @@ public class LanguageFiles {
 		ArmorStand = getLangConfig(lang).getString("Events.ArmorStand", "&cВы не можете взаимодействовать с стойкой для брони!");
 		OnCommand = getLangConfig(lang).getString("Events.ProhibitedCommand", "&cВы не можете использовать эту команду!");
 		Saplings = getLangConfig(lang).getString("Events.Saplings", "&7Этот саженец из творчества, поэтому вы не можете его вырастить!");
+		OnEssentialsSignUse = getLangConfig(lang).getString("Events.OnEssentialsSignUse", "&cВы не можете использовать эти таблички!");
 		
 		GamemodesControl = getLangConfig(lang).getString("GamemodesControl.NotAllowedGamemode", "&cВы не можете перейти в режим игры &6%gamemode%&c!");
 		
@@ -711,7 +715,7 @@ public class LanguageFiles {
 	public static String UpdateNotFound;
 	public static String UpdateAvailable;
 	
-	public static String OnDrop, OnMonsterInteract, OnPlayerInteract, OnInventoryClick, OnInventoryClickMaterial, OnOpenOtherInventory, OnBlockBreak, OnBlockPlace, OnBlockBreakMaterial, OnBlockPlaceMaterial, OnBowShoot, AnotherWorld, CreativeBlockNotDrop, CreativeBlockNotBreak, EntityInteract, EntityInteractMaterial, UseBlocks, OnFishing, ArmorStand, OnCommand, Saplings;
+	public static String OnDrop, OnMonsterInteract, OnPlayerInteract, OnInventoryClick, OnInventoryClickMaterial, OnOpenOtherInventory, OnBlockBreak, OnBlockPlace, OnBlockBreakMaterial, OnBlockPlaceMaterial, OnBowShoot, AnotherWorld, CreativeBlockNotDrop, CreativeBlockNotBreak, EntityInteract, EntityInteractMaterial, UseBlocks, OnFishing, ArmorStand, OnCommand, Saplings, OnEssentialsSignUse;
 	
 	public static String GamemodesControl;
 	

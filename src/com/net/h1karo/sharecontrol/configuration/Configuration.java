@@ -71,6 +71,7 @@ public class Configuration {
 		main.getConfig().set("Settings.BlockingPlayerInteract", PlayerInteract);
 		main.getConfig().set("Settings.BlockingBreak", BlockingBreak);
 		main.getConfig().set("Settings.ClearDropInInventory", ClearDropInInventory);
+		main.getConfig().set("Settings.EssentialsSignBlock", EssentialsSignBlock);
 		
 		main.getConfig().set("Settings.MultiInventories.Enabled", MultiInventoriesEnabled);
 		main.getConfig().set("Settings.MultiInventories.Separation", InventorySeparation);
@@ -130,6 +131,7 @@ public class Configuration {
         PlayerInteract = main.getConfig().getBoolean("Settings.BlockingPlayerInteract", true);
         BlockingBreak = main.getConfig().getBoolean("Settings.BlockingBreak", true);
         ClearDropInInventory = main.getConfig().getBoolean("Settings.ClearDropInInventory", false);
+        EssentialsSignBlock = main.getConfig().getBoolean("Settings.EssentialsSignBlock", false);
         
         MultiInventoriesEnabled = main.getConfig().getBoolean("Settings.MultiInventories.Enabled", true);
         InventorySeparation = main.getConfig().getBoolean("Settings.MultiInventories.Separation", true);
@@ -192,6 +194,9 @@ public class Configuration {
 		LanguageFiles.reloadlanguageConfig(Language);
 		LanguageFiles.savelanguageConfig(Language);
 		languageConfigFile = null;
+		
+		main.getCommand("sharecontrol").setPermissionMessage(MessageManager.prefix + ChatColor.translateAlternateColorCodes('&', LanguageFiles.NoPerms));
+		
 		defBlockingBlocksPlaceList.clear();
 		defBlockingBlocksBreakList.clear();
 		defBlockingItemsInvList.clear();
@@ -456,7 +461,7 @@ public class Configuration {
 	
 	public static boolean versionCheck;
 	public static List<String> BlockingBlocksPlaceList, BlockingBlocksBreakList, BlockingItemsInvList, BlockingCmdsList, BlockingInteractList;
-    public static boolean CreatureInteract, PlayerInteract, CreativeNotify, SurvivalNotify, material, BlockingBreak, PrefixEnabled, ClearDropInInventory;
+    public static boolean CreatureInteract, PlayerInteract, CreativeNotify, SurvivalNotify, material, BlockingBreak, PrefixEnabled, ClearDropInInventory, EssentialsSignBlock;
     public static boolean MultiInventoriesEnabled, InventorySeparation;
     public static String Language;
     

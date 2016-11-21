@@ -25,6 +25,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
@@ -41,21 +42,21 @@ public class InventoryOpenListener implements Listener
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
-	public void InventoryOpen(InventoryOpenEvent e)
-	{
+	public void InventoryOpen(InventoryOpenEvent e) {
 		Player p = (Player) e.getPlayer();
-		if(p.getGameMode() == GameMode.CREATIVE && !Permissions.perms(p, "allow.blocking-interact"))
-		{
-			boolean ifVehicle;
-			if(p.getVehicle() != null)
-				if(p.getVehicle().getType() == EntityType.HORSE)
-					ifVehicle = true;
-				else ifVehicle = false;
-			else ifVehicle = false;
+		if(p.getGameMode() == GameMode.CREATIVE && !Permissions.perms(p, "allow.blocking-interact")) {
+			boolean ifVehicleInventory = p.getVehicle() != null &&
+				p.getVehicle().getType() == EntityType.HORSE &&
+				e.getInventory().getType() == InventoryType.CHEST ?
+				true : false;
 			
-			if(!((e.getInventory().getType() == InventoryType.CHEST && ifVehicle) || e.getInventory().getName().compareToIgnoreCase("container.minecart") == 0) && e.getInventory().getType() == InventoryType.CHEST) return;
-				e.setCancelled(true);
-				Localization.openInv(p);
+			
+			Inventory inv = e.getInventory();
+			if(!ifVehicleInventory && !inv.getName().equalsIgnoreCase("container.minecart") && inv.getType() == InventoryType.CHEST)
+				return;
+			
+			e.setCancelled(true);
+			Localization.openInv(p);
 		}
 	}
 }

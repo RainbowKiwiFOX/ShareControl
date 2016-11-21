@@ -64,8 +64,7 @@ public class Localization {
 	}
 	
 	public static void UpdateFoundPlayer(CommandSender sender) {
-		if(sender instanceof Player)
-		{
+		if(sender instanceof Player) {
 			Player p = (Player) sender;
 			if(!Permissions.perms(p, "update") || !Configuration.versionCheck) return;
 		}
@@ -602,5 +601,18 @@ public class Localization {
 	public static void NotCuboid(Player p) {
 		String msg = ChatColor.translateAlternateColorCodes('&', LanguageFiles.NotCuboid);
 		MessageManager.getManager().msg(p, MessageType.PLINFO, msg);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public static void defGood(String msg, Player p) {
+		msg = ChatColor.translateAlternateColorCodes('&', msg);
+		MessageManager.getManager().msg(p, MessageType.BAD, msg);
 	}
 }
