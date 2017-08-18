@@ -43,15 +43,15 @@ public class InventoriesDatabase {
     	if (InvConfigFile == null)	InvConfigFile = new File(Configuration.dataFolder + File.separator + "inventories.yml");
     	
     	InvConfig = YamlConfiguration.loadConfiguration(InvConfigFile);
-    	 
-    		InputStream defConfigStream = main.getResource(Configuration.dataFolder + File.separator + "inventories.yml");
-    		if (defConfigStream != null) {
+
+		    File defConfigFile = new File(Configuration.dataFolder + File.separator + "inventories.yml");
+    		if (defConfigFile != null) {
 				@SuppressWarnings("deprecation")
-				YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+				YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigFile);
     			InvConfig.setDefaults(defConfig);
     		}
     	}
-    
+
     public static FileConfiguration getInvConfig() {
     	if (InvConfig == null) 	reloadInvConfig();
     	return InvConfig;

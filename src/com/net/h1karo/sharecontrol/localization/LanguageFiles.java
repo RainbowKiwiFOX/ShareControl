@@ -41,10 +41,9 @@ public class LanguageFiles {
     	if (languageConfigFile == null)	languageConfigFile = new File(main.getDataFolder(), "languages" + File.separator + lang + ".yml");
     	
     	languageConfig = YamlConfiguration.loadConfiguration(languageConfigFile);
-    		InputStream defConfigStream = main.getResource(main.getDataFolder() +  "languages" + File.separator + lang + ".yml");
-    		if (defConfigStream != null) {
-				@SuppressWarnings("deprecation")
-				YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+    		File defConfigFile = new File(main.getDataFolder() +  "languages" + File.separator + lang + ".yml");
+    		if (defConfigFile != null) {
+				YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigFile);
     			languageConfig.setDefaults(defConfig);
     		}
     }
