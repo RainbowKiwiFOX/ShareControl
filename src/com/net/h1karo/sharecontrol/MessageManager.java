@@ -68,7 +68,7 @@ public class MessageManager {
 					sender.sendMessage(type.getColor() + msg);
 			}
 			else {
-				if(type != MessageType.HELP && type != MessageType.PLAYERS)
+				if(type != MessageType.HELP && type != MessageType.PLAYERS && type != MessageType.BAD)
 					sender.sendMessage(prefix + type.getColor() + msg);
 				else 
 					sender.sendMessage(type.getColor() + msg);
