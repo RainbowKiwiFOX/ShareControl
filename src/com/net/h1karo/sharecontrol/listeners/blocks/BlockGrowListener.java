@@ -48,7 +48,7 @@ public class BlockGrowListener implements Listener {
 			e.setCancelled(true);
 		}
 		
-		if(Database.CheckCreative(b) && (b.getType() == Material.CACTUS || b.getType() == Material.SUGAR_CANE_BLOCK)) {
+		if(Database.CheckCreative(b) && (b.getType() == Material.CACTUS || b.getType() == Material.SUGAR_CANE)) {
 			e.setCancelled(true);
 		}
 	}
@@ -57,7 +57,7 @@ public class BlockGrowListener implements Listener {
 	public boolean ifFood(Material m) {
 		return m == Material.PUMPKIN_STEM || 
 			m == Material.MELON_STEM || 
-			m == Material.CROPS || 
+			m == Material.WHEAT ||
 			m == Material.CARROT || 
 			m == Material.POTATO;
 	}

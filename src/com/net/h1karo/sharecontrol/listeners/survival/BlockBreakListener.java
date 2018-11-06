@@ -41,8 +41,7 @@ public class BlockBreakListener implements Listener {
 	{
 		this.main = h;
 	}
-	
-	@SuppressWarnings("deprecation")
+
 	@EventHandler(priority = EventPriority.HIGH)
 	public void OnBreak(BlockBreakEvent e)
 	{
@@ -51,7 +50,7 @@ public class BlockBreakListener implements Listener {
 		if(p.getGameMode() == GameMode.CREATIVE) return;
 		Block b = e.getBlock();
 
-		if(b.getType().equals(Material.PISTON_EXTENSION)) {
+		if(b.getType().equals(Material.PISTON_HEAD)) {
 			World w = b.getWorld();
 			if(!Database.CheckCreative(b)) return;
 			if(b.getData() == 13 || b.getData() == 5) {
@@ -155,8 +154,8 @@ public class BlockBreakListener implements Listener {
 	
 	
 	public boolean isDoor(Block b) {
-		if(b.getType().equals(Material.WOODEN_DOOR) ||
-			b.getType().equals(Material.IRON_DOOR_BLOCK))
+		if(b.getType().equals(Material.OAK_DOOR) ||
+			b.getType().equals(Material.IRON_DOOR))
 			 return true;
 		if(CoreVersion.getVersionsArray().contains(CoreVersion.OneDotEightPlus))
 			if(b.getType().equals(Material.ACACIA_DOOR) ||

@@ -21,7 +21,7 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 
 import com.net.h1karo.sharecontrol.Permissions;
 import com.net.h1karo.sharecontrol.ShareControl;
@@ -37,12 +37,14 @@ public class PlayerPickupItemListener implements Listener
 	}
 	
 	@EventHandler
-	public void onPickup(PlayerPickupItemEvent e)
+	public void onPickup(EntityPickupItemEvent e)
 	{
-		Player p = e.getPlayer();
-		if(p.getGameMode() == GameMode.CREATIVE && !Permissions.perms(p, "allow.pickup"))
-		{
-			e.setCancelled(true);
+		if (e.getEntity() instanceof Player) {
+			Player p = ((Player) e.getEntity()).getPlayer();
+			if(p.getGameMode() == GameMode.CREATIVE && !Permissions.perms(p, "allow.pickup"))
+			{
+				e.setCancelled(true);
+			}
 		}
 	}
 }

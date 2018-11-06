@@ -49,7 +49,7 @@ public class BlockPlaceToCreationsListener implements Listener {
         //Anti Whiter Creation
         
         if ((!Permissions.perms(p, "allow.creatures"))) {
-            if (b.getType() == Material.SKULL) {
+            if (b.getType() == Material.WITHER_SKELETON_WALL_SKULL || b.getType() == Material.WITHER_SKELETON_SKULL) {
             	if(checkSkullWhiter(b)) {
             		e.setCancelled(true);
             		return;

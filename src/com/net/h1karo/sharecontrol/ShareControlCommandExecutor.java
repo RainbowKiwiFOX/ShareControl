@@ -17,6 +17,10 @@
 
 package com.net.h1karo.sharecontrol;
 
+import com.sk89q.worldedit.IncompleteRegionException;
+import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.regions.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -34,11 +38,9 @@ import com.net.h1karo.sharecontrol.database.Database;
 import com.net.h1karo.sharecontrol.localization.LanguageFiles;
 import com.net.h1karo.sharecontrol.localization.Localization;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
-import com.sk89q.worldedit.bukkit.selections.Selection;
 
 public class ShareControlCommandExecutor implements CommandExecutor {
-	 
+
 		private ShareControl main;
 	 
 		public ShareControlCommandExecutor(ShareControl h) {
@@ -130,7 +132,7 @@ public class ShareControlCommandExecutor implements CommandExecutor {
 				Localization.infoTools(sender);
 				return true;
 			}
-			
+
 			if(args[0].equalsIgnoreCase("tools") && (args[1].equalsIgnoreCase("infotool") || args[1].equalsIgnoreCase("info")))
 			{
 				Localization.getInfoTool(sender);
@@ -168,26 +170,32 @@ public class ShareControlCommandExecutor implements CommandExecutor {
 					return true;
 				}
 				
-				WorldEditPlugin WorldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit"); 
-				Selection sel = WorldEdit.getSelection(p); 
-				
-				if(sel == null) {
+				WorldEditPlugin WorldEdit = (WorldEditPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
+				Region reg;
+				try {
+					reg = WorldEdit.getSession(p).getSelection(BukkitAdapter.adapt(p.getWorld()));
+				} catch (IncompleteRegionException e) {
+					Localization.MakeSelection(p);
+					return true;
+				}
+
+				if(reg == null) {
 					Localization.MakeSelection(p);
 					return true;
 				}
 				Localization.PleaseWait(p);
 			 
-				if (!(sel instanceof CuboidSelection)) {
+				/*if (!(reg instanceof CuboidSelection)) {
 					Localization.NotCuboid(p);
 					return true;
-				}
+				}*/
 				
-				World w = sel.getWorld();
+				World w = p.getWorld();
 				int i = 0;
 				
-				Location min = sel.getMinimumPoint();
-				Location max = sel.getMaximumPoint();
-				
+				Vector min = reg.getMinimumPoint();
+				Vector max = reg.getMaximumPoint();
+
 				if(args[1].startsWith("cr") || args[1].startsWith(LanguageFiles.CreativeType.substring(1))) 
 					for (int x = min.getBlockX(); x <= max.getBlockX(); x++)
 				        for (int y = min.getBlockY(); y <= max.getBlockY(); y++)

@@ -57,7 +57,7 @@ public class EntityChangeBlockListener implements Listener
 				if (e.getTo() == Material.AIR) {
 					entity.setDropItem(false);
 					Database.RemoveBlock(b);
-					entity.setMetadata("ShareControl.CREATIVE_FALLING_BLOCK", new FixedMetadataValue(main, b.getType().getId()));
+					entity.setMetadata("ShareControl.CREATIVE_FALLING_BLOCK", new FixedMetadataValue(main, b.getType().name()));
 				}
 			}
 			
@@ -65,14 +65,14 @@ public class EntityChangeBlockListener implements Listener
 				if (e.getTo().equals(b.getType()) && !e.getTo().equals(Material.AIR)) {
 					FallingBlock entity = (FallingBlock) eventEntity;
 					if(entity.hasMetadata("ShareControl.CREATIVE_FALLING_BLOCK")) {
-						Database.AddBlockMoreArguments(b, entity.getMetadata("ShareControl.CREATIVE_FALLING_BLOCK").get(0).asInt());
+						Database.AddBlockMoreArguments(b, entity.getMetadata("ShareControl.CREATIVE_FALLING_BLOCK").get(0).asString());
 						entity.removeMetadata("ShareControl.CREATIVE_FALLING_BLOCK", main);
 					}
 				}
 			} else if (!e.getTo().equals(Material.AIR) && b.getType().equals(Material.AIR)) {
 				FallingBlock entity = (FallingBlock) eventEntity;
 				if(entity.hasMetadata("ShareControl.CREATIVE_FALLING_BLOCK")) {
-					Database.AddBlockMoreArguments(b, entity.getMetadata("ShareControl.CREATIVE_FALLING_BLOCK").get(0).asInt());
+					Database.AddBlockMoreArguments(b, entity.getMetadata("ShareControl.CREATIVE_FALLING_BLOCK").get(0).asString());
 					entity.removeMetadata("ShareControl.CREATIVE_FALLING_BLOCK", main);
 				}
 			}

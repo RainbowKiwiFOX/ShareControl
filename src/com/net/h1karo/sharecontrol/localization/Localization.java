@@ -461,8 +461,8 @@ public class Localization {
 	@SuppressWarnings("deprecation")
 	public static void BlockInfo(Player p, Block b)
 	{
-		String id = b.getTypeId() + "";
-		String material = b.getType().toString();
+		String id = b.getType().name() + "";
+		String material = b.getType().name();
 		String coords = b.getX() + ", " + b.getY() + ", " + b.getZ();
 		String type; String data = b.getData() + "";
 		

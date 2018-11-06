@@ -1,6 +1,7 @@
 name: ShareControl
 main: com.net.h1karo.sharecontrol.ShareControl
-version: 2.6.4
+version: 2.6.5
+api-version: 1.13
 authors:
   - H1KaRo
 softdepend: [Essentials, WorldEdit]

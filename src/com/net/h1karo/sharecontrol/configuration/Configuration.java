@@ -216,7 +216,7 @@ public class Configuration {
 		if(isInteger(material))
 		{
 			int ID = Integer.parseInt(material);
-			Material = org.bukkit.Material.getMaterial(ID);
+			Material = org.bukkit.Material.getMaterial(String.valueOf(ID));
 		}
 		else Material = org.bukkit.Material.getMaterial(material);
 		if(!(Material instanceof Material)) {
@@ -264,7 +264,7 @@ public class Configuration {
 		if(isInteger(material))
 		{
 			int ID = Integer.parseInt(material);
-			Material = org.bukkit.Material.getMaterial(ID);
+			Material = org.bukkit.Material.getMaterial(String.valueOf(ID));
 		}
 		else Material = org.bukkit.Material.getMaterial(material);
 		if(!(Material instanceof Material)) {
@@ -314,7 +314,7 @@ public class Configuration {
 			if(isInteger(String))
 			{
 				int ID = Integer.parseInt(String);
-				Material = org.bukkit.Material.getMaterial(ID);
+				Material = org.bukkit.Material.getMaterial(String.valueOf(ID));
 			}
 			else Material = org.bukkit.Material.getMaterial(String);
 			if(!(Material instanceof Material) && !String.equalsIgnoreCase("none")) {
@@ -331,7 +331,7 @@ public class Configuration {
 			if(isInteger(String))
 			{
 				int ID = Integer.parseInt(String);
-				Material = org.bukkit.Material.getMaterial(ID);
+				Material = org.bukkit.Material.getMaterial(String.valueOf(ID));
 			}
 			else Material = org.bukkit.Material.getMaterial(String);
 			
@@ -349,7 +349,7 @@ public class Configuration {
 			if(isInteger(String))
 			{
 				int ID = Integer.parseInt(String);
-				Material = org.bukkit.Material.getMaterial(ID);
+				Material = org.bukkit.Material.getMaterial(String.valueOf(ID));
 			}
 			else Material = org.bukkit.Material.getMaterial(String);
 			if(!(Material instanceof Material) && !String.equalsIgnoreCase("none")) {
@@ -366,7 +366,7 @@ public class Configuration {
 			if(isInteger(String))
 			{
 				int ID = Integer.parseInt(String);
-				Material = org.bukkit.Material.getMaterial(ID);
+				Material = org.bukkit.Material.getMaterial(String.valueOf(ID));
 			}
 			else Material = org.bukkit.Material.getMaterial(String);
 			if(!(Material instanceof Material) && !String.equalsIgnoreCase("none")) {
@@ -382,8 +382,8 @@ public class Configuration {
 		String msg2 = "Possible error: " + errorcode;
 		
 		if(Language.compareToIgnoreCase("ru") == 0) {
-			msg = "Внимание! Найдена ошибка в файле config.yml!";
-			msg2 = "Возможная ошибка: " + errorcode;
+			msg = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ! пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ config.yml!";
+			msg2 = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: " + errorcode;
 		}
 		if(main.checkSender(sender)) {
 			main.getLogger().warning(msg);
@@ -412,26 +412,24 @@ public class Configuration {
 	public static void loadDef() {
 		defBlockingBlocksPlaceList = new ArrayList<String>();
 		defBlockingBlocksPlaceList.add("BEDROCK");
-		defBlockingBlocksPlaceList.add("MONSTER_EGGS");
 		defBlockingBlocksPlaceList.add("TNT");
-		defBlockingBlocksPlaceList.add("ENDER_PORTAL_FRAME");
+		defBlockingBlocksPlaceList.add("END_PORTAL_FRAME");
 		
 		defBlockingBlocksBreakList = new ArrayList<String>();
 		defBlockingBlocksBreakList.add("BEDROCK");
 		
 		defBlockingItemsInvList = new ArrayList<String>();
-		defBlockingItemsInvList.add("MONSTER_EGG");
 		defBlockingItemsInvList.add("MINECART");
-		defBlockingItemsInvList.add("BOAT");
-		defBlockingItemsInvList.add("STORAGE_MINECART");
-		defBlockingItemsInvList.add("POWERED_MINECART");
-		defBlockingItemsInvList.add("EXPLOSIVE_MINECART");
+		defBlockingItemsInvList.add("OAK_BOAT");
+		defBlockingItemsInvList.add("CHEST_MINECART");
+		defBlockingItemsInvList.add("FURNACE_MINECART");
+		defBlockingItemsInvList.add("TNT_MINECART");
 		defBlockingItemsInvList.add("HOPPER_MINECART");
 		defBlockingItemsInvList.add("LAVA_BUCKET");
 		defBlockingItemsInvList.add("ENDER_PEARL");
-		defBlockingItemsInvList.add("EYE_OF_ENDER");
-		defBlockingItemsInvList.add("EXP_BOTTLE");
-		defBlockingItemsInvList.add("FIREBALL");
+		defBlockingItemsInvList.add("ENDER_EYE");
+		defBlockingItemsInvList.add("EXPERIENCE_BOTTLE");
+		defBlockingItemsInvList.add("FIRE_CHARGE");
 		defBlockingItemsInvList.add("FLINT_AND_STEEL");
 		defBlockingItemsInvList.add("POTION");
 		if(CoreVersion.getVersionsArray().contains(CoreVersion.OneDotNinePlus)) {
@@ -440,11 +438,11 @@ public class Configuration {
 			defBlockingItemsInvList.add("CHORUS_PLANT");
 			defBlockingItemsInvList.add("CHORUS_FLOWER");
 			defBlockingItemsInvList.add("END_CRYSTAL");
-			defBlockingItemsInvList.add("BOAT_ACACIA");
-			defBlockingItemsInvList.add("BOAT_BIRCH");
-			defBlockingItemsInvList.add("BOAT_DARK_OAK");
-			defBlockingItemsInvList.add("BOAT_JUNGLE");
-			defBlockingItemsInvList.add("BOAT_SPRUCE");
+			defBlockingItemsInvList.add("ACACIA_BOAT");
+			defBlockingItemsInvList.add("BIRCH_BOAT");
+			defBlockingItemsInvList.add("DARK_OAK_BOAT");
+			defBlockingItemsInvList.add("JUNGLE_BOAT");
+			defBlockingItemsInvList.add("SPRUCE_BOAT");
 		}
 		
 		defBlockingCmdsList = new ArrayList<String>();

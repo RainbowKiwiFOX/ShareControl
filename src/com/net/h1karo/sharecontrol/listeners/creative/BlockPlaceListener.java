@@ -59,7 +59,7 @@ public class BlockPlaceListener implements Listener {
     	Player p = e.getPlayer();
     	Block b = e.getBlock();
 		if(Permissions.perms(p, "allow.blocking-placement.*") || p.getGameMode() != GameMode.CREATIVE)	return;
-		if((Configuration.BlockingBlocksPlaceList.contains(b.getTypeId()) && !Permissions.perms(p, "allow.blocking-placement." + b.getTypeId())) || (Configuration.BlockingBlocksPlaceList.contains(b.getType().toString()) && !Permissions.perms(p, "allow.blocking-placement." + b.getType().toString()))) {
+		if((Configuration.BlockingBlocksPlaceList.contains(b.getType().name()) && !Permissions.perms(p, "allow.blocking-placement." + b.getType().name())) || (Configuration.BlockingBlocksPlaceList.contains(b.getType().name()) && !Permissions.perms(p, "allow.blocking-placement." + b.getType().name()))) {
 			Localization.PlaceBlock(b.getType(), p);
 			e.setCancelled(true);
 		}

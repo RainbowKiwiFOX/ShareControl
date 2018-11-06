@@ -62,14 +62,7 @@ public class InventoryClickListener implements Listener
 			if(!Permissions.perms(p, "allow.blocking-placement." + StrListItem)) {
 				Material typeThisItem = e.getCursor().getType();
 				Material typeListItem;
-				if(Database.isInteger(StrListItem))
-				{
-					String NewStr = StrListItem.replace("'", "");
-					int ID = Integer.parseInt(NewStr);
-					typeListItem = Material.getMaterial(ID);
-				}
-				else
-					typeListItem = Material.getMaterial(StrListItem);
+				typeListItem = Material.getMaterial(StrListItem);
 				
 				if(typeThisItem == typeListItem)
 				{

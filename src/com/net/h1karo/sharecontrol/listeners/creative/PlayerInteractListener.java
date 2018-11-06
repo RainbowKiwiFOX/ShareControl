@@ -74,7 +74,7 @@ public class PlayerInteractListener implements Listener {
 					Material.LIME_SHULKER_BOX == m ||
 					Material.PINK_SHULKER_BOX == m ||
 					Material.GRAY_SHULKER_BOX == m ||
-					Material.SILVER_SHULKER_BOX == m ||
+					Material.LIGHT_GRAY_SHULKER_BOX == m ||
 					Material.CYAN_SHULKER_BOX == m ||
 					Material.PURPLE_SHULKER_BOX == m ||
 					Material.BLUE_SHULKER_BOX == m ||
@@ -108,7 +108,7 @@ public class PlayerInteractListener implements Listener {
     	Player p = e.getPlayer();
     	Block b = e.getClickedBlock();
 		if(Permissions.perms(p, "allow.blocking-interact.*") || p.getGameMode() != GameMode.CREATIVE)	return;
-		if((Configuration.BlockingInteractList.contains(b.getTypeId()) && !Permissions.perms(p, "allow.blocking-interact." + b.getTypeId())) || (Configuration.BlockingInteractList.contains(b.getType().toString()) && !Permissions.perms(p, "allow.blocking-interact." + b.getType().toString()))) {
+		if((Configuration.BlockingInteractList.contains(b.getType().name()) && !Permissions.perms(p, "allow.blocking-interact." + b.getType().name())) || (Configuration.BlockingInteractList.contains(b.getType().name()) && !Permissions.perms(p, "allow.blocking-interact." + b.getType().name()))) {
 			Localization.interact(p);
 			e.setCancelled(true);
 		}
@@ -121,7 +121,7 @@ public class PlayerInteractListener implements Listener {
     	Player p = e.getPlayer();
     	ItemStack b = e.getItem();
 		if(Permissions.perms(p, "allow.blocking-inventory.*") || p.getGameMode() != GameMode.CREATIVE)	return;
-		if((Configuration.BlockingItemsInvList.contains(b.getTypeId()) && !Permissions.perms(p, "allow.blocking-inventory." + b.getTypeId())) || (Configuration.BlockingItemsInvList.contains(b.getType().toString()) && !Permissions.perms(p, "allow.blocking-inventory." + b.getType().toString()))) {
+		if((Configuration.BlockingItemsInvList.contains(b.getType().name()) && !Permissions.perms(p, "allow.blocking-inventory." + b.getType().name())) || (Configuration.BlockingItemsInvList.contains(b.getType().name()) && !Permissions.perms(p, "allow.blocking-inventory." + b.getType().name()))) {
 			Localization.invNotify(b.getType(), p);
 			p.setItemInHand(new ItemStack(Material.AIR));
 			e.setCancelled(true);
@@ -136,7 +136,7 @@ public class PlayerInteractListener implements Listener {
     	
         if(e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
         	Block b = e.getClickedBlock();
-            if(b.getType() == Material.WALL_SIGN || b.getType() == Material.SIGN_POST) {
+            if(b.getType() == Material.WALL_SIGN || b.getType() == Material.SIGN) {
                 Sign sign = (Sign) b.getState();
                 String[] lines = sign.getLines();
                 

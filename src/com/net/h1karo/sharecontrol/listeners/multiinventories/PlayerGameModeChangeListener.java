@@ -31,7 +31,6 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 
 import com.net.h1karo.sharecontrol.Permissions;
@@ -145,10 +144,9 @@ public class PlayerGameModeChangeListener implements Listener {
     			ItemStack item = null;
     			if(InventoryStack[i] != null) {
     				item = InventoryStack[i].clone();
-    				if(item.getType().equals(Material.SKULL_ITEM))
-    					if(((SkullMeta)item.getItemMeta()).getOwner() == null && item.getData().getData() == 3) {
-    						ItemStack skull = new ItemStack(Material.SKULL_ITEM);
-    						skull.setData(new MaterialData(3));
+    				if(item.getType().equals(Material.PLAYER_HEAD))
+    					if(((SkullMeta)item.getItemMeta()).getOwner() == null) {
+    						ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
     						item = skull.clone();
     					}
     			}
@@ -160,10 +158,9 @@ public class PlayerGameModeChangeListener implements Listener {
     			ItemStack item = null;
     			if(ArmorStack[i] != null) {
     				item = ArmorStack[i].clone();
-    				if(item.getType().equals(Material.SKULL_ITEM))
-    					if(((SkullMeta)item.getItemMeta()).getOwner() == null && item.getData().getData() == 3) {
-    						ItemStack skull = new ItemStack(Material.SKULL_ITEM);
-    						skull.setData(new MaterialData(3));
+    				if(item.getType().equals(Material.PLAYER_HEAD))
+    					if(((SkullMeta)item.getItemMeta()).getOwner() == null) {
+    						ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
     						item = skull.clone();
     					}
     			}
@@ -186,10 +183,9 @@ public class PlayerGameModeChangeListener implements Listener {
     			ItemStack item = null;
     			if(inv.getItem(i) != null) {
     				 item = inv.getItem(i);
-    				 if(item.getType().equals(Material.SKULL_ITEM))
-    					 if(((SkullMeta)item.getItemMeta()).getOwner() == null && item.getData().getData() == 3) {
-    						 ItemStack skull = new ItemStack(Material.SKULL_ITEM);
-    						 skull.setData(new MaterialData(3));
+    				 if(item.getType().equals(Material.PLAYER_HEAD))
+    					 if(((SkullMeta)item.getItemMeta()).getOwner() == null) {
+    						 ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
     						 item = skull;
     					 }
     			}

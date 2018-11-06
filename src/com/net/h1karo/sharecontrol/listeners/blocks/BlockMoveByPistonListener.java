@@ -53,17 +53,17 @@ public class BlockMoveByPistonListener implements Listener {
 		Block b = e.getBlock();
 		if(Database.CheckCreative(b)) {
 			if(e.getDirection().equals(BlockFace.EAST))
-				Database.AddBlockMoreArguments(b.getWorld().getBlockAt(b.getX() + 1, b.getY(), b.getZ()), Material.PISTON_EXTENSION.getId());
+				Database.AddBlockMoreArguments(b.getWorld().getBlockAt(b.getX() + 1, b.getY(), b.getZ()), Material.PISTON_HEAD.name());
 			if(e.getDirection().equals(BlockFace.WEST))
-				Database.AddBlockMoreArguments(b.getWorld().getBlockAt(b.getX() - 1, b.getY(), b.getZ()), Material.PISTON_EXTENSION.getId());
+				Database.AddBlockMoreArguments(b.getWorld().getBlockAt(b.getX() - 1, b.getY(), b.getZ()), Material.PISTON_HEAD.name());
 			if(e.getDirection().equals(BlockFace.SOUTH))
-				Database.AddBlockMoreArguments(b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + 1), Material.PISTON_EXTENSION.getId());
+				Database.AddBlockMoreArguments(b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() + 1), Material.PISTON_HEAD.name());
 			if(e.getDirection().equals(BlockFace.NORTH))
-				Database.AddBlockMoreArguments(b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - 1), Material.PISTON_EXTENSION.getId());
+				Database.AddBlockMoreArguments(b.getWorld().getBlockAt(b.getX(), b.getY(), b.getZ() - 1), Material.PISTON_HEAD.name());
 			if(e.getDirection().equals(BlockFace.UP))
-				Database.AddBlockMoreArguments(b.getWorld().getBlockAt(b.getX(), b.getY() + 1, b.getZ()), Material.PISTON_EXTENSION.getId());
+				Database.AddBlockMoreArguments(b.getWorld().getBlockAt(b.getX(), b.getY() + 1, b.getZ()), Material.PISTON_HEAD.name());
 			if(e.getDirection().equals(BlockFace.DOWN))
-				Database.AddBlockMoreArguments(b.getWorld().getBlockAt(b.getX(), b.getY() - 1, b.getZ()), Material.PISTON_EXTENSION.getId());
+				Database.AddBlockMoreArguments(b.getWorld().getBlockAt(b.getX(), b.getY() - 1, b.getZ()), Material.PISTON_HEAD.name());
 		}
 	}
 	
@@ -91,7 +91,7 @@ public class BlockMoveByPistonListener implements Listener {
 		}
 		if(CoreVersion.getVersionsArray().contains(CoreVersion.OneDotEightPlus))
 			blocksHandling(e.getBlocks(), e.getDirection());
-		else 	if(b.getType().equals(Material.PISTON_STICKY_BASE))
+		else 	if(b.getType().equals(Material.STICKY_PISTON))
 				blockHandling(e.getRetractLocation().getBlock(), e.getDirection());
 	}
 	
@@ -122,7 +122,7 @@ public class BlockMoveByPistonListener implements Listener {
 				newCreativeBlock = b.getWorld().getBlockAt(b.getX(), b.getY() - 1, b.getZ());
 			
 			if(newCreativeBlock != null) {
-				Database.AddBlockMoreArguments(newCreativeBlock, b.getTypeId());
+				Database.AddBlockMoreArguments(newCreativeBlock, b.getType().name());
 				successUpdatedBlocks.add(newCreativeBlock);
 			}
 		}
@@ -157,7 +157,7 @@ public class BlockMoveByPistonListener implements Listener {
 			newCreativeBlock = b.getWorld().getBlockAt(b.getX(), b.getY() + 1, b.getZ());
 			
 		if(newCreativeBlock != null) {
-			Database.AddBlockMoreArguments(newCreativeBlock, b.getTypeId());
+			Database.AddBlockMoreArguments(newCreativeBlock, b.getType().name());
 			Database.RemoveBlock(b);
 		}
 	}

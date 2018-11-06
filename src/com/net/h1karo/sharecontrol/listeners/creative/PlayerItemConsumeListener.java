@@ -52,15 +52,8 @@ public class PlayerItemConsumeListener implements Listener
 			if(!Permissions.perms(p, "allow.blocking-inventory." + StrListItem)) {
 				Material typeThisItem = e.getItem().getType();
 				Material typeListItem;
-				
-				if(Database.isInteger(StrListItem))
-				{
-					String NewStr = StrListItem.replace("'", "");
-					int ID = Integer.parseInt(NewStr);
-					typeListItem = Material.getMaterial(ID);
-				}
-				else
-					typeListItem = Material.getMaterial(StrListItem);
+
+				typeListItem = Material.getMaterial(StrListItem);
 				
 				if(typeThisItem == typeListItem)
 				{
